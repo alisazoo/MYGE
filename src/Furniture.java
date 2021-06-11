@@ -1,3 +1,9 @@
+/**
+ * Represents a furniture.
+ * Premise:
+ * The size, both the length and the width, should be same or less than floor's
+ * to fit the floor.
+ */
 public class Furniture {
 
     private static int id;

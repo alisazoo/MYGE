@@ -24,9 +24,9 @@ public class Main {
         // Ask the size of a furniture
         System.out.println("Do you have any furniture?: Y/N");
         String ans = prompt.nextLine();
-        if(ans.toLowerCase().equals("n")){
+        if(ans.equalsIgnoreCase("n")){
             System.out.println("Ok, that's done");
-        } else{
+        }else{
             System.out.println("Please enter the name of the furniture:");
             myFurnitureName = prompt.nextLine();
             System.out.println("Please enter the length of " + myFurnitureName + ":");

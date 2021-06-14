@@ -24,9 +24,8 @@ public class Main {
         // Ask the size of a furniture
         System.out.println("Do you have any furniture?: Y/N");
         String ans = prompt.nextLine();
-        if(ans.equalsIgnoreCase("n")){
-            System.out.println("Ok, that's done");
-        }else{
+
+        while(ans.equalsIgnoreCase("y")){
             System.out.println("Please enter the name of the furniture:");
             myFurnitureName = prompt.nextLine();
             System.out.println("Please enter the length of " + myFurnitureName + ":");
@@ -35,17 +34,25 @@ public class Main {
             myFurnitureWidth = parseInt(prompt.nextLine());
             // Set the size of furniture
             myFurniture.add(new Furniture(myFurnitureLength, myFurnitureWidth, myFurnitureName));
+
+            // ask again
+            System.out.println("Do you habe any furniture?: Y/N");
+            ans = prompt.nextLine();
         }
 
         // Display the values of floor and furniture
-        System.out.println("The size of the floor: ");
-        System.out.println(myFloor.getLength() + " x " + myFloor.getWidth()
-                + " (length x width)");
+        System.out.println("++++++++Floor Size++++++++");
+        System.out.println(myFloor.getLength() + "mm x " + myFloor.getWidth()
+                + "mm (length x width)");
         if (myFurniture.size() != 0) {
+            System.out.println("++++++++Furniture List++++++++");
+            int itemNum = 1;
             for (Furniture item : myFurniture) {
-                System.out.println("The size of " + item.getName());
-                System.out.println(item.getLength() + " x " + item.getWidth()
-                        + " (length x width) (" + item.isAvailable + ")");
+                System.out.print(itemNum + ". " + item.getName());
+                System.out.println(" " +
+                        ": " + item.getLength() + "mm x " + item.getWidth()
+                        + "mm (length x width)");
+                itemNum++;
 
             }
         }

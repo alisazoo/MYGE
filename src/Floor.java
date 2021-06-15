@@ -1,5 +1,5 @@
 /**
- *
+ * Represents an floor.
  */
 public class Floor {
 

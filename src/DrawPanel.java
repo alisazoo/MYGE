@@ -52,10 +52,11 @@ public class DrawPanel extends JPanel {
     private void userPrompt(){
         // Ask the size of floor
         Scanner prompt = new Scanner(System.in);
-        System.out.println("Enter the length of your floor in millimeters (e.g. 3650)");
-        myFloorLength = parseInt(prompt.nextLine());
-        System.out.println("Enter the width of your floor in millimeters (e.g. 2170)");
+
+        System.out.println("Enter the width of your floor in millimeters (e.g. 3650)");
         myFloorWidth = parseInt(prompt.nextLine());
+        System.out.println("Enter the length of your floor in millimeters (e.g. 2170)");
+        myFloorLength = parseInt(prompt.nextLine());
 
         // Set the size of floor
         myFloor = new Floor(myFloorLength, myFloorWidth);
@@ -87,7 +88,21 @@ public class DrawPanel extends JPanel {
      */
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        g.drawString(inputInfo, 20, 30);
+        g.setColor(Color.DARK_GRAY);
+//        g.drawString(inputInfo, 20, 30);
+        g.setColor(Color.WHITE);
+        g.fillRect(10,10,myFloor.getWidth()/10, myFloor.getLength()/10);
+            // pending: put the name "floor" & size arrangement to fit the floor inside of
+            // the application window area.
+        if(myFurniture.size() >0){
+            for(Furniture item: myFurniture){
+                int locx = 15, locy = 15;
+                g.setColor(Color.getHSBColor((float)Math.random(), 1.0F, 1.0F));
+                g.fillRect(locx, locy, item.getWidth(), item.getLength());
+                locx++;
+                locy++;
+                    // pending: the coordinates to set location are not worked.
+            }
+        }
     }
 }

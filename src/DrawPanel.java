@@ -89,7 +89,7 @@ public class DrawPanel extends JPanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         g.setColor(Color.DARK_GRAY);
-        g.drawString(inputInfo, 20, 30);
+//        g.drawString(inputInfo, 20, 30);
         g.setColor(Color.WHITE);
         g.fillRect(10,10,myFloor.getWidth()/10, myFloor.getLength()/10);
             // pending: put the name "floor" & size arrangement to fit the floor inside of

@@ -47,7 +47,6 @@ public class DrawPanel2 extends JPanel implements ActionListener {
         // Create a label to display the size of floor
         displaySizeLabel = new JLabel("Floor size: ");
         displaySize = new JLabel("0 mm x 0 mm");
-//        displaySize.setBackground(Color.WHITE);
         displayPanel = new JPanel();
         displayPanel.setBackground(Color.WHITE);
         displayPanel.setForeground(Color.MAGENTA);

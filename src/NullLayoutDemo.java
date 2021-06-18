@@ -13,7 +13,7 @@ public class NullLayoutDemo extends JPanel implements ActionListener {
         NullLayoutDemo content = new NullLayoutDemo();
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(500,400);
+        window.setSize(365,300);
         window.setVisible(true);
     }
 

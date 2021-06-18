@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class ASimpleCalculator extends JPanel implements ActionListener {
 
     /**
-     * This main routine allows this class to be run as an applicaiton.
+     * This main routine allows this class to be run as an application.
      */
     public static void main(String[] args) {
         JFrame window = new JFrame("A Simple Calculator");

@@ -22,12 +22,13 @@ public class Moyogae extends JFrame {
     public static void main(String[] args) {
         JFrame window = new Moyogae();
 
-        DrawPanel content = new DrawPanel();
-        content.setLayout(new BorderLayout());
+//        DataPanel content = new DataPanel();
+//        content.setLayout(new BorderLayout());
+        DrawPanel3 content = new DrawPanel3();
 
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(900, 700);
+        window.setSize(800, 600);
         window.setLocation(20,20);
         window.setVisible(true);
     }
@@ -38,6 +39,6 @@ public class Moyogae extends JFrame {
      * and centres it horizontally on the screen.
      */
     public Moyogae(){
-        super("MYGE -Let's make sure the size-");
+        super("MYGE: measure your room");
     } // end for constructor Moyogae()
 }

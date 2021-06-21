@@ -38,7 +38,7 @@ public class DrawPanel extends JPanel {
             floorLength = new JLabel("0 mm (length)", JLabel.CENTER);
             floorLength.setUI(new VerticalLabelUI(true));
             notificationLabel = new JLabel(
-                    "Input the size of floor, then click set button.",
+                    "",
                     JLabel.CENTER);
 
             setLayout( new BorderLayout(10,10) );
@@ -72,7 +72,7 @@ public class DrawPanel extends JPanel {
             floorName = new JLabel("Floor");
             floorWidthTxt = new JTextField("0", 10);
             floorLengthTxt = new JTextField("0", 10);
-            setBtn = new JButton("Set");
+            setBtn = new JButton("Set Floor Size");
             setBtn.addActionListener(this);
 
 //            // Layout
@@ -90,7 +90,7 @@ public class DrawPanel extends JPanel {
 
             public void actionPerformed(ActionEvent evt){
             String cmd = evt.getActionCommand();
-            if( cmd.equals("Set")) {
+            if( cmd.equals("Set Floor Size")) {
                 int floorWidthNum = Integer.parseInt(floorWidthTxt.getText());
                 int floorLengthNum = Integer.parseInt(floorLengthTxt.getText());
 
@@ -126,16 +126,16 @@ public class DrawPanel extends JPanel {
 
             addBtn = new JButton("Add Furniture");
 //            addBtn.addActionListener(this);
-            setBtn = new JButton("Set");
-//            setBtn.addActionListener(this);
+            setBtn = new JButton("Set Floor Size");
+            setBtn.addActionListener(this);
 
 //            // Layout
 //            setLayout(new GridLayout(0,3));
 //            // show only user input and xLabel, mmLabel, and setBtn.
 //            //TODO change the layout with more components.
 
-            add(addBtn);
             add(furnitureName);
+            add(addBtn);
         }
 
         private void addFurnitureInputArea(){

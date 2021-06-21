@@ -22,20 +22,19 @@ public class DrawPanel3 extends JPanel {
 
     private class DataPanel extends JPanel implements ActionListener {
 
-        JLabel floorName, xLabel;
+        JLabel floorName;
         JButton setBtn;
 
         DataPanel(){
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
 
-            xLabel = new JLabel(" x ");
             floorName = new JLabel("Floor");
             floorWidthTxt = new JTextField("0", 10);
             floorLengthTxt = new JTextField("0", 10);
             setBtn = new JButton("Set");
             setBtn.addActionListener(floorPanel);
-            setBtn.addActionListener(this);
+//            setBtn.addActionListener(this);
 
 //            // Layout
 //            setLayout(new GridLayout(0,3));
@@ -43,8 +42,9 @@ public class DrawPanel3 extends JPanel {
 //            //TODO change the layout with more components.
 
             add(floorWidthTxt);
-            add(xLabel);
+            add(new JLabel(" x "));
             add(floorLengthTxt);
+            add(new JLabel(" mm "));
             add(setBtn);
 
         }
@@ -86,7 +86,6 @@ public class DrawPanel3 extends JPanel {
                 System.out.println(floorNotification);
 
                 notificationLabel.setText(floorNotification);
-
                 repaint();
             }
         } // end: actionPerformed() method

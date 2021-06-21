@@ -3,14 +3,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DrawPanel2 extends JPanel implements ActionListener {
+public class DrawPanel_not_used extends JPanel implements ActionListener {
 
     /**
      * This main routine allows this class to be run as an application.
      */
     public static void main(String[] args) {
         JFrame window = new JFrame("MYGE");
-        DrawPanel2 content = new DrawPanel2();
+        DrawPanel_not_used content = new DrawPanel_not_used();
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(400, 250);
@@ -22,7 +22,7 @@ public class DrawPanel2 extends JPanel implements ActionListener {
     private JLabel displaySizeLabel, displaySize;
     private JButton setButton;
 
-    public DrawPanel2(){
+    public DrawPanel_not_used(){
         setBackground(Color.DARK_GRAY);
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 

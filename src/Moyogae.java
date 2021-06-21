@@ -1,11 +1,5 @@
 import javax.swing.*;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import static java.lang.Integer.parseInt;
-
 /**
  * A frame that displays
  * - floor size
@@ -21,10 +15,7 @@ public class Moyogae extends JFrame {
      */
     public static void main(String[] args) {
         JFrame window = new Moyogae();
-
-//        DataPanel content = new DataPanel();
-//        content.setLayout(new BorderLayout());
-        DrawPanel3 content = new DrawPanel3();
+        DrawPanel content = new DrawPanel();
 
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -81,9 +81,9 @@ public class DrawPanel extends JPanel {
 //            //TODO change the layout with more components.
 
             add(floorWidthTxt);
-            add(new JLabel("(width) x "));
+            add(new JLabel("mm (width) x "));
             add(floorLengthTxt);
-            add(new JLabel("(length) mm "));
+            add(new JLabel("mm (length)"));
             add(setBtn);
 
         }
@@ -114,27 +114,38 @@ public class DrawPanel extends JPanel {
     private class FurniturePanel extends JPanel implements ActionListener {
 
         JLabel furnitureName;
-        JButton setBtn, addBtn;
+        JButton setBtn, addBtn, deleteBtn;
+        JTextField furnitureNameTxt, furnitureWidthTxt, furnitureLengthTxt;
 
         FurniturePanel() {
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
 
-            JTextField furnitureName = new JTextField("(Furtniture Name)", 20);
-            JTextField furniturWidthTxt = new JTextField("0", 10);
-            JTextField furniturLengthTxt = new JTextField("0", 10);
+            furnitureNameTxt = new JTextField("", 20);
+                //TODO if the input is empty should be handled as exception.
+            furnitureWidthTxt = new JTextField("0", 10);
+            furnitureLengthTxt = new JTextField("0", 10);
 
             addBtn = new JButton("Add Furniture");
-//            addBtn.addActionListener(this);
+            addBtn.addActionListener(this);
             setBtn = new JButton("Set Floor Size");
             setBtn.addActionListener(this);
+            // this delete button only appears after the data is set
+            deleteBtn = new JButton("Delete this furniture");
+            deleteBtn.addActionListener(this);
 
 //            // Layout
 //            setLayout(new GridLayout(0,3));
 //            // show only user input and xLabel, mmLabel, and setBtn.
 //            //TODO change the layout with more components.
 
-            add(furnitureName);
+            add(new JLabel("Furniture: "));
+            add(furnitureNameTxt);
+            add(new JLabel(": "));
+            add(furnitureWidthTxt);
+            add(new JLabel("mm (width) x "));
+            add(furnitureLengthTxt);
+            add(new JLabel("mm (length)"));
             add(addBtn);
         }
 
@@ -145,10 +156,12 @@ public class DrawPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent evt) {
             String cmd = evt.getActionCommand();
+            int furnitureWidthNum = Integer.parseInt(furnitureWidthTxt.getText());
+            int furnitureLengthNum = Integer.parseInt(furnitureLengthTxt.getText());
+            String furnitureName = furnitureNameTxt.getText();
             if(cmd.equals("Add Furniture")){
-                furnitureName.setText("Hello");
-
-                repaint();
+                Furniture items = new Furniture();
+                items.addFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
             }
 
         }

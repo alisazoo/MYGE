@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DrawPanel extends JPanel {
@@ -117,9 +118,12 @@ public class DrawPanel extends JPanel {
         JLabel furnitureName;
         JButton setBtn, addBtn, deleteBtn;
         JTextField furnitureNameTxt, furnitureWidthTxt, furnitureLengthTxt;
-        JLabel furnitureList;
-        String list;
+        JLabel furnitureNotice;
+        JList<String> furnitureList;
+        DefaultListModel<String> furnitureListText = new DefaultListModel<>();
         Furniture items = new Furniture();
+        ArrayList<Furniture> furnitureArrayList = items.getFurnitureArrayList();
+        String itemText = "";
 
         FurniturePanel() {
             setBackground(Color.WHITE);
@@ -138,7 +142,7 @@ public class DrawPanel extends JPanel {
             deleteBtn = new JButton("Delete this furniture");
             deleteBtn.addActionListener(this);
 
-            furnitureList = new JLabel("No furniture is registered.", JLabel.CENTER);
+            furnitureNotice = new JLabel("No furniture is registered.", JLabel.CENTER);
 
             // Layout
             setLayout(new GridLayout(0,2));
@@ -152,7 +156,8 @@ public class DrawPanel extends JPanel {
             add(new JLabel("length (mm)"));
             add(furnitureLengthTxt);
             add(addBtn);
-            add(new JLabel("")); // to adjust components
+            add(furnitureNotice);
+            furnitureList = new JList<>(furnitureListText);
             add(furnitureList);
         }
 
@@ -168,7 +173,10 @@ public class DrawPanel extends JPanel {
             String furnitureName = furnitureNameTxt.getText();
             if(cmd.equals("Add Furniture")){
                 items.addFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
-                furnitureList.setText(items.getFurniturelistText());
+                furnitureNotice.setEnabled(false);
+                furnitureListText.addElement( furnitureName +
+                        " (" + furnitureWidthNum + "mm x  " +
+                        furnitureLengthNum + "mm)" );
                 repaint();
             }
 

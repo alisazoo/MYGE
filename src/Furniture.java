@@ -33,6 +33,10 @@ public class Furniture {
     }
 
     // For debugging: make sure items are set in the ArrayList
+    /**
+     * Return the string
+     * @return String of item
+     */
     public String getFurniturelistText(){
         String itemTxt = "";
         for(Furniture item: furnitureArrayList){
@@ -42,6 +46,10 @@ public class Furniture {
             itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
         }
         return itemTxt;
+    }
+
+    public ArrayList<Furniture> getFurnitureArrayList(){
+        return furnitureArrayList;
     }
 
     public String getName() {

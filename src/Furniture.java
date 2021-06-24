@@ -30,19 +30,18 @@ public class Furniture {
     public void addFurniture(String name, int width, int length){
         Furniture item = new Furniture(name, width, length);
         furnitureArrayList.add(item);
-
-        displayFurniturelist();
     }
 
     // For debugging: make sure items are set in the ArrayList
-    public void displayFurniturelist(){
+    public String getFurniturelistText(){
+        String itemTxt = "";
         for(Furniture item: furnitureArrayList){
             String itemN = item.getName();
             int w = item.getLength();
             int l = item.getWidth();
-            int id = item.hashCode();
-            System.out.println(id + ": " + itemN +" (" + w + "mm x  " + l + "mm)");
+            itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
         }
+        return itemTxt;
     }
 
     public String getName() {

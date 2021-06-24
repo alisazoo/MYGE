@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,7 +115,7 @@ public class DrawPanel extends JPanel {
     } // end: nested-inner class DataPanel
 
 
-    private class FurniturePanel extends JPanel implements ActionListener {
+    private class FurniturePanel extends JPanel implements ActionListener, ListSelectionListener {
 
         JLabel furnitureName;
         JButton setBtn, addBtn, deleteBtn;
@@ -139,10 +141,16 @@ public class DrawPanel extends JPanel {
             setBtn = new JButton("Set Floor Size");
             setBtn.addActionListener(this);
             // this delete button only appears after the data is set
-            deleteBtn = new JButton("Delete this furniture");
+            deleteBtn = new JButton("Delete selected furniture");
             deleteBtn.addActionListener(this);
 
             furnitureNotice = new JLabel("No furniture is registered.", JLabel.CENTER);
+
+            furnitureList = new JList<>(furnitureListText);
+//            setForeground(Color.BLUE);
+            furnitureList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            furnitureList.setBounds(new Rectangle());
+            furnitureList.addListSelectionListener(this);
 
             // Layout
             setLayout(new GridLayout(0,2));
@@ -157,8 +165,8 @@ public class DrawPanel extends JPanel {
             add(furnitureLengthTxt);
             add(addBtn);
             add(furnitureNotice);
-            furnitureList = new JList<>(furnitureListText);
             add(furnitureList);
+            add(deleteBtn);
         }
 
         private void addFurnitureInputArea(){
@@ -166,8 +174,8 @@ public class DrawPanel extends JPanel {
         }
 
         @Override
-        public void actionPerformed(ActionEvent evt) {
-            String cmd = evt.getActionCommand();
+        public void actionPerformed(ActionEvent actionEvent) {
+            String cmd = actionEvent.getActionCommand();
             int furnitureWidthNum = Integer.parseInt(furnitureWidthTxt.getText());
             int furnitureLengthNum = Integer.parseInt(furnitureLengthTxt.getText());
             String furnitureName = furnitureNameTxt.getText();
@@ -179,6 +187,20 @@ public class DrawPanel extends JPanel {
                         furnitureLengthNum + "mm)" );
                 repaint();
             }
+//            if (cmd.equals("Delete selected furniture")){
+//                items.removeFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
+//
+//            }
+
+        }
+
+        @Override
+        public void valueChanged(ListSelectionEvent listSelectionEvent) {
+            Object src = listSelectionEvent.getSource();
+            System.out.println( listSelectionEvent );
+            JOptionPane.showMessageDialog(furniturePanel,"selected");
+//            System.out.println(src);
+
 
         }
     } // end: nested-inner class FurniturePanel

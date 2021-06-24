@@ -8,9 +8,9 @@ import java.util.ArrayList;
  */
 public class Furniture {
 
+
     private String name;
-    private int length;
-    private int width;
+    private int length, width;
     private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Set the availability of the furniture
@@ -18,7 +18,6 @@ public class Furniture {
 
     // Constructor
     public Furniture(){
-
     }
     public Furniture(String name, int width, int length){
         this.length = length;
@@ -30,6 +29,16 @@ public class Furniture {
     public void addFurniture(String name, int width, int length){
         Furniture item = new Furniture(name, width, length);
         furnitureArrayList.add(item);
+    }
+
+    public void removeFurniture(String name, int width, int length){
+        for(Furniture item: furnitureArrayList){
+            if(item.getName().equals(name) && item.getWidth() == width && item.getLength() == length)
+                furnitureArrayList.remove(item);
+            //todo exception: if there is no such item in the ArrayList
+            else
+                System.out.println("There is no such item");
+        }
     }
 
     // For debugging: make sure items are set in the ArrayList

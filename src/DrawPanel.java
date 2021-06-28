@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class DrawPanel extends JPanel {
 
-    private Floor floor = new Floor();
     private ArrayList<Furniture> furnitureList;
 
     private DataPanel dataPanel;
@@ -16,7 +15,7 @@ public class DrawPanel extends JPanel {
     private JTextField floorWidthTxt, floorLengthTxt;
     private JLabel notificationLabel, floorWidth, floorLength;
 
-    DrawPanel(){
+    DrawPanel(Floor floor){
         setBackground(Color.DARK_GRAY);
 
         dataPanel = new DataPanel();
@@ -70,45 +69,33 @@ public class DrawPanel extends JPanel {
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
 
-            floorName = new JLabel("Floor");
-            floorWidthTxt = new JTextField("0", 10);
-            floorLengthTxt = new JTextField("0", 10);
             setBtn = new JButton("Set Floor Size");
             setBtn.addActionListener(this);
+        }
+
+        DataPanel(Floor floor){
 
 //            // Layout
 //            setLayout(new GridLayout(0,3));
 //            // show only user input and xLabel, mmLabel, and setBtn.
 //            //TODO change the layout with more components.
 
-            add(floorWidthTxt);
-            add(new JLabel("mm (width) x "));
-            add(floorLengthTxt);
-            add(new JLabel("mm (length)"));
+            String floorWidthText = floor.getWidth() + "mm (width)";
+            System.out.println("size: "+floor.getWidth());
+            add(new JLabel(floorWidthText));
+            String floorLengthText = floor.getLength() + "mm (length)";
+            add(new JLabel(floorLengthText));
             add(setBtn);
-
+            repaint();
         }
 
             public void actionPerformed(ActionEvent evt){
             String cmd = evt.getActionCommand();
             if( cmd.equals("Set Floor Size")) {
-                int floorWidthNum = Integer.parseInt(floorWidthTxt.getText());
-                int floorLengthNum = Integer.parseInt(floorLengthTxt.getText());
+//                Moyogae.inputFloorSize();
+                repaint();
 
-                // Set the width and length of the floor
-                floor.setWidth(floorWidthNum);
-                floor.setLength(floorLengthNum);
-
-                // Display the information about the floor in the DataPanel.
-                String floorWidthText = floorWidthNum + "mm (width)";
-                String floorLengthText = floorLengthNum + " mm (length)";
-                String floorNotification = "The size of your floor: " + floorWidthText +
-                        " x " + floorLengthText + ".";
-                notificationLabel.setText(floorNotification);
-                floorWidth.setText(floorWidthText);
-                floorLength.setText(floorLengthText);
             }
-            repaint();
         }
     } // end: nested-inner class DataPanel
 

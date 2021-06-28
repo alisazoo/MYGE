@@ -17,9 +17,6 @@ public class DrawSqures extends JPanel implements MouseMotionListener {
         window.setVisible(true);
     }
 
-    int colorCode; // 0 = blue, 1 = red
-    Square red, blue;
-
     /**
      * This constructor sets
      */
@@ -29,6 +26,14 @@ public class DrawSqures extends JPanel implements MouseMotionListener {
         setPreferredSize(new Dimension(370, 150));
     }
 
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.setColor(Color.BLUE);
+        g.fillRect(10,70,50,50);
+        g.setColor(Color.RED);
+        g.fillRect(10,10,50,50);
+    }
+
     @Override
     public void mouseDragged(MouseEvent e) {
 
@@ -36,23 +41,4 @@ public class DrawSqures extends JPanel implements MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) { }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.RED);
-        g.fillRect(10,10,100,100);
-        g.setColor(Color.BLUE);
-        g.fillRect(100,100,100,100);
-    }
-
-
-    private class Square extends JPanel{
-
-        private Square() {
-
-        }
-
-
-    }
 }

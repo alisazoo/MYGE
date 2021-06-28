@@ -11,6 +11,11 @@ public class Floor {
         this.width = width;
     }
 
+    public Floor(){
+        this.length = 0;
+        this.width = 0;
+    }
+
     public int getLength() {
         return length;
     }

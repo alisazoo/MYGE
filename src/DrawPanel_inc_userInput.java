@@ -72,8 +72,8 @@ public class DrawPanel_inc_userInput extends JPanel {
             myFurnitureLength = parseInt(prompt.nextLine());
             System.out.println("Please enter the width of " + myFurnitureName + ":");
             myFurnitureWidth = parseInt(prompt.nextLine());
-            // Set the size of furniture
-            myFurniture.add(new Furniture(myFurnitureLength, myFurnitureWidth, myFurnitureName));
+//            // Set the size of furniture
+//            myFurniture.add(new Furniture(myFurnitureLength, myFurnitureWidth, myFurnitureName));
 
             // ask again
             System.out.println("Do you have any furniture?: Y/N");

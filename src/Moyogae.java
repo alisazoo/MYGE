@@ -1,8 +1,6 @@
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,26 +24,6 @@ public class Moyogae extends JFrame {
 
         DrawPanel content = new DrawPanel();
         content.setLayout(new BorderLayout());
-
-//        content.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                super.mousePressed(e);
-////                Component source = (Component) e.getSource();
-////                source.repaint();
-//                int x = e.getX();
-//                int y = e.getY();
-//                Graphics g = content.getGraphics(); // not recommended way
-//                if(e.getButton() == MouseEvent.BUTTON1){ // if left button is pressed:
-//                    g.setColor(Color.RED);
-//                    g.fillOval(x, y, 100, 100);
-//                } else {
-//                    content.repaint();
-//                    return;
-//                }
-//                g.dispose();                        // not recommended way
-//            }
-//        });
 
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

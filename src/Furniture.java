@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a furniture.
  * Premise:
@@ -6,28 +8,48 @@
  */
 public class Furniture {
 
-    private static int id;
     private String name;
     private int length;
     private int width;
+    private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Set the availability of the furniture
     boolean isAvailable = true;
 
     // Constructor
-    public Furniture(int length, int width, String name){
+    public Furniture(){
+
+    }
+    public Furniture(String name, int width, int length){
         this.length = length;
         this.width = width;
         this.name = name;
-        id++;
     }
 
-    public static int getId() {
-        return id;
+    // add new furniture to the furnitureArrayList
+    public void addFurniture(String name, int width, int length){
+        Furniture item = new Furniture(name, width, length);
+        furnitureArrayList.add(item);
     }
 
-    public static void setId(int id) {
-        Furniture.id = id;
+    // For debugging: make sure items are set in the ArrayList
+    /**
+     * Return the string
+     * @return String of item
+     */
+    public String getFurniturelistText(){
+        String itemTxt = "";
+        for(Furniture item: furnitureArrayList){
+            String itemN = item.getName();
+            int w = item.getLength();
+            int l = item.getWidth();
+            itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
+        }
+        return itemTxt;
+    }
+
+    public ArrayList<Furniture> getFurnitureArrayList(){
+        return furnitureArrayList;
     }
 
     public String getName() {

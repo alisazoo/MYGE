@@ -1,108 +1,173 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import static java.lang.Integer.parseInt;
-
-/**
- * A panel that can display the size and image of the floor and furniture.
- * The sizes are corresponded to the ones set by the user.
- *
- * Future plan: The ratio of the size of each element should correspond to what the user input.
- * User can move furniture as long as it can be set in the floor.
- */
 
 public class DrawPanel extends JPanel {
 
-    private int myFloorLength, myFloorWidth, myFurnitureLength, myFurnitureWidth;
-    private String myFurnitureName, promptAns, inputInfo;
-    private Floor myFloor;
-    private ArrayList<Furniture> myFurniture = new ArrayList<>();
+    private ArrayList<Furniture> furnitureList;
 
-    public DrawPanel() {
-        userPrompt();
+    private DataPanel dataPanel;
+    private FloorPanel floorPanel;
+    private FurniturePanel furniturePanel;
+    private JTextField floorWidthTxt, floorLengthTxt;
+    private JLabel notificationLabel, floorWidth, floorLength;
 
-        // Create the line to display the values of floor and furniture
-        inputInfo = "++++++++Floor Size++++++++\n" +
-                myFloor.getLength() + "mm x " + myFloor.getWidth()
-                + "mm (length x width)\n\n";
-        if (myFurniture.size() != 0) {
-            inputInfo += "++++++++Furniture List++++++++\n";
-            int itemNum = 1;
-            for (Furniture item : myFurniture) {
-                inputInfo = inputInfo.concat(itemNum + ". " + item.getName() +
-                        ": " + item.getLength() + "mm x " + item.getWidth()
-                        + "mm (length x width)\n");
-                itemNum++;
+    DrawPanel(Floor floor){
+        setBackground(Color.DARK_GRAY);
+
+        dataPanel = new DataPanel();
+        floorPanel = new FloorPanel();
+        furniturePanel = new FurniturePanel();
+
+        setLayout(new BorderLayout());
+        add(dataPanel, BorderLayout.NORTH);
+        add(floorPanel,BorderLayout.CENTER);
+        add(furniturePanel, BorderLayout.SOUTH);
+    } // end: Constructor DrawPanel3
+
+    public class FloorPanel extends JPanel {
+
+        public FloorPanel(){
+            setBackground(Color.WHITE);
+            setPreferredSize( new Dimension(400,300) );
+
+            floorWidth = new JLabel("0 mm (width)", JLabel.CENTER);
+            floorLength = new JLabel("0 mm (length)", JLabel.CENTER);
+            floorLength.setUI(new VerticalLabelUI(true));
+            notificationLabel = new JLabel(
+                    "",
+                    JLabel.CENTER);
+
+            setLayout( new BorderLayout(5,5) );
+            //TODO check how the gaps above are reflected.
+            add(floorWidth, BorderLayout.NORTH);
+            add(notificationLabel, BorderLayout.SOUTH);
+            add(floorLength, BorderLayout.EAST);
+        } // end: constructor
+
+        /**
+         * This method draws the floor image in FloorPanel.
+         * @param g Graphic context
+         */
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            setForeground(Color.LIGHT_GRAY);
+            g.fillRect(50,50,675,400);
+        }
+
+    } // end: nested class FloorPanel
+
+    private class DataPanel extends JPanel implements ActionListener {
+
+        JLabel floorName;
+        JButton setBtn, addBtn;
+
+        DataPanel(){
+            setBackground(Color.WHITE);
+            setForeground(Color.BLACK);
+
+            setBtn = new JButton("Set Floor Size");
+            setBtn.addActionListener(this);
+        }
+
+        DataPanel(Floor floor){
+
+//            // Layout
+//            setLayout(new GridLayout(0,3));
+//            // show only user input and xLabel, mmLabel, and setBtn.
+//            //TODO change the layout with more components.
+
+            String floorWidthText = floor.getWidth() + "mm (width)";
+            System.out.println("size: "+floor.getWidth());
+            add(new JLabel(floorWidthText));
+            String floorLengthText = floor.getLength() + "mm (length)";
+            add(new JLabel(floorLengthText));
+            add(setBtn);
+            repaint();
+        }
+
+            public void actionPerformed(ActionEvent evt){
+            String cmd = evt.getActionCommand();
+            if( cmd.equals("Set Floor Size")) {
+//                Moyogae.inputFloorSize();
+                repaint();
 
             }
         }
+    } // end: nested-inner class DataPanel
 
-    } // end constructor DrawPanel
 
-    /**
-     * Ask the information about floor and furniture.
-     *
-     *              * Fix later:
-     *              * issue: enter the name of the next furniture instead of yes or no.
-     *              * if so, the prompt automatically ends and no time to fix.
-     *              * - NumberFormatException
-     */
-    private void userPrompt(){
-        // Ask the size of floor
-        Scanner prompt = new Scanner(System.in);
+    private class FurniturePanel extends JPanel implements ActionListener {
 
-        System.out.println("Enter the width of your floor in millimeters (e.g. 3650)");
-        myFloorWidth = parseInt(prompt.nextLine());
-        System.out.println("Enter the length of your floor in millimeters (e.g. 2170)");
-        myFloorLength = parseInt(prompt.nextLine());
+        JLabel furnitureName;
+        JButton setBtn, addBtn, deleteBtn;
+        JTextField furnitureNameTxt, furnitureWidthTxt, furnitureLengthTxt;
+        JLabel furnitureNotice;
+        JList<String> furnitureList;
+        DefaultListModel<String> furnitureListText = new DefaultListModel<>();
+        Furniture items = new Furniture();
+        ArrayList<Furniture> furnitureArrayList = items.getFurnitureArrayList();
+        String itemText = "";
 
-        // Set the size of floor
-        myFloor = new Floor(myFloorLength, myFloorWidth);
+        FurniturePanel() {
+            setBackground(Color.WHITE);
+            setForeground(Color.BLACK);
 
-        // Ask the size of a furniture
-        System.out.println("Do you have any furniture?: Y/N");
-        promptAns = prompt.nextLine();
+            furnitureNameTxt = new JTextField("e.g. desk", 15);
+                //TODO if the input is empty should be handled as exception.
+            furnitureWidthTxt = new JTextField("0", 5);
+            furnitureLengthTxt = new JTextField("0", 5);
 
-        while (promptAns.equalsIgnoreCase("y")) {
-            System.out.println("Please enter the name of the furniture:");
-            myFurnitureName = prompt.nextLine();
-            System.out.println("Please enter the length of " + myFurnitureName + ":");
-            myFurnitureLength = parseInt(prompt.nextLine());
-            System.out.println("Please enter the width of " + myFurnitureName + ":");
-            myFurnitureWidth = parseInt(prompt.nextLine());
-            // Set the size of furniture
-            myFurniture.add(new Furniture(myFurnitureLength, myFurnitureWidth, myFurnitureName));
+            addBtn = new JButton("Add Furniture");
+            addBtn.addActionListener(this);
+            setBtn = new JButton("Set Floor Size");
+            setBtn.addActionListener(this);
+            // this delete button only appears after the data is set
+            deleteBtn = new JButton("Delete this furniture");
+            deleteBtn.addActionListener(this);
 
-            // ask again
-            System.out.println("Do you have any furniture?: Y/N");
-            promptAns = prompt.nextLine();
+            furnitureNotice = new JLabel("No furniture is registered.", JLabel.CENTER);
+
+            // Layout
+            setLayout(new GridLayout(0,2));
+            // show only user input and xLabel, mmLabel, and setBtn.
+            //TODO change the layout with more components.
+
+            add(new JLabel("Furniture name:"));
+            add(furnitureNameTxt);
+            add(new JLabel("width (mm)"));
+            add(furnitureWidthTxt);
+            add(new JLabel("length (mm)"));
+            add(furnitureLengthTxt);
+            add(addBtn);
+            add(furnitureNotice);
+            furnitureList = new JList<>(furnitureListText);
+            add(furnitureList);
         }
-    }
 
-    /**
-     * Display text based on the user input, generate the shapes corresponding to the sizes
-     * the user input.
-     * @param g Graphic context
-     */
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
-        g.setColor(Color.DARK_GRAY);
-//        g.drawString(inputInfo, 20, 30);
-        g.setColor(Color.WHITE);
-        g.fillRect(10,10,myFloor.getWidth()/10, myFloor.getLength()/10);
-            // pending: put the name "floor" & size arrangement to fit the floor inside of
-            // the application window area.
-        if(myFurniture.size() >0){
-            for(Furniture item: myFurniture){
-                int locx = 15, locy = 15;
-                g.setColor(Color.getHSBColor((float)Math.random(), 1.0F, 1.0F));
-                g.fillRect(locx, locy, item.getWidth(), item.getLength());
-                locx++;
-                locy++;
-                    // pending: the coordinates to set location are not worked.
+        private void addFurnitureInputArea(){
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            String cmd = evt.getActionCommand();
+            int furnitureWidthNum = Integer.parseInt(furnitureWidthTxt.getText());
+            int furnitureLengthNum = Integer.parseInt(furnitureLengthTxt.getText());
+            String furnitureName = furnitureNameTxt.getText();
+            if(cmd.equals("Add Furniture")){
+                items.addFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
+                furnitureNotice.setEnabled(false);
+                furnitureListText.addElement( furnitureName +
+                        " (" + furnitureWidthNum + "mm x  " +
+                        furnitureLengthNum + "mm)" );
+                repaint();
             }
+
         }
-    }
+    } // end: nested-inner class FurniturePanel
+
 }

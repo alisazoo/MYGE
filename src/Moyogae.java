@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Moyogae extends JFrame {
 
     static JFrame window = new Moyogae();
+    static boolean isFloorEdit = false;
 
     /**
      * This main program creates a frame and makes it visible.
@@ -38,6 +39,11 @@ public class Moyogae extends JFrame {
         super("MYGE: measure your room");
     } // end for constructor Moyogae()
 
+    /**
+     * This DrawPanel method create the input dialog window, then
+     * return DrawPanel instance.
+     * - If isFloorEdit is true,
+     */
     public static DrawPanel inputFloorSize(){
 
         // Input Dialog
@@ -60,12 +66,11 @@ public class Moyogae extends JFrame {
         JOptionPane.showMessageDialog(null, panel,
                 "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
 
-        Floor floor = new Floor();
-        floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
-        floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
+        // Set the input data into the floor object
+        Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
+        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
-        DrawPanel content = new DrawPanel(floor);
-        return content;
+        return new DrawPanel();
 
     }
 

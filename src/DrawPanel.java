@@ -9,48 +9,53 @@ public class DrawPanel extends JPanel {
 
     private ArrayList<Furniture> furnitureList;
 
-    private DataPanel dataPanel;
     private FloorPanel floorPanel;
     private FurniturePanel furniturePanel;
     private JTextField floorWidthTxt, floorLengthTxt;
-    private JLabel notificationLabel, floorWidth, floorLength;
+    private JLabel floorWidth, floorLength;
+    private int dataFloorWidth, dataFloorLength;
 
-    DrawPanel(Floor floor){
+    DrawPanel(){
         setBackground(Color.DARK_GRAY);
 
-        dataPanel = new DataPanel();
-        floorPanel = new FloorPanel(floor);
+        floorPanel = new FloorPanel();
         furniturePanel = new FurniturePanel();
 
         setLayout(new BorderLayout());
-        add(dataPanel, BorderLayout.NORTH);
         add(floorPanel,BorderLayout.CENTER);
         add(furniturePanel, BorderLayout.SOUTH);
     } // end: Constructor DrawPanel3
 
-    public class FloorPanel extends JPanel {
+    /**
+     * This nested class is used to display floor image, its sizes
+     * center of the main window.
+     */
+    public class FloorPanel extends JPanel implements ActionListener{
 
-        public FloorPanel(Floor floor){
+        public FloorPanel(){
+
             setBackground(Color.WHITE);
             setPreferredSize( new Dimension(400,300) );
 
-            floorWidth = new JLabel(floor.getWidth() + " mm (width)", JLabel.CENTER);
-            floorLength = new JLabel(floor.getLength() + "mm (length)", JLabel.CENTER);
+            dataFloorWidth = Floor.getWidth() ;
+            dataFloorLength = Floor.getLength();
+
+            floorWidth = new JLabel(dataFloorWidth + " mm (width)", JLabel.CENTER);
+            floorLength = new JLabel(dataFloorLength + "mm (length)", JLabel.CENTER);
             floorLength.setUI(new VerticalLabelUI(true));
-            notificationLabel = new JLabel(
-                    "",
-                    JLabel.CENTER);
+
+            JButton setBtn = new JButton("Edit Floor Size");
+            setBtn.addActionListener(this);
 
             setLayout( new BorderLayout(5,5) );
-            //TODO check how the gaps above are reflected.
+                //TODO check how the gaps above are reflected.
             add(floorWidth, BorderLayout.NORTH);
-            add(notificationLabel, BorderLayout.SOUTH);
             add(floorLength, BorderLayout.EAST);
+            add(setBtn, BorderLayout.SOUTH);
         } // end: constructor
 
         /**
          * This method draws the floor image in FloorPanel.
-         * @param g Graphic context
          */
         public void paintComponent(Graphics g){
             super.paintComponent(g);
@@ -58,47 +63,17 @@ public class DrawPanel extends JPanel {
             g.fillRect(50,50,675,400);
         }
 
-    } // end: nested class FloorPanel
-
-    private class DataPanel extends JPanel implements ActionListener {
-
-        JLabel floorName;
-        JButton setBtn, addBtn;
-
-        DataPanel(){
-            setBackground(Color.WHITE);
-            setForeground(Color.BLACK);
-
-            setBtn = new JButton("Set Floor Size");
-            setBtn.addActionListener(this);
-        }
-
-        DataPanel(Floor floor){
-
-//            // Layout
-//            setLayout(new GridLayout(0,3));
-//            // show only user input and xLabel, mmLabel, and setBtn.
-//            //TODO change the layout with more components.
-
-            String floorWidthText = floor.getWidth() + "mm (width)";
-            System.out.println("size: "+floor.getWidth());
-            add(new JLabel(floorWidthText));
-            String floorLengthText = floor.getLength() + "mm (length)";
-            add(new JLabel(floorLengthText));
-            add(setBtn);
-            repaint();
-        }
-
-            public void actionPerformed(ActionEvent evt){
+        @Override
+        public void actionPerformed(ActionEvent evt) {
             String cmd = evt.getActionCommand();
-            if( cmd.equals("Set Floor Size")) {
-//                Moyogae.inputFloorSize();
+            if( cmd.equals("Edit Floor Size")) {
+                Moyogae.inputFloorSize();
+                floorWidth.setText(Floor.getWidth() + " mm (width)");
+                floorLength.setText(Floor.getLength() + " mm (length)");
                 repaint();
-
             }
         }
-    } // end: nested-inner class DataPanel
-
+    } // end: nested class FloorPanel
 
     private class FurniturePanel extends JPanel implements ActionListener {
 

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,6 +96,24 @@ public class DrawPanel extends JPanel {
 
             furnitureNotice = new JLabel("No furniture is registered.", JLabel.CENTER);
 
+            String[] columnHeads = new String[]{"Name", "Width(mm) x Length(mm)"};
+            String[][] furnitureItemList;
+//            JTable table = new JTable(furnitureItemList, columnHeads);
+
+//            // The following codes prevent user from editing the contents of the cells in the table.
+//            DefaultTableModel model = new DefaultTableModel(furnitureItemList, columnHeads) {
+//                public boolean isCellEditable(int row, int column) {
+//                    return false;
+//                }
+//            };
+//            JTable table = new JTable(model);
+
+            if( furnitureArrayList.size() > 0 ){
+                for(Furniture item: furnitureArrayList)
+                    System.out.println("from constructor -> " + item.getName() + ": " +
+                            item.getWidth() + " mm x " + item.getLength() + " mm");
+            }
+
             // Layout
             setLayout(new GridLayout(0,2));
             // show only user input and xLabel, mmLabel, and setBtn.
@@ -102,13 +121,9 @@ public class DrawPanel extends JPanel {
 
             add(addBtn);
             add(furnitureNotice);
-            add(new JLabel("test"));
-//            furnitureList = new JList<>(furnitureListText);
-//            add(furnitureList);
-        }
+//            add(new JLabel("test"));
 
-        private void addFurnitureInputArea(){
-
+//            add(new JScrollPane(table) );
         }
 
         @Override
@@ -123,7 +138,8 @@ public class DrawPanel extends JPanel {
                     System.out.print(item.getName() + ": " + item.getWidth() + " (w) x "
                             + item.getLength() + " (l)\n"); // debugging
                 }
-                    repaint();
+                furniturePanel.add(new JLabel("test" + ""));
+                repaint();
             }
         }
     } // end: nested-inner class FurniturePanel

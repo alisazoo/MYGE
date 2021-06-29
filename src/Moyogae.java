@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class Moyogae extends JFrame {
 
     static JFrame window = new Moyogae();
-    static boolean isFloorEdit = false;
 
     /**
      * This main program creates a frame and makes it visible.
@@ -22,7 +21,7 @@ public class Moyogae extends JFrame {
      */
     public static void main(String[] args) {
 
-        window.setContentPane(inputFloorSize());
+        window.setContentPane(inputFloorData());
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(800, 600);
         window.setLocation(20,20);
@@ -40,11 +39,10 @@ public class Moyogae extends JFrame {
     } // end for constructor Moyogae()
 
     /**
-     * This DrawPanel method create the input dialog window, then
+     * This inputFloorData method create the input dialog window, then
      * return DrawPanel instance.
-     * - If isFloorEdit is true,
      */
-    public static DrawPanel inputFloorSize(){
+    public static DrawPanel inputFloorData(){
 
         // Input Dialog
         JPanel panel = new JPanel(new BorderLayout(5,5));
@@ -72,6 +70,44 @@ public class Moyogae extends JFrame {
 
         return new DrawPanel();
 
-    }
+    }   // end inputFloorSize() method
+
+
+    /**
+     * This inputFurnitureData method set the new item in the ArrayList<Furniture>.
+     */
+    public static void inputFurnitureData(ArrayList<Furniture> arrayList, boolean isFurnitureAdd){
+
+        // Input Dialog
+        JPanel panel = new JPanel(new BorderLayout(5,5));
+
+        JPanel label = new JPanel(new GridLayout(0,1,2,2));
+        label.add( new JLabel("Name", SwingConstants.RIGHT) );
+        label.add( new JLabel("Width (mm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Length (mm)", SwingConstants.RIGHT) );
+        panel.add( label, BorderLayout.WEST );
+
+        JPanel control = new JPanel(new GridLayout(0,1,2,2));
+        JTextField furnitureName = new JTextField();
+        control.add( furnitureName );
+        JTextField furnitureWidthInput = new JTextField();
+        control.add(furnitureWidthInput);
+        JTextField furnitureLengthInput = new JTextField();
+        control.add(furnitureLengthInput);
+        panel.add(control, BorderLayout.CENTER);
+
+        if(isFurnitureAdd) {
+            JOptionPane.showMessageDialog(null, panel,
+                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+        }
+        // Set the input data into the ArrayList
+        Furniture item = new Furniture();
+        item.setName(furnitureName.getText());
+        item.setWidth( Integer.parseInt(furnitureWidthInput.getText()) );
+        item.setLength( Integer.parseInt(furnitureLengthInput.getText()) );
+        arrayList.add(item);
+
+    }   // end inputFurnitureData() method
+
 
 }

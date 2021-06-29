@@ -67,7 +67,7 @@ public class DrawPanel extends JPanel {
         public void actionPerformed(ActionEvent evt) {
             String cmd = evt.getActionCommand();
             if( cmd.equals("Edit Floor Size")) {
-                Moyogae.inputFloorSize();
+                Moyogae.inputFloorData();
                 floorWidth.setText(Floor.getWidth() + " mm (width)");
                 floorLength.setText(Floor.getLength() + " mm (length)");
                 repaint();
@@ -91,15 +91,15 @@ public class DrawPanel extends JPanel {
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
 
-            furnitureNameTxt = new JTextField("e.g. desk", 15);
-                //TODO if the input is empty should be handled as exception.
-            furnitureWidthTxt = new JTextField("0", 5);
-            furnitureLengthTxt = new JTextField("0", 5);
-
+//            furnitureNameTxt = new JTextField("e.g. desk", 15);
+//                //TODO if the input is empty should be handled as exception.
+//            furnitureWidthTxt = new JTextField("0", 5);
+//            furnitureLengthTxt = new JTextField("0", 5);
+//
             addBtn = new JButton("Add Furniture");
             addBtn.addActionListener(this);
-            setBtn = new JButton("Set Floor Size");
-            setBtn.addActionListener(this);
+//            setBtn = new JButton("Set Floor Size");
+//            setBtn.addActionListener(this);
             // this delete button only appears after the data is set
             deleteBtn = new JButton("Delete this furniture");
             deleteBtn.addActionListener(this);
@@ -111,16 +111,16 @@ public class DrawPanel extends JPanel {
             // show only user input and xLabel, mmLabel, and setBtn.
             //TODO change the layout with more components.
 
-            add(new JLabel("Furniture name:"));
-            add(furnitureNameTxt);
-            add(new JLabel("width (mm)"));
-            add(furnitureWidthTxt);
-            add(new JLabel("length (mm)"));
-            add(furnitureLengthTxt);
+//            add(new JLabel("Furniture name:"));
+//            add(furnitureNameTxt);
+//            add(new JLabel("width (mm)"));
+//            add(furnitureWidthTxt);
+//            add(new JLabel("length (mm)"));
+//            add(furnitureLengthTxt);
             add(addBtn);
             add(furnitureNotice);
-            furnitureList = new JList<>(furnitureListText);
-            add(furnitureList);
+//            furnitureList = new JList<>(furnitureListText);
+//            add(furnitureList);
         }
 
         private void addFurnitureInputArea(){
@@ -130,19 +130,26 @@ public class DrawPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent evt) {
             String cmd = evt.getActionCommand();
-            int furnitureWidthNum = Integer.parseInt(furnitureWidthTxt.getText());
-            int furnitureLengthNum = Integer.parseInt(furnitureLengthTxt.getText());
-            String furnitureName = furnitureNameTxt.getText();
-            if(cmd.equals("Add Furniture")){
-                items.addFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
+//            int furnitureWidthNum = Integer.parseInt(furnitureWidthTxt.getText());
+//            int furnitureLengthNum = Integer.parseInt(furnitureLengthTxt.getText());
+//            String furnitureName = furnitureNameTxt.getText();
+            if (cmd.equals("Add Furniture")) {
+                Moyogae.inputFurnitureData(furnitureArrayList, true);
                 furnitureNotice.setEnabled(false);
-                furnitureListText.addElement( furnitureName +
-                        " (" + furnitureWidthNum + "mm x  " +
-                        furnitureLengthNum + "mm)" );
-                repaint();
-            }
 
+                // Display the registered item
+                for (Furniture item : furnitureArrayList) {
+                    System.out.print(item.getName() + ": " + item.getWidth() + " (w) x "
+                            + item.getLength() + " (l)\n"); // debugging
+                }
+
+//                items.addFurniture(furnitureName, furnitureWidthNum, furnitureLengthNum);
+//                furnitureNotice.setEnabled(false);
+//                furnitureListText.addElement( furnitureName +
+//                        " (" + furnitureWidthNum + "mm x  " +
+//                        furnitureLengthNum + "mm)" );
+                    repaint();
+            }
         }
     } // end: nested-inner class FurniturePanel
-
 }

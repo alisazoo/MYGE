@@ -19,7 +19,7 @@ public class DrawPanel extends JPanel {
         setBackground(Color.DARK_GRAY);
 
         dataPanel = new DataPanel();
-        floorPanel = new FloorPanel();
+        floorPanel = new FloorPanel(floor);
         furniturePanel = new FurniturePanel();
 
         setLayout(new BorderLayout());
@@ -30,12 +30,12 @@ public class DrawPanel extends JPanel {
 
     public class FloorPanel extends JPanel {
 
-        public FloorPanel(){
+        public FloorPanel(Floor floor){
             setBackground(Color.WHITE);
             setPreferredSize( new Dimension(400,300) );
 
-            floorWidth = new JLabel("0 mm (width)", JLabel.CENTER);
-            floorLength = new JLabel("0 mm (length)", JLabel.CENTER);
+            floorWidth = new JLabel(floor.getWidth() + " mm (width)", JLabel.CENTER);
+            floorLength = new JLabel(floor.getLength() + "mm (length)", JLabel.CENTER);
             floorLength.setUI(new VerticalLabelUI(true));
             notificationLabel = new JLabel(
                     "",

@@ -100,6 +100,10 @@ public class Moyogae extends JFrame {
             JOptionPane.showMessageDialog(null, panel,
                     "Add new furniture", JOptionPane.QUESTION_MESSAGE);
         }
+        else {
+            // process for editing
+        }
+
         // Set the input data into the ArrayList
         Furniture item = new Furniture();
         item.setName(furnitureName.getText());

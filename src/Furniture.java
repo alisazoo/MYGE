@@ -32,21 +32,21 @@ public class Furniture {
         furnitureArrayList.add(item);
     }
 
-    // For debugging: make sure items are set in the ArrayList
-    /**
-     * Return the string
-     * @return String of item
-     */
-    public String getFurniturelistText(){
-        String itemTxt = "";
-        for(Furniture item: furnitureArrayList){
-            String itemN = item.getName();
-            int w = item.getLength();
-            int l = item.getWidth();
-            itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
-        }
-        return itemTxt;
-    }
+//    // For debugging: make sure items are set in the ArrayList
+//    /**
+//     * Return the string
+//     * @return String of item
+//     */
+//    public String getFurniturelistText(){
+//        String itemTxt = "";
+//        for(Furniture item: furnitureArrayList){
+//            String itemN = item.getName();
+//            int w = item.getLength();
+//            int l = item.getWidth();
+//            itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
+//        }
+//        return itemTxt;
+//    }
 
     public ArrayList<Furniture> getFurnitureArrayList(){
         return furnitureArrayList;

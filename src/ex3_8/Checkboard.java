@@ -30,7 +30,7 @@ public class Checkboard extends JPanel {
 
         drawingArea.setBackground(Color.WHITE);
         window.setContentPane(drawingArea);
-        drawingArea.setPreferredSize(new Dimension(600,450));
+        drawingArea.setPreferredSize(new Dimension(400,400));
         window.pack();
         window.setLocation(100,50);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

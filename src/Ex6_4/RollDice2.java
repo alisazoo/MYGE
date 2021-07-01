@@ -2,15 +2,15 @@ package Ex6_4;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class RollDice2 extends JPanel {
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Rolling dice sounds fun");
-
-        ex6_3.RollDice content = new ex6_3.RollDice();
+        RollDice2 content = new RollDice2();
 
         window.setContentPane(content);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,22 +19,45 @@ public class RollDice2 extends JPanel {
         window.setVisible(true);
     }
 
+    //---------------------------------------------------------------
+    private int randomNum1 = 3;
+    private int randomNum2 = 4;
+
     /**
      * The constructor adds a mouse listener to the panel.
      * The listener will roll the dice when the user clicks the panel.
      * Also, the background colour and preferred size of the panel are set.
      */
     public RollDice2(){
-        setPreferredSize(new Dimension(125,150));
-        setBackground(new Color(200,200,255)); // Light Blue
+        setLayout(new BorderLayout(3,3));
+        setBackground(Color.BLUE); // will show thorough the gap in the BorderLayout.
         setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 
-        setLayout(new BorderLayout(3,3));
+        JPanel dicePanel = new JPanel(){    // the drawing surface, where dice are shown
+            protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                drawDie(g2, randomNum1, 10,10);
+                drawDie(g2, randomNum2, 65,65);
+            }
+        };
+        dicePanel.setPreferredSize(new Dimension(125,125));
+        dicePanel.setBackground(new Color(200,200,255)); // Light Blue
+        add(dicePanel, BorderLayout.CENTER);
+
         JButton rollBtn = new JButton("Roll");
-        EventHandler listener = new EventHandler();
-        rollBtn.addMouseListener(listener);
+//        EventHandler listener = new EventHandler();
+//        rollBtn.addMouseListener(listener);
+        rollBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                roll();
+            }
+        });
         add(rollBtn, BorderLayout.SOUTH);
-    }
+    } // end constructor
 
     /**
      * This method is used to draw a dice corresponding to the value passed.
@@ -86,34 +109,22 @@ public class RollDice2 extends JPanel {
         }
     }
 
-    private class EventHandler implements MouseListener{
-
-        public void mousePressed(MouseEvent e) {
-            Graphics g = getGraphics();
-            int randomNum1 = (int)(Math.random()*6) + 1;
-            int randomNum2 = (int)(Math.random()*6) + 1;
-            int x1 = 10, y1 = 10, x2 = 65, y2 = 65;
-            drawDie(g, randomNum1, x1,y1);
-            drawDie(g, randomNum2, x2,y2);
-            g.dispose();
-        }
-        public void mouseReleased(MouseEvent evt) { }
-        public void mouseClicked(MouseEvent e) { }
-        public void mouseEntered(MouseEvent e) { }
-        public void mouseExited(MouseEvent e) { }
-
+    public void roll(){
+        randomNum1 = (int)(Math.random()*6) + 1;
+        randomNum2 = (int)(Math.random()*6) + 1;
+        repaint();
     }
 
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        int randomNum1 = (int)(Math.random()*6) + 1;
-        int randomNum2 = (int)(Math.random()*6) + 1;
-        int x1 = 10, y1 = 10, x2 = 65, y2 = 65;
-        drawDie(g2, randomNum1, x1,y1);
-        drawDie(g2, randomNum2, x2,y2);
-    }
+//    private class EventHandler implements MouseListener{
+//
+//        public void mousePressed(MouseEvent e) {
+//            roll();
+//        }
+//        public void mouseReleased(MouseEvent evt) { }
+//        public void mouseClicked(MouseEvent e) { }
+//        public void mouseEntered(MouseEvent e) { }
+//        public void mouseExited(MouseEvent e) { }
+//
+//    }
 
 }

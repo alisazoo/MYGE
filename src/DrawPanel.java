@@ -83,10 +83,16 @@ public class DrawPanel extends JPanel {
         Furniture items = new Furniture();
         ArrayList<Furniture> furnitureArrayList = items.getFurnitureArrayList();
 
+
+        DefaultListModel<String> listModel;
+        JList<String> furnitureItemsList;
+
         FurniturePanel() {
+
             setBackground(Color.WHITE);
             setForeground(Color.BLACK);
 
+            //--- Set up components-----------------------------------------------
             addBtn = new JButton("Add Furniture");
             addBtn.addActionListener(this);
 
@@ -96,51 +102,64 @@ public class DrawPanel extends JPanel {
 
             furnitureNotice = new JLabel("No furniture is registered.", JLabel.CENTER);
 
-            String[] columnHeads = new String[]{"Name", "Width(mm) x Length(mm)"};
-            String[][] furnitureItemList;
-//            JTable table = new JTable(furnitureItemList, columnHeads);
-
-//            // The following codes prevent user from editing the contents of the cells in the table.
-//            DefaultTableModel model = new DefaultTableModel(furnitureItemList, columnHeads) {
-//                public boolean isCellEditable(int row, int column) {
-//                    return false;
-//                }
-//            };
-//            JTable table = new JTable(model);
-
+            // for debugging
             if( furnitureArrayList.size() > 0 ){
                 for(Furniture item: furnitureArrayList)
                     System.out.println("from constructor -> " + item.getName() + ": " +
                             item.getWidth() + " mm x " + item.getLength() + " mm");
             }
 
-            // Layout
+            // ---LAYOUT----------------------------------------------------------
             setLayout(new GridLayout(0,2));
             // show only user input and xLabel, mmLabel, and setBtn.
             //TODO change the layout with more components.
 
+            furnitureItemsList = createItemList();
+            add(furnitureItemsList);
             add(addBtn);
-            add(furnitureNotice);
-//            add(new JLabel("test"));
 
-//            add(new JScrollPane(table) );
+        }
+
+        private JList<String> createItemList() {
+
+            String[] itemList;
+
+            listModel = new DefaultListModel<String>();
+            if(furnitureArrayList.isEmpty()){
+                listModel.addElement("No furniture is registerd");
+            } else {
+
+                listModel.removeAllElements();
+                itemList = Furniture.createFurnitureList();
+
+                // For debugging
+                for(String item: itemList){
+                    System.out.println("itemList: "+item);
+                    listModel.addElement(item);
+                }
+            }
+
+            furnitureItemsList = new JList<String>(listModel);
+            furnitureItemsList.setModel(listModel);
+//            furnitureItemsList.setSelectedIndex(0);
+
+            return furnitureItemsList;
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
             String cmd = evt.getActionCommand();
+
             if (cmd.equals("Add Furniture")) {
                 Moyogae.inputFurnitureData(furnitureArrayList, true);
                 furnitureNotice.setEnabled(false);
+                furnitureItemsList = createItemList();
 
-                // Display the registered item
-                for (Furniture item : furnitureArrayList) {
-                    System.out.print(item.getName() + ": " + item.getWidth() + " (w) x "
-                            + item.getLength() + " (l)\n"); // debugging
-                }
-                furniturePanel.add(new JLabel("test" + ""));
                 repaint();
             }
         }
     } // end: nested-inner class FurniturePanel
 }
+
+
+

@@ -8,20 +8,11 @@ import java.awt.event.ActionListener;
 
 public class RollDice2 extends JPanel {
 
-    public static void main(String[] args) {
-        JFrame window = new JFrame("Rolling dice sounds fun");
-        RollDice2 content = new RollDice2();
-
-        window.setContentPane(content);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLocation(120,70);
-        window.pack(); // need to set the preferred size of the size (see below)
-        window.setVisible(true);
-    }
-
     //---------------------------------------------------------------
     private int randomNum1 = 3;
     private int randomNum2 = 4;
+
+    private Timer timer;
 
     /**
      * The constructor adds a mouse listener to the panel.
@@ -48,8 +39,6 @@ public class RollDice2 extends JPanel {
         add(dicePanel, BorderLayout.CENTER);
 
         JButton rollBtn = new JButton("Roll");
-//        EventHandler listener = new EventHandler();
-//        rollBtn.addMouseListener(listener);
         rollBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -110,21 +99,23 @@ public class RollDice2 extends JPanel {
     }
 
     public void roll(){
-        randomNum1 = (int)(Math.random()*6) + 1;
-        randomNum2 = (int)(Math.random()*6) + 1;
-        repaint();
+        if(timer != null)
+            return;
+        timer = new Timer(100, new ActionListener() {
+            int frames = 1;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                randomNum1 = (int)(Math.random()*6) + 1;
+                randomNum2 = (int)(Math.random()*6) + 1;
+                repaint();
+                frames++;
+                if(frames == 10){
+                    timer.stop();
+                    timer = null;
+                }
+            }
+        });
+        timer.start();
     }
-
-//    private class EventHandler implements MouseListener{
-//
-//        public void mousePressed(MouseEvent e) {
-//            roll();
-//        }
-//        public void mouseReleased(MouseEvent evt) { }
-//        public void mouseClicked(MouseEvent e) { }
-//        public void mouseEntered(MouseEvent e) { }
-//        public void mouseExited(MouseEvent e) { }
-//
-//    }
 
 }

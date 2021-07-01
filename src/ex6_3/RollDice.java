@@ -103,7 +103,9 @@ public class RollDice extends JPanel {
     public void roll(){
         die1 = (int)(Math.random()*6) + 1;
         die2 = (int)(Math.random()*6) + 1;
-        repaint();
+        repaint();  // = call the paintComponent()
+                    //  = No need to handle Graphics context in this method
+                    //   = No need to use getGraphic() in this method!!!
     }
 
     protected void paintComponent(Graphics g){

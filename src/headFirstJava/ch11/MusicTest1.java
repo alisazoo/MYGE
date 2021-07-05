@@ -1,4 +1,4 @@
-package headFirstJava.codekitchen;
+package headFirstJava.ch11;
 
 import javax.sound.midi.*;
 

@@ -2,8 +2,6 @@ package headFirstJava.ch12;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 // Remove the implementation of ActionListener to combine with SimpleGUI3C.
 //public class RandomColouredCircleGradient extends JPanel implements ActionListener {

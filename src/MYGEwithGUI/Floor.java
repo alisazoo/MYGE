@@ -1,3 +1,5 @@
+package MYGEwithGUI;
+
 /**
  * Represents an floor.
  */

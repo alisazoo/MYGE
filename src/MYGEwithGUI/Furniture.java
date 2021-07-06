@@ -1,3 +1,5 @@
+package MYGEwithGUI;
+
 import java.util.ArrayList;
 
 /**
@@ -32,7 +34,7 @@ public class Furniture {
         furnitureArrayList.add(item);
     }
 
-    // private JList<Furniture> createFurnitureList(){
+    // private JList<MYGEwithGUI.Furniture> createFurnitureList(){
     protected static String[] createFurnitureList(){
         String[] itemList = new String[furnitureArrayList.size()];
         for(int i = 0; i < furnitureArrayList.size(); i++){
@@ -51,7 +53,7 @@ public class Furniture {
 //     */
 //    public String getFurniturelistText(){
 //        String itemTxt = "";
-//        for(Furniture item: furnitureArrayList){
+//        for(MYGEwithGUI.Furniture item: furnitureArrayList){
 //            String itemN = item.getName();
 //            int w = item.getLength();
 //            int l = item.getWidth();

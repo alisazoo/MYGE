@@ -1,3 +1,5 @@
+package MYGEwithGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +10,6 @@ public class MoyogaeDemo extends JPanel {
     JFrame frame;
     JPanel mainPanel, furniturePanel;
     FloorPanel floorPanel;
-
 
     /**
      * This main routine allow to use this program as an application.
@@ -30,7 +31,7 @@ public class MoyogaeDemo extends JPanel {
         String[] furnitureEntries = Furniture.createFurnitureList();
         JList<String> furnitureList;
 
-        frame = new JFrame("Moyogae Demo");
+        frame = new JFrame("MYGEwithGUI.Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         BorderLayout layout = new BorderLayout();
@@ -56,7 +57,7 @@ public class MoyogaeDemo extends JPanel {
         furnitureList = new JList<>(furnitureEntries);
         furniturePanel.add( BorderLayout.CENTER, furnitureList);
 
-        JButton addItem = new JButton("Add Furniture");
+        JButton addItem = new JButton("Add MYGEwithGUI.Furniture");
         addItem.addActionListener(new addItemListener() );
         furniturePanel.add( BorderLayout.EAST, addItem);
 

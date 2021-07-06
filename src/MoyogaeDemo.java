@@ -1,5 +1,3 @@
-import org.w3c.dom.ls.LSOutput;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,8 +6,9 @@ import java.awt.event.ActionListener;
 public class MoyogaeDemo extends JPanel {
 
     JFrame frame;
-    JPanel background, floorPanel, furniturePanel;
-    FloorImagePanel floorImagePanel;
+    JPanel mainPanel, furniturePanel;
+    FloorPanel floorPanel;
+
     /**
      * This main routine allow to use this program as an application.
      */
@@ -26,38 +25,26 @@ public class MoyogaeDemo extends JPanel {
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        background = new JPanel();
-        background.setLayout( new BoxLayout(background, BoxLayout.Y_AXIS) );
-        background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        background.setPreferredSize( new Dimension( 480, 480 ) );
-
         BorderLayout layout = new BorderLayout();
-        floorImagePanel = new FloorImagePanel();   // FlowLayout
-        floorImagePanel.setPreferredSize(new Dimension(350,200));
-        floorPanel = new JPanel(layout);
-        floorPanel.setPreferredSize(new Dimension(400,300));
+
+        mainPanel = new JPanel();
+        mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
+        mainPanel.setBackground(Color.orange);
+
+        floorPanel = new FloorPanel();
+        floorPanel.setBackground(Color.PINK);
+        floorPanel.setPreferredSize(new Dimension(440,350));
+
         furniturePanel = new JPanel(layout);
-
-        //-----------------for Debugging-------------
-        // TODO: erase the following block later
-        floorImagePanel.setBackground(Color.PINK);
-//        floorPanel.setBackground(Color.BLUE);
-//        furniturePanel.setBackground(Color.LIGHT_GRAY);
-        //-------------------------------------------
-
-        //-----floorImagePanel--------------------------------------
-
-        floorImagePanel.add(new JButton("hell0"));
+        furniturePanel.setBackground(Color.GRAY);
+        furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
         JLabel floorWidth = new JLabel("000" + " mm (width)" + " x " +
                 "111" + " mm (length)", JLabel.CENTER);
-        floorWidth.setForeground(Color.DARK_GRAY); // for debugging.
-            //TODO: delete the above code later
-
-        floorPanel.add( BorderLayout.NORTH, floorWidth );
-        floorPanel.add( BorderLayout.CENTER, floorImagePanel );
-
+        floorPanel.add( BorderLayout.SOUTH, floorWidth );
 
         //------furniturePanel----------------------------------------
         String[] furnitureEntries;
@@ -72,27 +59,27 @@ public class MoyogaeDemo extends JPanel {
         addItem.addActionListener(new addItemListener() );
         furniturePanel.add( BorderLayout.EAST, addItem);
 
-        background.add( floorPanel );
-        background.add( furniturePanel );
+        mainPanel.add( floorPanel );
+        mainPanel.add( furniturePanel );
 
-        frame.setContentPane(background);
-        frame.setBounds(50,50,500,500);
+        frame.setContentPane(mainPanel);
+        frame.setBounds(50,50,500,650);
         frame.pack();
         frame.setVisible(true);
     } // end: buildGUI()
 
 
     //------Panel Class-----------------------------------------------
-    private class FloorImagePanel extends JPanel{
+
+    private class FloorPanel extends JPanel{
 
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            g.setColor(Color.CYAN);
-            g.fillRect(0,0,100,100);
+            g.setColor(Color.GRAY);
+            g.fillRect(20,20,420,290);
         }
 
     }
-
 
     //-----Action Listener--------------------------------------------
     private class addItemListener implements ActionListener {

@@ -9,18 +9,26 @@ public class MoyogaeDemo extends JPanel {
     JPanel mainPanel, furniturePanel;
     FloorPanel floorPanel;
 
+
     /**
      * This main routine allow to use this program as an application.
      */
     public static void main(String[] args) {
         new MoyogaeDemo().buildGUI();
-
     }
 
     /**
      * This method creates a frame and makes it visible.
      */
     public void buildGUI(){
+
+        // TODO: delete the following test data after implement imput dialog.
+        Furniture.addFurniture("desk", 120,60);
+        Furniture.addFurniture("Shelf", 40,30);
+        Furniture.addFurniture("Chair", 60,60);
+
+        String[] furnitureEntries = Furniture.createFurnitureList();
+        JList<String> furnitureList;
 
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,10 +39,8 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
-        mainPanel.setBackground(Color.orange);
 
         floorPanel = new FloorPanel();
-        floorPanel.setBackground(Color.PINK);
         floorPanel.setPreferredSize(new Dimension(440,350));
 
         furniturePanel = new JPanel(layout);
@@ -47,11 +53,6 @@ public class MoyogaeDemo extends JPanel {
         floorPanel.add( BorderLayout.SOUTH, floorWidth );
 
         //------furniturePanel----------------------------------------
-        String[] furnitureEntries;
-        furnitureEntries = new String[]{"desk: 1200 x 600", "Shelf: 300 x 400", "Chair: 60 x 60"};
-            //TODO delete the test data above later
-        JList<String> furnitureList;
-
         furnitureList = new JList<>(furnitureEntries);
         furniturePanel.add( BorderLayout.CENTER, furnitureList);
 
@@ -68,7 +69,6 @@ public class MoyogaeDemo extends JPanel {
         frame.setVisible(true);
     } // end: buildGUI()
 
-
     //------Panel Class-----------------------------------------------
 
     private class FloorPanel extends JPanel{
@@ -76,7 +76,25 @@ public class MoyogaeDemo extends JPanel {
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             g.setColor(Color.GRAY);
-            g.fillRect(20,20,420,290);
+            g.drawRect(20,20,420,290);
+
+            int red, green, blue;
+            Color randomColor;
+
+            int x = 50, y = 50;
+            for(Furniture item: Furniture.furnitureArrayList ){
+                String itemName = item.getName();
+                int itemW = item.getWidth();
+                int itemH = item.getLength();
+                red = (int) (Math.random() * 256);
+                blue = (int) (Math.random() * 256);
+                green = (int) (Math.random() * 256);
+                randomColor = new Color(red, green, blue);
+                g.setColor(randomColor);
+                g.fillRect(x,y,itemW, itemH);
+                x += 50;
+                y += 50;
+            }
         }
 
     }

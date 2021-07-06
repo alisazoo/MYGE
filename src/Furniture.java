@@ -27,7 +27,7 @@ public class Furniture {
     }
 
     // add new furniture to the furnitureArrayList
-    public void addFurniture(String name, int width, int length){
+    public static void addFurniture(String name, int width, int length){
         Furniture item = new Furniture(name, width, length);
         furnitureArrayList.add(item);
     }

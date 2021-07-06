@@ -11,15 +11,15 @@ public class Furniture {
     private String name;
     private int length;
     private int width;
-    private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
+    static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Set the availability of the furniture
     boolean isAvailable = true;
 
     // Constructor
     public Furniture(){
-
     }
+
     public Furniture(String name, int width, int length){
         this.length = length;
         this.width = width;
@@ -42,6 +42,7 @@ public class Furniture {
         }
         return itemList;
     }
+
 
 //    // For debugging: make sure items are set in the ArrayList
 //    /**

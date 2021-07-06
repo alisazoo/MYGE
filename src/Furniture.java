@@ -32,6 +32,17 @@ public class Furniture {
         furnitureArrayList.add(item);
     }
 
+    // private JList<Furniture> createFurnitureList(){
+    protected static String[] createFurnitureList(){
+        String[] itemList = new String[furnitureArrayList.size()];
+        for(int i = 0; i < furnitureArrayList.size(); i++){
+            itemList[i] = furnitureArrayList.get(i).getName() + " (" +
+                    furnitureArrayList.get(i).getWidth() + " mm x " +
+                    furnitureArrayList.get(i).getWidth() + " mm)";
+        }
+        return itemList;
+    }
+
 //    // For debugging: make sure items are set in the ArrayList
 //    /**
 //     * Return the string

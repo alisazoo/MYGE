@@ -31,7 +31,7 @@ public class MoyogaeDemo extends JPanel {
      */
     public void buildGUI(){
 
-        // TODO: delete the following test data after implement imput dialog.
+        // TODO: delete the following test data after implement input dialog.
         // for debugging
         Furniture.addFurniture("desk", 120,60);
         Furniture.addFurniture("Shelf", 40,30);
@@ -57,9 +57,10 @@ public class MoyogaeDemo extends JPanel {
         //------floorPanel-------------------------------------------
         JLabel floorWidth = new JLabel( Floor.getWidth() + " mm (width)" + " x " +
                 Floor.getLength() + " mm (length)", JLabel.CENTER);
-        floorPanel.add( BorderLayout.SOUTH, floorWidth );
+        floorPanel.add( BorderLayout.NORTH, floorWidth );
 
         //------furniturePanel----------------------------------------
+
         listModel = new DefaultListModel<>();
         for (Furniture item: Furniture.furnitureArrayList){
             String s = item.getName() + ": " + item.getWidth() + " mm x " + item.getLength() + " mm";

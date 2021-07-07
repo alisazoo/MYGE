@@ -16,6 +16,7 @@ public class MoyogaeDemo extends JPanel {
     JList<String> furnitureList;
 
     static boolean isDuplicateFurniture = false;
+    static String[] result;
 
     /**
      * This main routine allow to use this program as an application.
@@ -182,7 +183,7 @@ public class MoyogaeDemo extends JPanel {
     public static void inputFurnitureData(
             ArrayList<Furniture> arrayList, DefaultListModel<String> listModel){
 
-        String[] result = inputFurnitureDialog();
+        result = inputFurnitureDialog();
 
         // Set the input data into the ArrayList
         Furniture item = new Furniture();

@@ -12,6 +12,9 @@ public class MoyogaeDemo extends JPanel {
     JPanel mainPanel, furniturePanel;
     FloorPanel floorPanel;
 
+    DefaultListModel<String> listModel;
+    JList<String> furnitureList;
+
     /**
      * This main routine allow to use this program as an application.
      */
@@ -33,7 +36,6 @@ public class MoyogaeDemo extends JPanel {
         Furniture.addFurniture("Chair", 60,60);
 
         String[] furnitureEntries = Furniture.createFurnitureList();
-        JList<String> furnitureList;
 
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,16 +60,27 @@ public class MoyogaeDemo extends JPanel {
         floorPanel.add( BorderLayout.SOUTH, floorWidth );
 
         //------furniturePanel----------------------------------------
-        furnitureList = new JList<>(furnitureEntries);
-        furniturePanel.add( BorderLayout.CENTER, furnitureList);
+        listModel = new DefaultListModel<>();
+        for (Furniture item: Furniture.furnitureArrayList){
+            String s = item.getName() + ": " + item.getWidth() + " mm x " + item.getLength() + " mm";
+            listModel.addElement(s);
+        }
+        furnitureList = new JList<>(listModel);
+        JScrollPane scrollPane = new JScrollPane(furnitureList);
+        furniturePanel.add( BorderLayout.CENTER, scrollPane);
 
-        JButton addItem = new JButton("Add MYGEwithGUI.Furniture");
+        JButton addItem = new JButton("Add Furniture");
         addItem.addActionListener(new addItemListener() );
         furniturePanel.add( BorderLayout.EAST, addItem);
+
+        JButton remItem = new JButton("Remove Furniture");
+        remItem.addActionListener(new remItemListener() );
+        furniturePanel.add( BorderLayout.SOUTH, remItem);
 
         mainPanel.add( floorPanel );
         mainPanel.add( furniturePanel );
 
+        frame.setLocationRelativeTo(null);
         frame.setContentPane(mainPanel);
         frame.setBounds(50,50,500,650);
         frame.pack();
@@ -108,8 +121,13 @@ public class MoyogaeDemo extends JPanel {
     private class addItemListener implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("clicked!");
+        public void actionPerformed(ActionEvent evt) {
+
+            inputFurnitureData(Furniture.furnitureArrayList, true, listModel);
+//            if(e.getActionCommand().equals("") ){
+//
+//            }
+
         }
     }
 
@@ -143,49 +161,71 @@ public class MoyogaeDemo extends JPanel {
         Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
         Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
+        // for debugging
+        Floor.setWidth(3000);
+        Floor.setLength(2100);
+
     }   // end inputFloorSize() method
 
+    private class remItemListener implements ActionListener{
 
+        public void actionPerformed(ActionEvent evt){
+            if(!listModel.isEmpty()) {
+                int index = furnitureList.getSelectedIndex();
+                listModel.removeElementAt(index);
+            } else {
+                System.out.println("no more item here. please add the new one!");
+            }
+        }
+    }
 
-//    /**
-//     * This inputFurnitureData method set the new item in the ArrayList<MYGEwithGUI.Furniture>.
-//     */
-//    public static void inputFurnitureData(ArrayList<Furniture> arrayList, boolean isFurnitureAdd){
-//
-//        // Input Dialog
-//        JPanel panel = new JPanel(new BorderLayout(5,5));
-//
-//        JPanel label = new JPanel(new GridLayout(0,1,2,2));
-//        label.add( new JLabel("Name", SwingConstants.RIGHT) );
-//        label.add( new JLabel("Width (mm)", SwingConstants.RIGHT) );
-//        label.add( new JLabel("Length (mm)", SwingConstants.RIGHT) );
-//        panel.add( label, BorderLayout.WEST );
-//
-//        JPanel control = new JPanel(new GridLayout(0,1,2,2));
-//        JTextField furnitureName = new JTextField();
-//        control.add( furnitureName );
-//        JTextField furnitureWidthInput = new JTextField();
-//        control.add(furnitureWidthInput);
-//        JTextField furnitureLengthInput = new JTextField();
-//        control.add(furnitureLengthInput);
-//        panel.add(control, BorderLayout.CENTER);
-//
-//        if(isFurnitureAdd) {
-//            JOptionPane.showMessageDialog(null, panel,
-//                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-//        }
-//        else {
-//            // process for editing
-//        }
-//
-//        // Set the input data into the ArrayList
-//        Furniture item = new Furniture();
-//        item.setName(furnitureName.getText());
-//        item.setWidth( Integer.parseInt(furnitureWidthInput.getText()) );
-//        item.setLength( Integer.parseInt(furnitureLengthInput.getText()) );
-//        arrayList.add(item);
-//
-//    }   // end inputFurnitureData() method
+    /**
+     * This inputFurnitureData method set the new item in the ArrayList<Furniture>.
+     */
+    public static void inputFurnitureData(
+            ArrayList<Furniture> arrayList, boolean isFurnitureAdd, DefaultListModel<String> listModel){
+
+        // Input Dialog
+        JPanel panel = new JPanel(new BorderLayout(5,5));
+
+        JPanel label = new JPanel(new GridLayout(0,1,2,2));
+        label.add( new JLabel("Name", SwingConstants.RIGHT) );
+        label.add( new JLabel("Width (mm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Length (mm)", SwingConstants.RIGHT) );
+        panel.add( label, BorderLayout.WEST );
+
+        JPanel control = new JPanel(new GridLayout(0,1,2,2));
+        JTextField furnitureName = new JTextField();
+        control.add( furnitureName );
+        JTextField furnitureWidthInput = new JTextField();
+        control.add(furnitureWidthInput);
+        JTextField furnitureLengthInput = new JTextField();
+        control.add(furnitureLengthInput);
+        panel.add(control, BorderLayout.CENTER);
+
+        if(isFurnitureAdd) {
+            JOptionPane.showMessageDialog(null, panel,
+                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+        }
+        else {
+            // process for editing
+        }
+
+        // Set the input data into the ArrayList
+        Furniture item = new Furniture();
+        String name = furnitureName.getText();
+        int width = Integer.parseInt(furnitureWidthInput.getText());
+        int length = Integer.parseInt(furnitureLengthInput.getText());
+        item.setName( name );
+        item.setWidth( width );
+        item.setLength( length );
+        arrayList.add(item);
+
+        // Set the input data into the DefaultListModel
+        String newItem = name + ": " + width + " mm x " + length + " mm";
+        listModel.addElement(newItem);
+
+    }   // end inputFurnitureData() method
 
 
 }

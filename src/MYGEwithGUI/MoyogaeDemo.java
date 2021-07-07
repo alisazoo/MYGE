@@ -122,12 +122,7 @@ public class MoyogaeDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-
             inputFurnitureData(Furniture.furnitureArrayList, true, listModel);
-//            if(e.getActionCommand().equals("") ){
-//
-//            }
-
         }
     }
 

@@ -226,10 +226,10 @@ public class MoyogaeDemo extends JPanel {
 
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
 
-        //Todo: make different dialog or fix the layout.
         if(isDuplicateFurniture)
-            control.add( new JLabel(
-                    "You cannot add duplicated item. \nPlease make the new one with different name.") );
+            panel.add( new JLabel(
+                    "You cannot add duplicated item. Please make the new one with different name."),
+                    BorderLayout.NORTH);
 
         JTextField furnitureName = new JTextField();
         control.add( furnitureName );

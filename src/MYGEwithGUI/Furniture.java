@@ -1,3 +1,5 @@
+package MYGEwithGUI;
+
 import java.util.ArrayList;
 
 /**
@@ -11,15 +13,15 @@ public class Furniture {
     private String name;
     private int length;
     private int width;
-    private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
+    static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Set the availability of the furniture
     boolean isAvailable = true;
 
     // Constructor
     public Furniture(){
-
     }
+
     public Furniture(String name, int width, int length){
         this.length = length;
         this.width = width;
@@ -27,12 +29,12 @@ public class Furniture {
     }
 
     // add new furniture to the furnitureArrayList
-    public void addFurniture(String name, int width, int length){
+    public static void addFurniture(String name, int width, int length){
         Furniture item = new Furniture(name, width, length);
         furnitureArrayList.add(item);
     }
 
-    // private JList<Furniture> createFurnitureList(){
+    // private JList<MYGEwithGUI.Furniture> createFurnitureList(){
     protected static String[] createFurnitureList(){
         String[] itemList = new String[furnitureArrayList.size()];
         for(int i = 0; i < furnitureArrayList.size(); i++){
@@ -43,6 +45,7 @@ public class Furniture {
         return itemList;
     }
 
+
 //    // For debugging: make sure items are set in the ArrayList
 //    /**
 //     * Return the string
@@ -50,7 +53,7 @@ public class Furniture {
 //     */
 //    public String getFurniturelistText(){
 //        String itemTxt = "";
-//        for(Furniture item: furnitureArrayList){
+//        for(MYGEwithGUI.Furniture item: furnitureArrayList){
 //            String itemN = item.getName();
 //            int w = item.getLength();
 //            int l = item.getWidth();

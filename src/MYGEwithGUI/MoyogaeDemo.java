@@ -15,11 +15,12 @@ public class MoyogaeDemo extends JPanel {
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
 
+    static boolean isDuplicateFurniture = false;
+
     /**
      * This main routine allow to use this program as an application.
      */
     public static void main(String[] args) {
-
         MoyogaeDemo main = new MoyogaeDemo();
         inputFloorData();
         main.buildGUI();
@@ -31,11 +32,10 @@ public class MoyogaeDemo extends JPanel {
     public void buildGUI(){
 
         // TODO: delete the following test data after implement imput dialog.
+        // for debugging
         Furniture.addFurniture("desk", 120,60);
         Furniture.addFurniture("Shelf", 40,30);
         Furniture.addFurniture("Chair", 60,60);
-
-        String[] furnitureEntries = Furniture.createFurnitureList();
 
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,7 +122,8 @@ public class MoyogaeDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            inputFurnitureData(Furniture.furnitureArrayList, true, listModel);
+            inputFurnitureData(Furniture.furnitureArrayList, listModel);
+            floorPanel.repaint();
         }
     }
 
@@ -133,30 +134,30 @@ public class MoyogaeDemo extends JPanel {
     public static void inputFloorData(){
 
         // Input Dialog
-        JPanel panel = new JPanel(new BorderLayout(5,5));
+//        JPanel panel = new JPanel(new BorderLayout(5,5));
+//
+//        JPanel label = new JPanel(new GridLayout(0,1,2,2));
+//        label.add( new JLabel("Enter the size:") );
+//        label.add( new JLabel("Floor Width (mm)", SwingConstants.RIGHT) );
+//        label.add( new JLabel("Floor Length (mm)", SwingConstants.RIGHT) );
+//        panel.add( label, BorderLayout.WEST );
+//
+//        JPanel control = new JPanel(new GridLayout(0,1,2,2));
+//        control.add( new JLabel(""));   // to fill the empty space for layout
+//        JTextField floorWidthInput = new JTextField();
+//        control.add(floorWidthInput);
+//        JTextField floorLengthInput = new JTextField();
+//        control.add(floorLengthInput);
+//        panel.add(control, BorderLayout.CENTER);
+//
+//        JOptionPane.showMessageDialog(null, panel,
+//                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+//
+//        // Set the input data into the floor object
+//        Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
+//        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
-        JPanel label = new JPanel(new GridLayout(0,1,2,2));
-        label.add( new JLabel("Enter the size:") );
-        label.add( new JLabel("Floor Width (mm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Floor Length (mm)", SwingConstants.RIGHT) );
-        panel.add( label, BorderLayout.WEST );
-
-        JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        control.add( new JLabel(""));   // to fill the empty space for layout
-        JTextField floorWidthInput = new JTextField();
-        control.add(floorWidthInput);
-        JTextField floorLengthInput = new JTextField();
-        control.add(floorLengthInput);
-        panel.add(control, BorderLayout.CENTER);
-
-        JOptionPane.showMessageDialog(null, panel,
-                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-
-        // Set the input data into the floor object
-        Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
-        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
-
-        // for debugging
+        // for debugging: skip the first input dialog
         Floor.setWidth(3000);
         Floor.setLength(2100);
 
@@ -178,7 +179,41 @@ public class MoyogaeDemo extends JPanel {
      * This inputFurnitureData method set the new item in the ArrayList<Furniture>.
      */
     public static void inputFurnitureData(
-            ArrayList<Furniture> arrayList, boolean isFurnitureAdd, DefaultListModel<String> listModel){
+            ArrayList<Furniture> arrayList, DefaultListModel<String> listModel){
+
+        String[] result = inputFurnitureDialog();
+
+        // Set the input data into the ArrayList
+        Furniture item = new Furniture();
+        String name = result[0];
+        int width, length;
+        width = Integer.parseInt( result[1] );
+        length = Integer.parseInt( result[2] );
+
+        for (Furniture newItem: Furniture.furnitureArrayList){
+            if(newItem.getName().equals(name)){
+                System.out.println(newItem.getName());
+                isDuplicateFurniture = true;
+            }
+        }
+        if(isDuplicateFurniture) { // If the name of the item is the same as the existing items
+            //TODO: it is not good never to use result array. Need to improve!
+            result = new String[]{};
+            result = inputFurnitureDialog();
+
+        } else {
+            item.setName(name);
+            item.setWidth(width);
+            item.setLength(length);
+            arrayList.add(item);
+
+            // Set the input data into the DefaultListModel
+            String newItemTxt = name + ": " + width + " mm x " + length + " mm";
+            listModel.addElement(newItemTxt);
+        }
+    }   // end inputFurnitureData() method
+
+    public static String[] inputFurnitureDialog(){
 
         // Input Dialog
         JPanel panel = new JPanel(new BorderLayout(5,5));
@@ -190,37 +225,32 @@ public class MoyogaeDemo extends JPanel {
         panel.add( label, BorderLayout.WEST );
 
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
+
+        //Todo: make different dialog or fix the layout.
+        if(isDuplicateFurniture)
+            control.add( new JLabel(
+                    "You cannot add duplicated item. \nPlease make the new one with different name.") );
+
         JTextField furnitureName = new JTextField();
         control.add( furnitureName );
         JTextField furnitureWidthInput = new JTextField();
         control.add(furnitureWidthInput);
         JTextField furnitureLengthInput = new JTextField();
         control.add(furnitureLengthInput);
+
         panel.add(control, BorderLayout.CENTER);
 
-        if(isFurnitureAdd) {
-            JOptionPane.showMessageDialog(null, panel,
-                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-        }
-        else {
-            // process for editing
-        }
+        JOptionPane.showMessageDialog(null, panel,
+                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
-        // Set the input data into the ArrayList
-        Furniture item = new Furniture();
-        String name = furnitureName.getText();
-        int width = Integer.parseInt(furnitureWidthInput.getText());
-        int length = Integer.parseInt(furnitureLengthInput.getText());
-        item.setName( name );
-        item.setWidth( width );
-        item.setLength( length );
-        arrayList.add(item);
+        String[] infoArray = new String[3];
+        infoArray[0] = furnitureName.getText();
+            // The value is not trimmed considering the possiblity to treat not only single word name.
+        infoArray[1] = furnitureWidthInput.getText();
+        infoArray[2] = furnitureLengthInput.getText();
 
-        // Set the input data into the DefaultListModel
-        String newItem = name + ": " + width + " mm x " + length + " mm";
-        listModel.addElement(newItem);
-
-    }   // end inputFurnitureData() method
+        return infoArray;
+    }
 
 
 }

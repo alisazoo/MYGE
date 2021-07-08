@@ -177,10 +177,6 @@ public class MoyogaeDemo extends JPanel {
                 int index = furnitureList.getSelectedIndex();
                 String str = furnitureList.getSelectedValue();
 
-                // DELETE the item from both JList and furnitureArrayList
-                //  it works for the default item, but does not work with
-                //  the new items added from user input.
-
                 // Delete the existing item from JList
                 listModel.removeElementAt(index);
 

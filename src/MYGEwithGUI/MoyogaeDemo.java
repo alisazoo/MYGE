@@ -179,8 +179,8 @@ public class MoyogaeDemo extends JPanel {
                 //      create extractString method and add here.
 
             } else {
-                // TODO: replace with dialog window.
-                System.out.println("no more item here. please add the new one!");
+                JOptionPane.showMessageDialog(null,
+                        "No more item here. Please add the new one before deleting!");
             }
         }
     }

@@ -23,9 +23,11 @@ public class MoyogaeDemo extends JPanel {
      * This main routine allow to use this program as an application.
      */
     public static void main(String[] args) {
+
         MoyogaeDemo main = new MoyogaeDemo();
         inputFloorData();
         main.buildGUI();
+
     }
 
     /**
@@ -169,14 +171,30 @@ public class MoyogaeDemo extends JPanel {
     private class remItemListener implements ActionListener{
 
         public void actionPerformed(ActionEvent evt){
-            if(!listModel.isEmpty()) {
-                int index = furnitureList.getSelectedIndex();
-                String v = furnitureList.getSelectedValue();
 
+            if(!listModel.isEmpty()) {
+
+                int index = furnitureList.getSelectedIndex();
+                String str = furnitureList.getSelectedValue();
+
+                // DELETE the item from both JList and furnitureArrayList
+                //  it works for the default item, but does not work with
+                //  the new items added from user input.
+
+                // Delete the existing item from JList
                 listModel.removeElementAt(index);
 
-                //TODO: the item should be deleted from Furniture.furnitureArrayList so
-                //      create extractString method and add here.
+                // Delete the existing item from furnitureArrayList
+                int strIndex = str.indexOf(":");
+                String subtractText = str.substring(0, strIndex);
+
+                for(Furniture item: Furniture.furnitureArrayList){
+                    if( item.getName().equals(subtractText) ){
+                        Furniture.furnitureArrayList.remove(item);
+                        break;
+                    }
+                }
+                frame.repaint();
 
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -213,7 +231,7 @@ public class MoyogaeDemo extends JPanel {
         String newItemTxt = name + ": " + width + " mm x " + length + " mm";
         listModel.addElement(newItemTxt);
 
-    }   // end inputFurnitureData() method
+    }   // end: inputFurnitureData() method
 
     /**
      * This static method inputFurnitureDialog create the input dialog
@@ -284,23 +302,6 @@ public class MoyogaeDemo extends JPanel {
         }
 
         return infoArray;
-    }
-
-    private String extractString(String targetStr){
-
-        String extractedName = "";
-
-        //TODO: create the method based on https://www.baeldung.com/java-substring
-        try (Scanner scanner = new Scanner(targetStr)){
-            scanner.useDelimiter(":");
-
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return extractedName;
-    }
-
+    } // end: inputFurnitureDialog() method
 
 }

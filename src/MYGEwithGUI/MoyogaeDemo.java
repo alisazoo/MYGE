@@ -17,6 +17,7 @@ public class MoyogaeDemo extends JPanel {
     static boolean isDuplicateFurniture = false;
     static String[] result = new String[3];
 
+    double adjustRatioWidth, adjustRatioLength;
     /**
      * This main routine allow to use this program as an application.
      */
@@ -43,11 +44,17 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        floorPanel = new FloorPanel();
+        int flrWidth = Floor.getWidth();
+        int flrLength = Floor.getLength();
+
+        adjustRatioWidth = 420.0/flrWidth;
+        adjustRatioLength = 330.0/flrLength;
+
+        floorPanel = new FloorPanel(adjustRatioWidth, adjustRatioLength);
         floorPanel.setPreferredSize(new Dimension(440,350));
+        floorPanel.setBorder( BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 
         furniturePanel = new JPanel(layout);
-        furniturePanel.setBackground(Color.GRAY);
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
@@ -55,17 +62,19 @@ public class MoyogaeDemo extends JPanel {
                 Floor.getLength() + " mm (length)", JLabel.CENTER);
 
 // Comment out during checking out sizeAdjustment brunch
-        // TODO uncomment out before merging
-//        Dragger dragListener = new Dragger();
-//        floorPanel.addMouseListener( dragListener );
-//        floorPanel.addMouseMotionListener( dragListener );
+        Dragger dragListener = new Dragger();
+        floorPanel.addMouseListener( dragListener );
+        floorPanel.addMouseMotionListener( dragListener );
         floorPanel.add( BorderLayout.NORTH, floorWidth );
+        // TODO: fix the layout issue with BorderLayout manager?
+        // floorPanel.add(BorderLayout.SOUTH, floorWidth);
+        //  this above line also work but the location is the SAME as NORTH ver.
 
         //------furniturePanel----------------------------------------
 
         listModel = new DefaultListModel<>();
         for (Furniture item: Furniture.getFurnitureArrayList() ){
-            String s = item.getName() + ": " + item.getWidth() + " mm x " + item.getLength() + " mm";
+            String s = item.getName() + ": " + item.getWidth() + " cm x " + item.getLength() + " cm";
             listModel.addElement(s);
         }
         furnitureList = new JList<>(listModel);
@@ -126,8 +135,8 @@ public class MoyogaeDemo extends JPanel {
 //        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
         // TODO: delete the following test data
-        Floor.setWidth(3000);
-        Floor.setLength(2100);
+        Floor.setWidth(300);
+        Floor.setLength(210);
 
     }   // end inputFloorSize() method
 

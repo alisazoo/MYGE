@@ -6,6 +6,14 @@ import java.util.ArrayList;
 
 public class FloorPanel extends JPanel {
 
+    double adjustRatioWidth, adjustRatioLength;
+
+    public FloorPanel(double adjustRatioWidth, double adjustRatioLength){
+        super();
+        this.adjustRatioWidth = adjustRatioWidth;
+        this.adjustRatioLength = adjustRatioLength;
+    }
+
     public void paintComponent(Graphics g){
         int x = 50, y = 50;
         ArrayList<Furniture> itemArrayList = Furniture.getFurnitureArrayList();
@@ -20,8 +28,8 @@ public class FloorPanel extends JPanel {
         System.out.println("\nNew Attempt:");
         for(Furniture item: itemArrayList ){
             String itemName = item.getName();
-            int itemW = item.getWidth();
-            int itemH = item.getLength();
+            int itemW = (int)(item.getWidth() * adjustRatioWidth);
+            int itemH = (int)(item.getLength() * adjustRatioLength);
 
             // Set the current x & y coods into furnitureArrayList
             item.setCurX(x);

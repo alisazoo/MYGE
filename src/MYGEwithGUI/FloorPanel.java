@@ -27,9 +27,9 @@ public class FloorPanel extends JPanel {
             item.setCurX(x);
             item.setCurY(y);
 
-            //For DEBUGGING
-            System.out.println(itemName + ": " + "(" + item.getCurX() + ", " + item.getCurY() + ")");
-            System.out.println("id of " + itemName + ": " + item.getId());
+//            //For DEBUGGING
+//            System.out.println(itemName + ": " + "(" + item.getCurX() + ", " + item.getCurY() + ")");
+//            System.out.println("id of " + itemName + ": " + item.getId());
 
             red = (int) (Math.random() * 256);
             blue = (int) (Math.random() * 256);

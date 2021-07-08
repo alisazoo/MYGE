@@ -278,18 +278,15 @@ public class MoyogaeDemo extends JPanel {
     private class Dragger implements MouseListener, MouseMotionListener{
 
         boolean dragging;       // Set to true when a drag is in progress.
-        int draggingIndex;      // Set the index of the current dragging item in furnitureArrayList
+        Furniture draggingItem; // Set the instance of the current dragging item (in furnitureArrayList)
         int offsetX, offsetY;   // Offset of mouse-click coordinates from the top-left corner of
                                 //  the square that was clicked.
 
-        @Override
-        public void mouseClicked(MouseEvent evt) {
-            System.out.println("Clicked at (" + evt.getPoint().getX() + ", " +
-                    evt.getPoint().getY() + ")" );
-        }
 
         @Override
         public void mousePressed(MouseEvent evt) {
+
+            System.out.println("clicked: " + evt.getX() + ", " + evt.getY());
 
             // Exit if a drag is in progress.
             if( dragging )
@@ -297,11 +294,55 @@ public class MoyogaeDemo extends JPanel {
             int locX = evt.getX();
             int locY = evt.getY();
 
-            for(Furniture item: Furniture.getFurnitureArrayList() ){
+            ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+            ArrayList<Furniture> listForDetect = new ArrayList<>(itemList);
+            Furniture target;
+            boolean isFoundTarget = false;
 
+            // contains infinite loop.
+            while( !isFoundTarget && !listForDetect.isEmpty()) {
+
+                int latestItemId = detectLatestItem(listForDetect);
+
+                for (Furniture item : listForDetect) {
+
+                    if (item.getId() == latestItemId) {
+
+                        int topLeftX = item.getCurX();
+                        int topLeftY = item.getCurY();
+
+                        if (topLeftX <= locX && locX <= topLeftX + (item.getWidth())
+                                && topLeftY <= locY && locY <= (topLeftY + item.getLength())) {
+
+                            target = item;
+                            isFoundTarget = true;
+                            System.out.println("your target is " + target.getName());
+                            break;
+
+                        } else {
+
+                            System.out.println("You clicked no item.");
+                            break; // to avoid error. only when the latest item is clicked, the correct item is detected.
+                                    //TODO should fix the issue.
+//                            listForDetect.remove(item);
+                        }
+                    }
+                }
             }
+        }
 
+        public int detectLatestItem(ArrayList<Furniture> list){
+            // Detect the latest item in the furnitureArrayList
+            int latestItemId = 0; // id represents the latest created item
+            for( Furniture item: list ){
+                if(latestItemId < item.getId() )
+                    latestItemId = item.getId();
+            }
+            return latestItemId;
+        }
 
+        @Override
+        public void mouseDragged(MouseEvent e) {
 
         }
 
@@ -311,24 +352,17 @@ public class MoyogaeDemo extends JPanel {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-
-        }
-
-        @Override
         public void mouseMoved(MouseEvent e) {
 
         }
+
+        public void mouseClicked(MouseEvent evt) {}
+        public void mouseEntered(MouseEvent e) { }
+        public void mouseExited(MouseEvent e) { }
+
+
+
+
     }   // end: nested-class Dragger
 
 

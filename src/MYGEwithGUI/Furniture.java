@@ -10,7 +10,10 @@ import java.util.ArrayList;
  */
 public class Furniture {
 
-    private int id = 0;
+    //TODO debugging
+//        System.out.println("id: " + item.getId() );
+
+    private int id;
     private String name;
     private int length;
     private int width;
@@ -31,19 +34,7 @@ public class Furniture {
         this.length = length;
         this.width = width;
         this.name = name;
-    }
-
-    // add new furniture to the furnitureArrayList
-    public static void addFurniture(String name, int width, int length){
-        Furniture item = new Furniture(name, width, length);
-
-//        //TODO debugging
-////        System.out.println("id: " + item.getId() );
-//
-//        item.setId(id);
-//        furnitureArrayList.add(item);
-//
-//        id++;
+        this.id = IdProvider.getInstance().getUniqueId();
     }
 
     // Set the coordinates of current location of the item

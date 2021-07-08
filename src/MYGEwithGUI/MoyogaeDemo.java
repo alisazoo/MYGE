@@ -23,7 +23,6 @@ public class MoyogaeDemo extends JPanel {
     public static void main(String[] args) {
 
         MoyogaeDemo main = new MoyogaeDemo();
-//        Furniture furnitureItems = new Furniture();
         inputFloorData();
         main.buildGUI();
 
@@ -33,16 +32,6 @@ public class MoyogaeDemo extends JPanel {
      * This method creates a frame and makes it visible.
      */
     public void buildGUI(){
-
-        // TODO: delete the following test data
-        Furniture.addFurniture("desk", 120,60);
-        Furniture.addFurniture("Shelf", 40,30);
-        Furniture.addFurniture("Chair", 60,60);
-
-        ArrayList<Furniture> itemArrayList = Furniture.getFurnitureArrayList();
-        for(Furniture f: itemArrayList){
-            System.out.println(f.getName() + " (" + f.getId() + ")" );
-        }
 
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -153,16 +142,13 @@ public class MoyogaeDemo extends JPanel {
         } while (isDuplicateFurniture);
 
         // Set the input data into the local variables
-        Furniture item = new Furniture();
         String name = result[0];
         int width, length;
         width = Integer.parseInt( result[1] );
         length = Integer.parseInt( result[2] );
 
         // new data is assigned to the ArrayList
-        item.setName(name);
-        item.setWidth(width);
-        item.setLength(length);
+        Furniture item = new Furniture(name, width, length);
         arrayList.add(item);
 
         // Set the input data into the DefaultListModel
@@ -225,6 +211,9 @@ public class MoyogaeDemo extends JPanel {
         infoArray[0] = name;
         infoArray[1] = width;
         infoArray[2] = length;
+
+        System.out.println("infoArray: " + infoArray[0] + " is " + infoArray[1] +
+                " mm(w) " + infoArray[2] + "mm(l)");
 
         // If the name of the new input item is the same as one of the existing item,
         // isDuplicateFurniture set as true.

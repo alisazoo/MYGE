@@ -17,6 +17,7 @@ public class FloorPanel extends JPanel {
         g.drawRect(20,20,420,290);
 
 
+        System.out.println("\nNew Attempt:");
         for(Furniture item: itemArrayList ){
             String itemName = item.getName();
             int itemW = item.getWidth();

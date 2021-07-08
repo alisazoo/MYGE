@@ -53,9 +53,12 @@ public class MoyogaeDemo extends JPanel {
         //------floorPanel-------------------------------------------
         JLabel floorWidth = new JLabel( Floor.getWidth() + " mm (width)" + " x " +
                 Floor.getLength() + " mm (length)", JLabel.CENTER);
-        Dragger dragListener = new Dragger();
-        floorPanel.addMouseListener( dragListener );
-        floorPanel.addMouseMotionListener( dragListener );
+
+// Comment out during checking out sizeAdjustment brunch
+        // TODO uncomment out before merging
+//        Dragger dragListener = new Dragger();
+//        floorPanel.addMouseListener( dragListener );
+//        floorPanel.addMouseMotionListener( dragListener );
         floorPanel.add( BorderLayout.NORTH, floorWidth );
 
         //------furniturePanel----------------------------------------

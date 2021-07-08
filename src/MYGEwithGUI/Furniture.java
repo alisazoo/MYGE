@@ -10,13 +10,18 @@ import java.util.ArrayList;
  */
 public class Furniture {
 
+    private int id = 0;
     private String name;
     private int length;
     private int width;
-    static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
-    // Set the availability of the furniture
-    boolean isAvailable = true;
+    private int curX;   // current x-coordinates of top-left corner
+    private int curY;   // current y-coordinates of top-left corner
+    private int preX;   // previous x-coordinates of top-left corner
+    private int preY;   // previous y-coordinates of top-left corner
+
+    //TODO add getter method for furnitureArrayList & make this private (encupsulation)
+    private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Constructor
     public Furniture(){
@@ -31,7 +36,37 @@ public class Furniture {
     // add new furniture to the furnitureArrayList
     public static void addFurniture(String name, int width, int length){
         Furniture item = new Furniture(name, width, length);
-        furnitureArrayList.add(item);
+
+//        //TODO debugging
+////        System.out.println("id: " + item.getId() );
+//
+//        item.setId(id);
+//        furnitureArrayList.add(item);
+//
+//        id++;
+    }
+
+    // Set the coordinates of current location of the item
+    public static void addFurnitureCurrentLocation(String name, int x, int y){
+        for( Furniture item: furnitureArrayList ){
+            if( item.getName().equals(name) ){
+                item.setCurX(x);
+                item.setCurY(y);
+                break;
+            }
+        }
+    }
+
+    // Set the previous of current location of the item
+    public static void addFurniturePreviousLocation(String name, int x, int y){
+        for( Furniture item: furnitureArrayList ){
+            if( item.getName().equals(name) ){
+                //TODO: encupsulation
+                item.setPreX(x);
+                item.setPreY(y);
+                break;
+            }
+        }
     }
 
     // private JList<MYGEwithGUI.Furniture> createFurnitureList(){
@@ -62,8 +97,20 @@ public class Furniture {
 //        return itemTxt;
 //    }
 
-    public ArrayList<Furniture> getFurnitureArrayList(){
+    public static ArrayList<Furniture> getFurnitureArrayList(){
         return furnitureArrayList;
+    }
+
+    public static void setFurnitureArrayList(ArrayList<Furniture> furnitureArrayList) {
+        Furniture.furnitureArrayList = furnitureArrayList;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -89,4 +136,37 @@ public class Furniture {
     public void setWidth(int width) {
         this.width = width;
     }
+
+    public int getCurX() {
+        return curX;
+    }
+
+    public void setCurX(int curX) {
+        this.curX = curX;
+    }
+
+    public int getCurY() {
+        return curY;
+    }
+
+    public void setCurY(int curY) {
+        this.curY = curY;
+    }
+
+    public int getPreX() {
+        return preX;
+    }
+
+    public void setPreX(int preX) {
+        this.preX = preX;
+    }
+
+    public int getPreY() {
+        return preY;
+    }
+
+    public void setPreY(int preY) {
+        this.preY = preY;
+    }
+
 }

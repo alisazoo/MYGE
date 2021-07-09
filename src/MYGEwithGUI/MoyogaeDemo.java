@@ -294,7 +294,6 @@ public class MoyogaeDemo extends JPanel {
         int offsetX, offsetY;   // Offset of mouse-click coordinates from the top-left corner of
                                 //  the square that was clicked.
 
-
         @Override
         public void mousePressed(MouseEvent evt) {
 
@@ -312,35 +311,65 @@ public class MoyogaeDemo extends JPanel {
             boolean isFoundTarget = false;
 
             // contains infinite loop.
-            while( !isFoundTarget && !listForDetect.isEmpty()) {
 
-                int latestItemId = detectLatestItem(listForDetect);
+            for (Furniture item : itemList) {
 
-                for (Furniture item : listForDetect) {
+                int topLeftX = item.getCurX();
+                int topLeftY = item.getCurY();
+                int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
+                int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
+                System.out.println(topLeftX + ", " + topLeftY + "( " + buttomRightX + ", " + buttomRightY + " )");
 
-                    if (item.getId() == latestItemId) {
+                // Check whether the area of this item contains the clicked position.
+                if (topLeftX <= locX && locX <= buttomRightX
+                        && topLeftY <= locY && locY <= buttomRightY) {
 
-                        int topLeftX = item.getCurX();
-                        int topLeftY = item.getCurY();
-
-                        if (topLeftX <= locX && locX <= topLeftX + (item.getWidth())
-                                && topLeftY <= locY && locY <= (topLeftY + item.getLength())) {
-
+                    // Find the latest created item that displayed on the top layer = clickable
+                    //  item.
+                    int latestItemId = detectLatestItem(listForDetect);
+                    while (!isFoundTarget && !listForDetect.isEmpty() ) {
+                        if (item.getId() == latestItemId) {
                             target = item;
-                            isFoundTarget = true;
                             System.out.println("your target is " + target.getName());
+                            isFoundTarget = true;
                             break;
-
                         } else {
-
-                            System.out.println("You clicked no item.");
-                            break; // to avoid error. only when the latest item is clicked, the correct item is detected.
-                                    //TODO should fix the issue.
-//                            listForDetect.remove(item);
+                            listForDetect.remove(item);
+                            break;
                         }
                     }
                 }
-            }
+            } // end for-loop
+
+////                if (!isFoundTarget && !listForDetect.isEmpty()) {
+//                if (!listForDetect.isEmpty()) {
+
+//                    int latestItemId = detectLatestItem(listForDetect);
+//
+//                    int topLeftX = item.getCurX();
+//                    int topLeftY = item.getCurY();
+//                    int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
+//                    int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
+//                    System.out.println(topLeftX + ", " + topLeftY + "( " + buttomRightX + ", " + buttomRightY + " )");
+//
+//                    if (topLeftX <= locX && locX <= buttomRightX
+//                            && topLeftY <= locY && locY <= buttomRightY) {
+//
+//                        if (item.getId() == latestItemId) {
+//                            target = item;
+////                            isFoundTarget = true;
+//                            System.out.println("your target is " + target.getName());
+//                            break;
+//
+//                        }
+//
+//                        listForDetect.remove(item);
+//
+//                    }
+
+
+
+
         }
 
         public int detectLatestItem(ArrayList<Furniture> list){

@@ -56,7 +56,7 @@ public class FloorPanel extends JPanel {
             g.setColor(randomColor);
             g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
             g.setColor(Color.BLACK);
-            g.drawString(itemName, x,y); // after the 2nd: curX, curY
+            g.drawString(itemName + ": (" + x + ", " + y + ")", x,y); // after the 2nd: curX, curY
 
         }
     }

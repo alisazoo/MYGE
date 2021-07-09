@@ -295,8 +295,12 @@ public class MoyogaeDemo extends JPanel {
         Furniture target = null;    // Set the instance of the current dragging item (in furnitureArrayList)
         int offsetX, offsetY;       // Offset of mouse-click coordinates from the top-left corner of
                                     //  the square that was clicked.
-        int topLeftX = 0;           // the top-left x-coords of target furniture
-        int topLeftY = 0;           // the top-left y-coords of target furniture
+        int topLeftX = 0;           // the top-left x-coords of the target furniture
+        int topLeftY = 0;           // the top-left y-coords of the target furniture
+        int buttomRightX;           // the buttom-right x-coords of the target furniture
+        int buttomRightY;           // the buttom-right y-coods of the target furniture
+        int itemWidth;
+        int itemLength;
 
         @Override
         public void mousePressed(MouseEvent evt) {
@@ -313,10 +317,21 @@ public class MoyogaeDemo extends JPanel {
             ArrayList<Furniture> targetList = new ArrayList<>();
 
             for (Furniture item : itemList) {
+
+                itemWidth = (int)(item.getWidth() * adjustRatioWidth);
+                itemLength = (int)(item.getLength() * adjustRatioLength);
+
                 topLeftX = item.getCurX();
                 topLeftY = item.getCurY();
-                int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
-                int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
+                System.out.println("topLeft: " + topLeftX + ", "+ topLeftY);
+
+                buttomRightX = topLeftX + itemWidth;
+                buttomRightY = topLeftY + itemLength;
+                System.out.println("buttomRight: " + buttomRightX + ", " + buttomRightY);
+
+                offsetX = locX - topLeftX;
+                offsetY = locY - topLeftY;
+                System.out.println("offset (" + offsetX + ", " + offsetY + ")");
 
                 // Check whether the area of this item contains the clicked position.
                 // And add the item to targetList as a potential item to detect the clicked item.
@@ -344,9 +359,6 @@ public class MoyogaeDemo extends JPanel {
             }
 
             dragging = true;
-            offsetX = locX - topLeftX;
-            offsetY = locY - topLeftY;
-            System.out.println("offset (" + offsetX + ", " + offsetY + ")");
         }
 
         //        public int detectLatestItem(ArrayList<Furniture> list){
@@ -378,7 +390,7 @@ public class MoyogaeDemo extends JPanel {
             ArrayList<Furniture> originalAryList = Furniture.getFurnitureArrayList();
             for( Furniture item: originalAryList ){
                 if( item.getId() == targetId ){
-                    //TODO: use preX & Y when implementing "return" button
+
                     item.setPreX( item.getCurX() );
                     item.setPreY( item.getCurY() );
                     item.setCurX( x - offsetX );
@@ -387,8 +399,11 @@ public class MoyogaeDemo extends JPanel {
                             "(" + item.getCurX() + ", " + item.getCurY() + ")" );
 
                 }
+
             }
             frame.repaint();
+
+            System.out.println("\n");
 
         }
 
@@ -397,6 +412,31 @@ public class MoyogaeDemo extends JPanel {
          */
         @Override
         public void mouseReleased(MouseEvent evt) {
+
+            int afterReleaseX = evt.getX();
+            int afterReleaseY = evt.getY();
+
+            // If the bottom-right corner of the item will out of the floor,
+            // notification will be appear
+            //TODO: additionally, the image repaint based on the previous location (= topLeftX & topLeftY)
+            if( (afterReleaseX - offsetX + itemWidth) > 445 || ( afterReleaseY - offsetY + itemLength ) > 310 ){
+                //panel size: 440 x 305!
+                JOptionPane.showMessageDialog(null,
+                        "You cannot move the item out side your room. " +
+                                "Please put it in the room");
+                //TODO: add a function. Set the item along to the right bottom corner of the floor.
+
+                return;
+//            } else if (afterReleaseX < 0 || afterReleaseY < 0){
+            } else if ( (afterReleaseX-offsetX) < 15 || (afterReleaseY-offsetY ) < 15){
+                JOptionPane.showMessageDialog(null,
+                        "You cannot move the item out side your room. " +
+                                "Please put it in the room, please!");
+                //TODO: add a function. Set the item along to the top left corner of the floor.
+                return;
+            }
+
+            System.out.println("\nafterRelease: " + afterReleaseX + ", " + afterReleaseY);
             dragging = false;
         }
 

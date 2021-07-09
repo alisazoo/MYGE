@@ -1,5 +1,6 @@
 package MYGEwithGUI;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,7 @@ public class Furniture {
     private String name;
     private int length;
     private int width;
+    private Color uniqueColor;
 
     private int curX;   // current x-coordinates of top-left corner
     private int curY;   // current y-coordinates of top-left corner
@@ -128,6 +130,14 @@ public class Furniture {
 
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public Color getUniqueColor() {
+        return uniqueColor;
+    }
+
+    public void setUniqueColor(Color uniqueColor) {
+        this.uniqueColor = uniqueColor;
     }
 
     public int getCurX() {

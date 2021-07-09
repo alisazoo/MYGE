@@ -35,12 +35,15 @@ public class FloorPanel extends JPanel {
 //            //For DEBUGGING
 //            System.out.println(itemName + ": " + "(" + item.getCurX() + ", " + item.getCurY() + ")");
 //            System.out.println("id of " + itemName + ": " + item.getId());
-
-            red = (int) (Math.random() * 256);
-            blue = (int) (Math.random() * 256);
-            green = (int) (Math.random() * 256);
-            randomColor = new Color(red, green, blue);
-
+            if( item.getUniqueColor() == null) {
+                red = (int) (Math.random() * 256);
+                blue = (int) (Math.random() * 256);
+                green = (int) (Math.random() * 256);
+                randomColor = new Color(red, green, blue);
+                item.setUniqueColor(randomColor);
+            } else {
+                randomColor = item.getUniqueColor();
+            }
             g.setColor(randomColor);
 
             if( item.getCurX() == -1 && item.getCurY() == -1 ) {

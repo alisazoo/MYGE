@@ -306,21 +306,15 @@ public class MoyogaeDemo extends JPanel {
             int locY = evt.getY();
 
             ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
-            ArrayList<Furniture> listForDetect = new ArrayList<>(itemList);
-
             ArrayList<Furniture> targetList = new ArrayList<>();
 
             Furniture target = null;
-            boolean isFoundTarget = false;
 
             for (Furniture item : itemList) {
                 int topLeftX = item.getCurX();
                 int topLeftY = item.getCurY();
                 int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
                 int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
-                System.out.println(item.getName() + " <" + item.getId() + "> " +
-                        "(" + topLeftX + "-" + buttomRightX + " (w), " +
-                        " x " + topLeftY + "- " + buttomRightY + " (l) )");
 
                 // Check whether the area of this item contains the clicked position.
                 // And add the item to targetList as a potential item to detect the clicked item.
@@ -330,15 +324,17 @@ public class MoyogaeDemo extends JPanel {
                 }
             } // end for-loop
 
-            //TODO can improve this process with Stream
+            //TODO the following process can be improved with Stream! try later.
             int latestItemId = 0;
             for(Furniture item: targetList){
-                if( item.getId() > latestItemId ) {
+                if( item.getId() >= latestItemId ) {
                     latestItemId = item.getId();
                     target = item;
                 }
             }
 
+            //For Debugging
+            //TODO: delete the following block later
             if( target != null ) {
                 System.out.println("your target is " + target.getName());
             } else {

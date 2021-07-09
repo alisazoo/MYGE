@@ -307,80 +307,55 @@ public class MoyogaeDemo extends JPanel {
 
             ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
             ArrayList<Furniture> listForDetect = new ArrayList<>(itemList);
-            Furniture target;
+
+            ArrayList<Furniture> targetList = new ArrayList<>();
+
+            Furniture target = null;
             boolean isFoundTarget = false;
 
-            // contains infinite loop.
-
             for (Furniture item : itemList) {
-
                 int topLeftX = item.getCurX();
                 int topLeftY = item.getCurY();
                 int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
                 int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
-                System.out.println(topLeftX + ", " + topLeftY + "( " + buttomRightX + ", " + buttomRightY + " )");
+                System.out.println(item.getName() + " <" + item.getId() + "> " +
+                        "(" + topLeftX + "-" + buttomRightX + " (w), " +
+                        " x " + topLeftY + "- " + buttomRightY + " (l) )");
 
                 // Check whether the area of this item contains the clicked position.
+                // And add the item to targetList as a potential item to detect the clicked item.
                 if (topLeftX <= locX && locX <= buttomRightX
                         && topLeftY <= locY && locY <= buttomRightY) {
-
-                    // Find the latest created item that displayed on the top layer = clickable
-                    //  item.
-                    int latestItemId = detectLatestItem(listForDetect);
-                    while (!isFoundTarget && !listForDetect.isEmpty() ) {
-                        if (item.getId() == latestItemId) {
-                            target = item;
-                            System.out.println("your target is " + target.getName());
-                            isFoundTarget = true;
-                            break;
-                        } else {
-                            listForDetect.remove(item);
-                            break;
-                        }
-                    }
+                    targetList.add(item);
                 }
             } // end for-loop
 
-////                if (!isFoundTarget && !listForDetect.isEmpty()) {
-//                if (!listForDetect.isEmpty()) {
-
-//                    int latestItemId = detectLatestItem(listForDetect);
-//
-//                    int topLeftX = item.getCurX();
-//                    int topLeftY = item.getCurY();
-//                    int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
-//                    int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
-//                    System.out.println(topLeftX + ", " + topLeftY + "( " + buttomRightX + ", " + buttomRightY + " )");
-//
-//                    if (topLeftX <= locX && locX <= buttomRightX
-//                            && topLeftY <= locY && locY <= buttomRightY) {
-//
-//                        if (item.getId() == latestItemId) {
-//                            target = item;
-////                            isFoundTarget = true;
-//                            System.out.println("your target is " + target.getName());
-//                            break;
-//
-//                        }
-//
-//                        listForDetect.remove(item);
-//
-//                    }
-
-
-
-
-        }
-
-        public int detectLatestItem(ArrayList<Furniture> list){
-            // Detect the latest item in the furnitureArrayList
-            int latestItemId = 0; // id represents the latest created item
-            for( Furniture item: list ){
-                if(latestItemId < item.getId() )
+            //TODO can improve this process with Stream
+            int latestItemId = 0;
+            for(Furniture item: targetList){
+                if( item.getId() > latestItemId ) {
                     latestItemId = item.getId();
+                    target = item;
+                }
             }
-            return latestItemId;
+
+            if( target != null ) {
+                System.out.println("your target is " + target.getName());
+            } else {
+                System.out.println("nothing is clicked.");
+            }
+
         }
+
+//        public int detectLatestItem(ArrayList<Furniture> list){
+//            // Detect the latest item in the furnitureArrayList
+//            int latestItemId = 0; // id represents the latest created item
+//            for( Furniture item: list ){
+//                if(latestItemId < item.getId() )
+//                    latestItemId = item.getId();
+//            }
+//            return latestItemId;
+//        }
 
         @Override
         public void mouseDragged(MouseEvent e) {

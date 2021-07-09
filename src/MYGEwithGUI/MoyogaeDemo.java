@@ -17,6 +17,7 @@ public class MoyogaeDemo extends JPanel {
     static boolean isDuplicateFurniture = false;
     static String[] result = new String[3];
 
+    double adjustRatioWidth, adjustRatioLength;
     /**
      * This main routine allow to use this program as an application.
      */
@@ -43,26 +44,37 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        floorPanel = new FloorPanel();
+        int flrWidth = Floor.getWidth();
+        int flrLength = Floor.getLength();
+
+        adjustRatioWidth = 420.0/flrWidth;
+        adjustRatioLength = 330.0/flrLength;
+
+        floorPanel = new FloorPanel(adjustRatioWidth, adjustRatioLength);
         floorPanel.setPreferredSize(new Dimension(440,350));
+        floorPanel.setBorder( BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 
         furniturePanel = new JPanel(layout);
-        furniturePanel.setBackground(Color.GRAY);
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
         JLabel floorWidth = new JLabel( Floor.getWidth() + " mm (width)" + " x " +
                 Floor.getLength() + " mm (length)", JLabel.CENTER);
+
+// Comment out during checking out sizeAdjustment brunch
         Dragger dragListener = new Dragger();
         floorPanel.addMouseListener( dragListener );
         floorPanel.addMouseMotionListener( dragListener );
         floorPanel.add( BorderLayout.NORTH, floorWidth );
+        // TODO: fix the layout issue with BorderLayout manager?
+        // floorPanel.add(BorderLayout.SOUTH, floorWidth);
+        //  this above line also work but the location is the SAME as NORTH ver.
 
         //------furniturePanel----------------------------------------
 
         listModel = new DefaultListModel<>();
         for (Furniture item: Furniture.getFurnitureArrayList() ){
-            String s = item.getName() + ": " + item.getWidth() + " mm x " + item.getLength() + " mm";
+            String s = item.getName() + ": " + item.getWidth() + " cm x " + item.getLength() + " cm";
             listModel.addElement(s);
         }
         furnitureList = new JList<>(listModel);
@@ -123,8 +135,8 @@ public class MoyogaeDemo extends JPanel {
 //        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
         // TODO: delete the following test data
-        Floor.setWidth(3000);
-        Floor.setLength(2100);
+        Floor.setWidth(300);
+        Floor.setLength(210);
 
     }   // end inputFloorSize() method
 
@@ -278,18 +290,14 @@ public class MoyogaeDemo extends JPanel {
     private class Dragger implements MouseListener, MouseMotionListener{
 
         boolean dragging;       // Set to true when a drag is in progress.
-        int draggingIndex;      // Set the index of the current dragging item in furnitureArrayList
+        Furniture draggingItem; // Set the instance of the current dragging item (in furnitureArrayList)
         int offsetX, offsetY;   // Offset of mouse-click coordinates from the top-left corner of
                                 //  the square that was clicked.
 
         @Override
-        public void mouseClicked(MouseEvent evt) {
-            System.out.println("Clicked at (" + evt.getPoint().getX() + ", " +
-                    evt.getPoint().getY() + ")" );
-        }
-
-        @Override
         public void mousePressed(MouseEvent evt) {
+
+            System.out.println("clicked: " + evt.getX() + ", " + evt.getY());
 
             // Exit if a drag is in progress.
             if( dragging )
@@ -297,11 +305,56 @@ public class MoyogaeDemo extends JPanel {
             int locX = evt.getX();
             int locY = evt.getY();
 
-            for(Furniture item: Furniture.getFurnitureArrayList() ){
+            ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+            ArrayList<Furniture> targetList = new ArrayList<>();
 
+            Furniture target = null;
+
+            for (Furniture item : itemList) {
+                int topLeftX = item.getCurX();
+                int topLeftY = item.getCurY();
+                int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
+                int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
+
+                // Check whether the area of this item contains the clicked position.
+                // And add the item to targetList as a potential item to detect the clicked item.
+                if (topLeftX <= locX && locX <= buttomRightX
+                        && topLeftY <= locY && locY <= buttomRightY) {
+                    targetList.add(item);
+                }
+            } // end for-loop
+
+            //TODO the following process can be improved with Stream! try later.
+            int latestItemId = 0;
+            for(Furniture item: targetList){
+                if( item.getId() >= latestItemId ) {
+                    latestItemId = item.getId();
+                    target = item;
+                }
             }
 
+            //For Debugging
+            //TODO: delete the following block later
+            if( target != null ) {
+                System.out.println("your target is " + target.getName());
+            } else {
+                System.out.println("nothing is clicked.");
+            }
 
+        }
+
+//        public int detectLatestItem(ArrayList<Furniture> list){
+//            // Detect the latest item in the furnitureArrayList
+//            int latestItemId = 0; // id represents the latest created item
+//            for( Furniture item: list ){
+//                if(latestItemId < item.getId() )
+//                    latestItemId = item.getId();
+//            }
+//            return latestItemId;
+//        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
 
         }
 
@@ -311,24 +364,17 @@ public class MoyogaeDemo extends JPanel {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-
-        }
-
-        @Override
         public void mouseMoved(MouseEvent e) {
 
         }
+
+        public void mouseClicked(MouseEvent evt) {}
+        public void mouseEntered(MouseEvent e) { }
+        public void mouseExited(MouseEvent e) { }
+
+
+
+
     }   // end: nested-class Dragger
 
 

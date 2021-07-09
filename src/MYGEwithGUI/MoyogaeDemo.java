@@ -60,8 +60,8 @@ public class MoyogaeDemo extends JPanel {
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
-        JLabel floorWidth = new JLabel( Floor.getWidth() + " mm (width)" + " x " +
-                Floor.getLength() + " mm (length)", JLabel.CENTER);
+        JLabel floorWidth = new JLabel( Floor.getWidth() + " cm (width)" + " x " +
+                Floor.getLength() + " cm (length)", JLabel.CENTER);
 
 // Comment out during checking out sizeAdjustment brunch
         Dragger dragListener = new Dragger();
@@ -117,8 +117,8 @@ public class MoyogaeDemo extends JPanel {
 //
 //        JPanel label = new JPanel(new GridLayout(0,1,2,2));
 //        label.add( new JLabel("Enter the size:") );
-//        label.add( new JLabel("Floor Width (mm)", SwingConstants.RIGHT) );
-//        label.add( new JLabel("Floor Length (mm)", SwingConstants.RIGHT) );
+//        label.add( new JLabel("Floor Width (cm)", SwingConstants.RIGHT) );
+//        label.add( new JLabel("Floor Length (cm)", SwingConstants.RIGHT) );
 //        panel.add( label, BorderLayout.WEST );
 //
 //        JPanel control = new JPanel(new GridLayout(0,1,2,2));
@@ -166,7 +166,7 @@ public class MoyogaeDemo extends JPanel {
         arrayList.add(item);
 
         // Set the input data into the DefaultListModel
-        String newItemTxt = name + ": " + width + " mm x " + length + " mm";
+        String newItemTxt = name + ": " + width + " cm x " + length + " cm";
         listModel.addElement(newItemTxt);
 
     }   // end: inputFurnitureData() method
@@ -191,8 +191,8 @@ public class MoyogaeDemo extends JPanel {
         // set up labelPanel
         JPanel label = new JPanel(new GridLayout(0,1,2,2));
         label.add( new JLabel("Name", SwingConstants.RIGHT) );
-        label.add( new JLabel("Width (mm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Length (mm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Width (cm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Length (cm)", SwingConstants.RIGHT) );
         panel.add( label, BorderLayout.WEST );
 
         // set up controlPanel
@@ -227,7 +227,7 @@ public class MoyogaeDemo extends JPanel {
         infoArray[2] = length;
 
         System.out.println("infoArray: " + infoArray[0] + " is " + infoArray[1] +
-                " mm(w) " + infoArray[2] + "mm(l)");
+                " cm(w) " + infoArray[2] + "cm(l)");
 
         // If the name of the new input item is the same as one of the existing item,
         // isDuplicateFurniture set as true.

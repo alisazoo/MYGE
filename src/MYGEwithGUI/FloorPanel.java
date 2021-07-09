@@ -15,7 +15,8 @@ public class FloorPanel extends JPanel {
     }
 
     public void paintComponent(Graphics g){
-        int x = 50, y = 50;
+
+        int x, y;
         ArrayList<Furniture> itemArrayList = Furniture.getFurnitureArrayList();
         int red, green, blue;
         Color randomColor;
@@ -31,10 +32,6 @@ public class FloorPanel extends JPanel {
             int itemW = (int)(item.getWidth() * adjustRatioWidth);
             int itemH = (int)(item.getLength() * adjustRatioLength);
 
-            // Set the current x & y coods into furnitureArrayList
-            item.setCurX(x);
-            item.setCurY(y);
-
 //            //For DEBUGGING
 //            System.out.println(itemName + ": " + "(" + item.getCurX() + ", " + item.getCurY() + ")");
 //            System.out.println("id of " + itemName + ": " + item.getId());
@@ -45,12 +42,26 @@ public class FloorPanel extends JPanel {
             randomColor = new Color(red, green, blue);
 
             g.setColor(randomColor);
-            g.fillRect(x,y,itemW, itemH);
-            g.setColor(Color.BLACK);
-            g.drawString(itemName, x,y);
 
-            x += 50;
-            y += 50;
+            if( item.getCurX() == -1 && item.getCurY() == -1 ) {
+                x = 20;
+                y = 20;
+                // Set the current x & y coods into furnitureArrayList
+                item.setCurX(x);
+                item.setCurY(y);
+            }
+
+            System.out.println("current X & Y: " + item.getCurX() + ", " + item.getCurY());
+
+            x = item.getCurX();
+            y = item.getCurY();
+
+            g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
+            g.setColor(Color.BLACK);
+            g.drawString(itemName, x,y); // after the 2nd: curX, curY
+
+//            x += 50;// after the 2nd: no need this?
+//            y += 50;// after the 2nd: no need this?
         }
     }
 

@@ -1,5 +1,7 @@
 package MYGEwithGUI;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -289,15 +291,17 @@ public class MoyogaeDemo extends JPanel {
 
     private class Dragger implements MouseListener, MouseMotionListener{
 
-        boolean dragging;       // Set to true when a drag is in progress.
-        Furniture draggingItem; // Set the instance of the current dragging item (in furnitureArrayList)
-        int offsetX, offsetY;   // Offset of mouse-click coordinates from the top-left corner of
-                                //  the square that was clicked.
+        boolean dragging;           // Set to true when a drag is in progress.
+        Furniture target = null;    // Set the instance of the current dragging item (in furnitureArrayList)
+        int offsetX, offsetY;       // Offset of mouse-click coordinates from the top-left corner of
+                                    //  the square that was clicked.
+        int topLeftX = 0;           // the top-left x-coords of target furniture
+        int topLeftY = 0;           // the top-left y-coords of target furniture
 
         @Override
         public void mousePressed(MouseEvent evt) {
 
-            System.out.println("clicked: " + evt.getX() + ", " + evt.getY());
+            System.out.println("clicked: (" + evt.getX() + ", " + evt.getY() + ")");
 
             // Exit if a drag is in progress.
             if( dragging )
@@ -308,11 +312,9 @@ public class MoyogaeDemo extends JPanel {
             ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
             ArrayList<Furniture> targetList = new ArrayList<>();
 
-            Furniture target = null;
-
             for (Furniture item : itemList) {
-                int topLeftX = item.getCurX();
-                int topLeftY = item.getCurY();
+                topLeftX = item.getCurX();
+                topLeftY = item.getCurY();
                 int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
                 int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
 
@@ -341,9 +343,13 @@ public class MoyogaeDemo extends JPanel {
                 System.out.println("nothing is clicked.");
             }
 
+            dragging = true;
+            offsetX = locX - topLeftX;
+            offsetY = locY - topLeftY;
+            System.out.println("offset (" + offsetX + ", " + offsetY + ")");
         }
 
-//        public int detectLatestItem(ArrayList<Furniture> list){
+        //        public int detectLatestItem(ArrayList<Furniture> list){
 //            // Detect the latest item in the furnitureArrayList
 //            int latestItemId = 0; // id represents the latest created item
 //            for( Furniture item: list ){
@@ -353,14 +359,45 @@ public class MoyogaeDemo extends JPanel {
 //            return latestItemId;
 //        }
 
+        /**
+         * Respond when the user drags the mouse.
+         * If a square, representing each furniture, is not being dragged, then exit.
+         * Otherwise, change the position of the mouse.
+         * NOTE: the corner of the square is placed in the same relative position with
+         * respect to the mouse that I had when the user started dragging it.
+         */
         @Override
-        public void mouseDragged(MouseEvent e) {
+        public void mouseDragged(MouseEvent evt) {
+
+            if(!dragging)
+                return;
+            int x = evt.getX();
+            int y = evt.getY();
+
+            int targetId = target.getId();
+            ArrayList<Furniture> originalAryList = Furniture.getFurnitureArrayList();
+            for( Furniture item: originalAryList ){
+                if( item.getId() == targetId ){
+                    //TODO: use preX & Y when implementing "return" button
+                    item.setPreX( item.getCurX() );
+                    item.setPreY( item.getCurY() );
+                    item.setCurX( x - offsetX );
+                    item.setCurY( y - offsetY );
+                    System.out.println( "The dragging item is " + item.getName() +
+                            "(" + item.getCurX() + ", " + item.getCurY() + ")" );
+
+                }
+            }
+            frame.repaint();
 
         }
 
+        /**
+         * Dragging stops when user releases the mouse button.
+         */
         @Override
-        public void mouseReleased(MouseEvent e) {
-
+        public void mouseReleased(MouseEvent evt) {
+            dragging = false;
         }
 
         @Override

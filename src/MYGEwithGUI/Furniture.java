@@ -35,6 +35,8 @@ public class Furniture {
         this.width = width;
         this.name = name;
         this.id = IdProvider.getInstance().getUniqueId();
+        this.curX = -1;
+        this.curY = -1;
     }
 
     // Set the coordinates of current location of the item

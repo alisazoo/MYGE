@@ -25,7 +25,10 @@ public class Furniture {
     private int preX;   // previous x-coordinates of top-left corner
     private int preY;   // previous y-coordinates of top-left corner
 
-    //TODO add getter method for furnitureArrayList & make this private (encupsulation)
+    //For GUI
+    private int offsetX;
+    private int offsetY;
+
     private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Constructor
@@ -172,4 +175,19 @@ public class Furniture {
         this.preY = preY;
     }
 
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public void setOffsetX(int offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(int offsetY) {
+        this.offsetY = offsetY;
+    }
 }

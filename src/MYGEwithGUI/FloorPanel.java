@@ -47,8 +47,8 @@ public class FloorPanel extends JPanel {
                 item.setCurX(x);
                 item.setCurY(y);
             }
-
-            System.out.println("<paintComponent()>\ncurrent X & Y: " + item.getCurX() + ", " + item.getCurY());
+//todo
+//            System.out.println("<paintComponent()>\ncurrent X & Y: " + item.getCurX() + ", " + item.getCurY());
 
             x = item.getCurX();
             y = item.getCurY();

@@ -3,6 +3,7 @@ package MYGEwithGUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MoyogaeDemo extends JPanel {
@@ -87,6 +88,10 @@ public class MoyogaeDemo extends JPanel {
         JButton remItem = new JButton("Remove Furniture");
         remItem.addActionListener(new remItemListener() );
         furniturePanel.add( BorderLayout.SOUTH, remItem);
+
+        JButton rotateItem = new JButton("Rotate Furniture");
+        rotateItem.addActionListener(new rotateItemListener() );
+        furniturePanel.add( BorderLayout.SOUTH, rotateItem);
 
         mainPanel.add( floorPanel );
         mainPanel.add( furniturePanel );
@@ -301,6 +306,42 @@ public class MoyogaeDemo extends JPanel {
             } else {
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before deleting!");
+            }
+        }
+    }
+
+    private class rotateItemListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(!listModel.isEmpty()) {
+
+                String str = furnitureList.getSelectedValue();
+
+//                // Delete the existing item from JList
+//                listModel.removeElementAt(index);
+
+                // rotate the furniture
+                int strIndex = str.indexOf(":");
+                String subtractText = str.substring(0, strIndex);
+                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+                for(Furniture item: list ){
+                    if( item.getName().equals(subtractText) ){
+
+                        int i = list.indexOf(item);
+                        int preW = list.get(i).getWidth();
+                        int preL = list.get(i).getLength();
+                        list.get(i).setWidth(preL);
+                        list.get(i).setLength(preW);
+
+                        break;
+                    }
+                }
+                frame.repaint();
+
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "No more item here. Please add the new one before trying to rotate nothing!");
             }
         }
     }

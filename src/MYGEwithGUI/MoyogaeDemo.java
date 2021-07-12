@@ -130,10 +130,20 @@ public class MoyogaeDemo extends JPanel {
 //
 //        JOptionPane.showMessageDialog(null, panel,
 //                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-//
-//        // Set the input data into the floor object
-//        Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
-//        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
+//        boolean isSetFloorData = false;
+//        while(!isSetFloorData ){
+//            try {
+//                // Set the input data into the floor object
+//                Floor.setWidth(Integer.parseInt(floorWidthInput.getText()));
+//                Floor.setLength(Integer.parseInt(floorLengthInput.getText()));
+//                isSetFloorData = true;
+//            } catch (NumberFormatException exception) {
+//                JOptionPane.showMessageDialog(null,
+//                        "Please enter number for both width and length.");
+//                JOptionPane.showMessageDialog(null, panel,
+//                        "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+//            }
+//        }
 
         // TODO: delete the following test data
         Floor.setWidth(350);
@@ -155,18 +165,27 @@ public class MoyogaeDemo extends JPanel {
         } while (isDuplicateFurniture);
 
         // Set the input data into the local variables
-        String name = result[0];
+        String name;
         int width, length;
-        width = Integer.parseInt( result[1] );
-        length = Integer.parseInt( result[2] );
 
-        // new data is assigned to the ArrayList
-        Furniture item = new Furniture(name, width, length);
-        arrayList.add(item);
+        try {
+            name = result[0];
+            width = Integer.parseInt(result[1]);
+            length = Integer.parseInt(result[2]);
 
-        // Set the input data into the DefaultListModel
-        String newItemTxt = name + ": " + width + " cm x " + length + " cm";
-        listModel.addElement(newItemTxt);
+            // new data is assigned to the ArrayList
+            Furniture item = new Furniture(name, width, length);
+            arrayList.add(item);
+
+            // Set the input data into the DefaultListModel
+            String newItemTxt = name + ": " + width + " cm x " + length + " cm";
+            listModel.addElement(newItemTxt);
+        }
+        catch (NumberFormatException numEx){
+            numEx.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Please enter the valid data. Width and length of the furniture should be number.");
+        }
 
     }   // end: inputFurnitureData() method
 
@@ -212,13 +231,17 @@ public class MoyogaeDemo extends JPanel {
         }
         panel.add(control, BorderLayout.CENTER);
 
+        String name;
+        String width;
+        String length;
+
         JOptionPane.showMessageDialog(null, panel,
                 "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
         // keep the input data into the String array, infoArray.
-        String name = furnitureName.getText();
-        String width = furnitureWidthInput.getText();
-        String length = furnitureLengthInput.getText();
+        name = furnitureName.getText();
+        width = furnitureWidthInput.getText();
+        length = furnitureLengthInput.getText();
 
         String[] infoArray = new String[3];
         infoArray[0] = name;

@@ -44,15 +44,12 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        int flrWidth = Floor.getWidth();
-        int flrLength = Floor.getLength();
+        floorPanel = new FloorPanel();
+        adjustRatioWidth = 440.0/Floor.getWidth();
+        adjustRatioLength = 300.0/Floor.getLength();
+        floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
 
-        adjustRatioWidth = 420.0/flrWidth;
-        adjustRatioLength = 330.0/flrLength;
-
-        floorPanel = new FloorPanel(adjustRatioWidth, adjustRatioLength);
         floorPanel.setPreferredSize(new Dimension(440,350));
-        floorPanel.setBorder( BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 
         furniturePanel = new JPanel(layout);
         furniturePanel.setPreferredSize( new Dimension(400, 150));
@@ -94,9 +91,10 @@ public class MoyogaeDemo extends JPanel {
 
         frame.setLocationRelativeTo(null);
         frame.setContentPane(mainPanel);
-        frame.setBounds(50,50,500,650);
+        frame.setBounds(10,10,500,650);
         frame.pack();
         frame.setVisible(true);
+
     } // end: buildGUI()
 
 
@@ -110,7 +108,8 @@ public class MoyogaeDemo extends JPanel {
     public static void inputFloorData(){
 
 // TODO: uncomment out the following code to use dialog input
-        // Input Dialog
+
+//        //Input Dialog
 //        JPanel panel = new JPanel(new BorderLayout(5,5));
 //
 //        JPanel label = new JPanel(new GridLayout(0,1,2,2));
@@ -135,7 +134,7 @@ public class MoyogaeDemo extends JPanel {
 //        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
 
         // TODO: delete the following test data
-        Floor.setWidth(300);
+        Floor.setWidth(350);
         Floor.setLength(210);
 
     }   // end inputFloorSize() method
@@ -237,9 +236,6 @@ public class MoyogaeDemo extends JPanel {
 
         return infoArray;
     } // end: inputFurnitureDialog() method
-
-
-
 
 
     //-----Action Listener--------------------------------------------
@@ -372,7 +368,7 @@ public class MoyogaeDemo extends JPanel {
          */
         @Override
         public void mouseDragged(MouseEvent evt) {
-            System.out.println("\n====== mouseDragged() ===========================");
+//            System.out.println("\n====== mouseDragged() ===========================");
             if (!dragging)
                 return;
             int x = evt.getX();
@@ -382,14 +378,14 @@ public class MoyogaeDemo extends JPanel {
             target.setCurX( x );
             target.setCurY( y );
 
-//            System.out.println("MouseDragged(): " +
-//                    "cur(" + x + "," + y + ") " +
-//                    "top (" + topLeftX + "," + topLeftY+ ") " +
-//                    "bottom (" + bottomRightX + "," + bottomRightY +")");
+            System.out.println("MouseDragged(): " +
+                    "cur(" + x + "," + y + ") " +
+                    "top (" + topLeftX + "," + topLeftY+ ") " +
+                    "bottom (" + bottomRightX + "," + bottomRightY +")");
 
             frame.repaint();
 
-            System.out.println("====== mouseDragged() ===========================");
+//            System.out.println("====== mouseDragged() ===========================");
 
         }
 
@@ -412,19 +408,19 @@ public class MoyogaeDemo extends JPanel {
                 System.out.println("bottom X reset.");
                 showNotification = true;
             }
-            if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 310) {
-                int bottomYReset = 310 - itemLength;
+            if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 300) {
+                int bottomYReset = 300 - itemLength;
                 target.setCurY(bottomYReset);
                 System.out.println("bottom Y reset.");
                 showNotification = true;
             }
             if( ( afterReleaseX- target.getOffsetX() ) < 10 ){
-                target.setCurX(20);
+                target.setCurX(10);
                 System.out.println("top x reset.");
                 showNotification = true;
             }
             if ( ( afterReleaseY - target.getOffsetY() ) < 10){
-                target.setCurY(20);
+                target.setCurY(10);
                 System.out.println("top y reset.");
                 showNotification = true;
             }

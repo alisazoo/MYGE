@@ -8,8 +8,12 @@ public class FloorPanel extends JPanel {
 
     double adjustRatioWidth, adjustRatioLength;
 
-    public FloorPanel(double adjustRatioWidth, double adjustRatioLength){
-        super();
+//    public FloorPanel(double adjustRatioWidth, double adjustRatioLength){
+//        super();
+//
+//    }
+
+    public void setFloorRatio(double adjustRatioWidth, double adjustRatioLength){
         this.adjustRatioWidth = adjustRatioWidth;
         this.adjustRatioLength = adjustRatioLength;
     }
@@ -23,7 +27,7 @@ public class FloorPanel extends JPanel {
 
         super.paintComponent(g);
         g.setColor(Color.GRAY);
-        g.drawRect(20,20,420,290);
+        g.drawRect(10,10,440,300);
 
         for(Furniture item: itemArrayList ){
             String itemName = item.getName();

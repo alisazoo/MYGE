@@ -17,6 +17,8 @@ public class MoyogaeDemo extends JPanel {
     static boolean isDuplicateFurniture = false;
     static String[] result = new String[3];
 
+    double floorAreaWidth = 440.0;
+    double floorAreaLength = 300.0;
     double adjustRatioWidth, adjustRatioLength;
     /**
      * This main routine allow to use this program as an application.
@@ -45,8 +47,8 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
         floorPanel = new FloorPanel();
-        adjustRatioWidth = 440.0/Floor.getWidth();
-        adjustRatioLength = 300.0/Floor.getLength();
+        adjustRatioWidth = floorAreaWidth / Floor.getWidth();
+        adjustRatioLength = floorAreaLength / Floor.getLength();
         floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
 
         floorPanel.setPreferredSize(new Dimension(440,350));
@@ -400,25 +402,26 @@ public class MoyogaeDemo extends JPanel {
 
             // If the bottom-right corner of the item will out of the floor,
             // repaint the image in one of the edge of the floor.
-            //panel size: 440 x 305!
             boolean showNotification = false;
             if ( (afterReleaseX - target.getOffsetX() + itemWidth) > 440) {
-                int bottomXReset = 440 - itemWidth;
+                int bottomXReset = 450 - itemWidth;
                 target.setCurX(bottomXReset);
                 System.out.println("bottom X reset.");
                 showNotification = true;
             }
             if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 300) {
-                int bottomYReset = 300 - itemLength;
+                int bottomYReset = 310 - itemLength;
                 target.setCurY(bottomYReset);
                 System.out.println("bottom Y reset.");
                 showNotification = true;
             }
-            if( ( afterReleaseX- target.getOffsetX() ) < 10 ){
+//            if( ( target.getOffsetX() - afterReleaseX ) < 10 ){
+            if( ( afterReleaseX - target.getOffsetX() ) < 10 ){
                 target.setCurX(10);
                 System.out.println("top x reset.");
                 showNotification = true;
             }
+//            if ( ( target.getOffsetY() - afterReleaseY ) < 10){
             if ( ( afterReleaseY - target.getOffsetY() ) < 10){
                 target.setCurY(10);
                 System.out.println("top y reset.");

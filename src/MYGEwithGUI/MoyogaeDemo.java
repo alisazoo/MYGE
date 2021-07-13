@@ -53,7 +53,9 @@ public class MoyogaeDemo extends JPanel {
 
         floorPanel.setPreferredSize(new Dimension(440,350));
 
-        furniturePanel = new JPanel(layout);
+        furniturePanel = new JPanel();
+        furniturePanel.setLayout( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
@@ -78,19 +80,42 @@ public class MoyogaeDemo extends JPanel {
         }
         furnitureList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(furnitureList);
-        furniturePanel.add( BorderLayout.CENTER, scrollPane);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 60;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.gridx = 0;
+        c.gridwidth = 3;
+        c.gridy = 0;
+        furniturePanel.add( scrollPane, c );
 
         JButton addItem = new JButton("Add Furniture");
         addItem.addActionListener(new addItemListener() );
-        furniturePanel.add( BorderLayout.EAST, addItem);
-
-        JButton remItem = new JButton("Remove Furniture");
-        remItem.addActionListener(new remItemListener() );
-        furniturePanel.add( BorderLayout.SOUTH, remItem);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 1;
+        furniturePanel.add( addItem, c );
 
         JButton rotateItem = new JButton("Rotate Furniture");
         rotateItem.addActionListener(new rotateItemListener() );
-        furniturePanel.add( BorderLayout.SOUTH, rotateItem);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 1;
+        c.gridy = 1;
+        furniturePanel.add( rotateItem, c );
+
+        JButton remItem = new JButton("Remove Furniture");
+        remItem.addActionListener(new remItemListener() );
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 2;
+        c.gridy = 1;
+        furniturePanel.add( remItem, c );
+
+
 
         mainPanel.add( floorPanel );
         mainPanel.add( furniturePanel );

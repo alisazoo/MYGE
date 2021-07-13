@@ -316,11 +316,14 @@ public class MoyogaeDemo extends JPanel {
                 // Delete the existing item from furnitureArrayList
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
+                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
 
-                for(Furniture item: Furniture.getFurnitureArrayList() ){
+                for(Furniture item: list ){
                     if( item.getName().equals(subtractText) ){
-                        Furniture.getFurnitureArrayList().remove(item);
+
+                        list.remove(item);
                         break;
+
                     }
                 }
 
@@ -345,13 +348,11 @@ public class MoyogaeDemo extends JPanel {
 
                 String str = furnitureList.getSelectedValue();
 
-//                // Delete the existing item from JList
-//                listModel.removeElementAt(index);
-
                 // rotate the furniture
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
                 ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+
                 for(Furniture item: list ){
                     if( item.getName().equals(subtractText) ){
 
@@ -377,22 +378,25 @@ public class MoyogaeDemo extends JPanel {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            System.out.println(e.toString());
+            if(!e.getValueIsAdjusting()) {
 
-            String str = furnitureList.getSelectedValue();
+                String str = furnitureList.getSelectedValue();
 
-            // Reset the isSelected status: set true only if it is currently selected.
-            int strIndex = str.indexOf(":");
-            String subtractText = str.substring(0, strIndex);
-            ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
-            for(Furniture item: list ){
-                if ( item.getName().equals(subtractText) ){
-                    item.setSelected( true );
-                } else {
-                    item.setSelected( false );
+                if( str!=null ) {
+                    // Reset the isSelected status: set true only if it is currently selected.
+                    int strIndex = str.indexOf(":");
+                    String subtractText = str.substring(0, strIndex);
+                    ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+                    for (Furniture item : list) {
+                        if (item.getName().equals(subtractText)) {
+                            item.setSelected(true);
+                        } else {
+                            item.setSelected(false);
+                        }
+                    }
+                    frame.repaint();
                 }
             }
-            frame.repaint();
         }
     }
 

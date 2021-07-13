@@ -55,7 +55,7 @@ public class FloorPanel extends JPanel {
             g.setColor(randomColor);
             g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
             if( item.isSelected() ){//TODO: this does not work so fix it!
-                g.setColor(Color.MAGENTA);
+                g.setColor(Color.RED);
             } else {
                 g.setColor(Color.WHITE);
             }

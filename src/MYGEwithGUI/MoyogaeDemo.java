@@ -313,9 +313,6 @@ public class MoyogaeDemo extends JPanel {
                 int index = furnitureList.getSelectedIndex();
                 String str = furnitureList.getSelectedValue();
 
-                // Delete the existing item from JList
-                listModel.removeElementAt(index);
-
                 // Delete the existing item from furnitureArrayList
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
@@ -326,6 +323,10 @@ public class MoyogaeDemo extends JPanel {
                         break;
                     }
                 }
+
+                // Delete the existing item from JList
+                listModel.removeElementAt(index);
+
                 frame.repaint();
 
             } else {
@@ -376,9 +377,11 @@ public class MoyogaeDemo extends JPanel {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
+            System.out.println(e.toString());
 
             String str = furnitureList.getSelectedValue();
 
+            // Reset the isSelected status: set true only if it is currently selected.
             int strIndex = str.indexOf(":");
             String subtractText = str.substring(0, strIndex);
             ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
@@ -386,7 +389,7 @@ public class MoyogaeDemo extends JPanel {
                 if ( item.getName().equals(subtractText) ){
                     item.setSelected( true );
                 } else {
-                    item.setSelected(false);
+                    item.setSelected( false );
                 }
             }
             frame.repaint();
@@ -464,7 +467,18 @@ public class MoyogaeDemo extends JPanel {
                 if (item.getId() >= latestItemId) {
                     latestItemId = item.getId();
                     target = item;
+                }
+            }
 
+            // Select the item on the list if the target is selected
+            String targetName = target.getName();
+            for( int i = 0; i< listModel.getSize(); i++) {
+                // extract only the item name
+                String listStr = listModel.getElementAt(i);
+                int listStrIndex = listStr.indexOf(":");
+                String subListStr = listStr.substring(0, listStrIndex);
+                if( targetName.equals(subListStr)){
+                    furnitureList.setSelectedIndex(i);
                 }
             }
 

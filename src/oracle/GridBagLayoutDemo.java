@@ -68,6 +68,15 @@ public class GridBagLayoutDemo {
         c.gridwidth = 2;// 2 columns wide
         c.gridy = 2;    // third row
         pane.add(button, c);
+
+        button = new JButton("Button 6");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.LAST_LINE_START;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        c.gridy = 2;
+        pane.add(button, c);
+
     }
 
     /**

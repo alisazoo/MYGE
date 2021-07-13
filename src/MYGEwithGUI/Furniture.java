@@ -1,5 +1,6 @@
 package MYGEwithGUI;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -17,13 +18,18 @@ public class Furniture {
     private String name;
     private int length;
     private int width;
+    private Color uniqueColor;
 
     private int curX;   // current x-coordinates of top-left corner
     private int curY;   // current y-coordinates of top-left corner
     private int preX;   // previous x-coordinates of top-left corner
     private int preY;   // previous y-coordinates of top-left corner
 
-    //TODO add getter method for furnitureArrayList & make this private (encupsulation)
+    //For GUI
+    private int offsetX;
+    private int offsetY;
+    private boolean isSelected = false;
+
     private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Constructor
@@ -35,6 +41,8 @@ public class Furniture {
         this.width = width;
         this.name = name;
         this.id = IdProvider.getInstance().getUniqueId();
+        this.curX = -1;
+        this.curY = -1;
     }
 
     // Set the coordinates of current location of the item
@@ -128,6 +136,14 @@ public class Furniture {
         this.width = width;
     }
 
+    public Color getUniqueColor() {
+        return uniqueColor;
+    }
+
+    public void setUniqueColor(Color uniqueColor) {
+        this.uniqueColor = uniqueColor;
+    }
+
     public int getCurX() {
         return curX;
     }
@@ -160,4 +176,27 @@ public class Furniture {
         this.preY = preY;
     }
 
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public void setOffsetX(int offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(int offsetY) {
+        this.offsetY = offsetY;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }

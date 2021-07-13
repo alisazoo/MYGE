@@ -1,6 +1,8 @@
 package MYGEwithGUI;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class MoyogaeDemo extends JPanel {
     static boolean isDuplicateFurniture = false;
     static String[] result = new String[3];
 
+    double floorAreaWidth = 440.0;
+    double floorAreaLength = 300.0;
     double adjustRatioWidth, adjustRatioLength;
     /**
      * This main routine allow to use this program as an application.
@@ -44,22 +48,21 @@ public class MoyogaeDemo extends JPanel {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        int flrWidth = Floor.getWidth();
-        int flrLength = Floor.getLength();
+        floorPanel = new FloorPanel();
+        adjustRatioWidth = floorAreaWidth / Floor.getWidth();
+        adjustRatioLength = floorAreaLength / Floor.getLength();
+        floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
 
-        adjustRatioWidth = 420.0/flrWidth;
-        adjustRatioLength = 330.0/flrLength;
-
-        floorPanel = new FloorPanel(adjustRatioWidth, adjustRatioLength);
         floorPanel.setPreferredSize(new Dimension(440,350));
-        floorPanel.setBorder( BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
 
-        furniturePanel = new JPanel(layout);
+        furniturePanel = new JPanel();
+        furniturePanel.setLayout( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
-        JLabel floorWidth = new JLabel( Floor.getWidth() + " mm (width)" + " x " +
-                Floor.getLength() + " mm (length)", JLabel.CENTER);
+        JLabel floorWidth = new JLabel( Floor.getWidth() + " cm (width)" + " x " +
+                Floor.getLength() + " cm (length)", JLabel.CENTER);
 
 // Comment out during checking out sizeAdjustment brunch
         Dragger dragListener = new Dragger();
@@ -78,25 +81,52 @@ public class MoyogaeDemo extends JPanel {
             listModel.addElement(s);
         }
         furnitureList = new JList<>(listModel);
+        furnitureList.addListSelectionListener( new ListListener() );
         JScrollPane scrollPane = new JScrollPane(furnitureList);
-        furniturePanel.add( BorderLayout.CENTER, scrollPane);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 60;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.gridx = 0;
+        c.gridwidth = 3;
+        c.gridy = 0;
+        furniturePanel.add( scrollPane, c );
 
         JButton addItem = new JButton("Add Furniture");
         addItem.addActionListener(new addItemListener() );
-        furniturePanel.add( BorderLayout.EAST, addItem);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 1;
+        furniturePanel.add( addItem, c );
+
+        JButton rotateItem = new JButton("Rotate Furniture");
+        rotateItem.addActionListener(new rotateItemListener() );
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 1;
+        c.gridy = 1;
+        furniturePanel.add( rotateItem, c );
 
         JButton remItem = new JButton("Remove Furniture");
         remItem.addActionListener(new remItemListener() );
-        furniturePanel.add( BorderLayout.SOUTH, remItem);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 2;
+        c.gridy = 1;
+        furniturePanel.add( remItem, c );
 
         mainPanel.add( floorPanel );
         mainPanel.add( furniturePanel );
 
         frame.setLocationRelativeTo(null);
         frame.setContentPane(mainPanel);
-        frame.setBounds(50,50,500,650);
+        frame.setBounds(10,10,500,650);
         frame.pack();
         frame.setVisible(true);
+
     } // end: buildGUI()
 
 
@@ -110,13 +140,14 @@ public class MoyogaeDemo extends JPanel {
     public static void inputFloorData(){
 
 // TODO: uncomment out the following code to use dialog input
-        // Input Dialog
+
+//        //Input Dialog
 //        JPanel panel = new JPanel(new BorderLayout(5,5));
 //
 //        JPanel label = new JPanel(new GridLayout(0,1,2,2));
 //        label.add( new JLabel("Enter the size:") );
-//        label.add( new JLabel("Floor Width (mm)", SwingConstants.RIGHT) );
-//        label.add( new JLabel("Floor Length (mm)", SwingConstants.RIGHT) );
+//        label.add( new JLabel("Floor Width (cm)", SwingConstants.RIGHT) );
+//        label.add( new JLabel("Floor Length (cm)", SwingConstants.RIGHT) );
 //        panel.add( label, BorderLayout.WEST );
 //
 //        JPanel control = new JPanel(new GridLayout(0,1,2,2));
@@ -129,13 +160,23 @@ public class MoyogaeDemo extends JPanel {
 //
 //        JOptionPane.showMessageDialog(null, panel,
 //                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-//
-//        // Set the input data into the floor object
-//        Floor.setWidth( Integer.parseInt(floorWidthInput.getText()) );
-//        Floor.setLength( Integer.parseInt(floorLengthInput.getText()) );
+//        boolean isSetFloorData = false;
+//        while(!isSetFloorData ){
+//            try {
+//                // Set the input data into the floor object
+//                Floor.setWidth(Integer.parseInt(floorWidthInput.getText()));
+//                Floor.setLength(Integer.parseInt(floorLengthInput.getText()));
+//                isSetFloorData = true;
+//            } catch (NumberFormatException exception) {
+//                JOptionPane.showMessageDialog(null,
+//                        "Please enter number for both width and length.");
+//                JOptionPane.showMessageDialog(null, panel,
+//                        "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+//            }
+//        }
 
         // TODO: delete the following test data
-        Floor.setWidth(300);
+        Floor.setWidth(350);
         Floor.setLength(210);
 
     }   // end inputFloorSize() method
@@ -154,18 +195,27 @@ public class MoyogaeDemo extends JPanel {
         } while (isDuplicateFurniture);
 
         // Set the input data into the local variables
-        String name = result[0];
+        String name;
         int width, length;
-        width = Integer.parseInt( result[1] );
-        length = Integer.parseInt( result[2] );
 
-        // new data is assigned to the ArrayList
-        Furniture item = new Furniture(name, width, length);
-        arrayList.add(item);
+        try {
+            name = result[0];
+            width = Integer.parseInt(result[1]);
+            length = Integer.parseInt(result[2]);
 
-        // Set the input data into the DefaultListModel
-        String newItemTxt = name + ": " + width + " mm x " + length + " mm";
-        listModel.addElement(newItemTxt);
+            // new data is assigned to the ArrayList
+            Furniture item = new Furniture(name, width, length);
+            arrayList.add(item);
+
+            // Set the input data into the DefaultListModel
+            String newItemTxt = name + ": " + width + " cm x " + length + " cm";
+            listModel.addElement(newItemTxt);
+        }
+        catch (NumberFormatException numEx){
+            numEx.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Please enter the valid data. Width and length of the furniture should be number.");
+        }
 
     }   // end: inputFurnitureData() method
 
@@ -189,8 +239,8 @@ public class MoyogaeDemo extends JPanel {
         // set up labelPanel
         JPanel label = new JPanel(new GridLayout(0,1,2,2));
         label.add( new JLabel("Name", SwingConstants.RIGHT) );
-        label.add( new JLabel("Width (mm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Length (mm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Width (cm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Length (cm)", SwingConstants.RIGHT) );
         panel.add( label, BorderLayout.WEST );
 
         // set up controlPanel
@@ -211,21 +261,22 @@ public class MoyogaeDemo extends JPanel {
         }
         panel.add(control, BorderLayout.CENTER);
 
+        String name;
+        String width;
+        String length;
+
         JOptionPane.showMessageDialog(null, panel,
                 "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
         // keep the input data into the String array, infoArray.
-        String name = furnitureName.getText();
-        String width = furnitureWidthInput.getText();
-        String length = furnitureLengthInput.getText();
+        name = furnitureName.getText();
+        width = furnitureWidthInput.getText();
+        length = furnitureLengthInput.getText();
 
         String[] infoArray = new String[3];
         infoArray[0] = name;
         infoArray[1] = width;
         infoArray[2] = length;
-
-        System.out.println("infoArray: " + infoArray[0] + " is " + infoArray[1] +
-                " mm(w) " + infoArray[2] + "mm(l)");
 
         // If the name of the new input item is the same as one of the existing item,
         // isDuplicateFurniture set as true.
@@ -240,9 +291,6 @@ public class MoyogaeDemo extends JPanel {
 
         return infoArray;
     } // end: inputFurnitureDialog() method
-
-
-
 
 
     //-----Action Listener--------------------------------------------
@@ -265,19 +313,23 @@ public class MoyogaeDemo extends JPanel {
                 int index = furnitureList.getSelectedIndex();
                 String str = furnitureList.getSelectedValue();
 
-                // Delete the existing item from JList
-                listModel.removeElementAt(index);
-
                 // Delete the existing item from furnitureArrayList
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
+                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
 
-                for(Furniture item: Furniture.getFurnitureArrayList() ){
+                for(Furniture item: list ){
                     if( item.getName().equals(subtractText) ){
-                        Furniture.getFurnitureArrayList().remove(item);
+
+                        list.remove(item);
                         break;
+
                     }
                 }
+
+                // Delete the existing item from JList
+                listModel.removeElementAt(index);
+
                 frame.repaint();
 
             } else {
@@ -287,95 +339,276 @@ public class MoyogaeDemo extends JPanel {
         }
     }
 
-    private class Dragger implements MouseListener, MouseMotionListener{
+    private class rotateItemListener implements ActionListener{
 
-        boolean dragging;       // Set to true when a drag is in progress.
-        Furniture draggingItem; // Set the instance of the current dragging item (in furnitureArrayList)
-        int offsetX, offsetY;   // Offset of mouse-click coordinates from the top-left corner of
-                                //  the square that was clicked.
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if(!listModel.isEmpty()) {
+
+                String str = furnitureList.getSelectedValue();
+
+                // rotate the furniture
+                int strIndex = str.indexOf(":");
+                String subtractText = str.substring(0, strIndex);
+                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+
+                for(Furniture item: list ){
+                    if( item.getName().equals(subtractText) ){
+
+                        int i = list.indexOf(item);
+                        int preW = list.get(i).getWidth();
+                        int preL = list.get(i).getLength();
+                        list.get(i).setWidth(preL);
+                        list.get(i).setLength(preW);
+
+                        break;
+                    }
+                }
+                frame.repaint();
+
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "No more item here. Please add the new one before trying to rotate nothing!");
+            }
+        }
+    }
+
+    private class ListListener implements ListSelectionListener{
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if(!e.getValueIsAdjusting()) {
+
+                String str = furnitureList.getSelectedValue();
+
+                if( str!=null ) {
+                    // Reset the isSelected status: set true only if it is currently selected.
+                    int strIndex = str.indexOf(":");
+                    String subtractText = str.substring(0, strIndex);
+                    ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+                    for (Furniture item : list) {
+                        if (item.getName().equals(subtractText)) {
+                            item.setSelected(true);
+                        } else {
+                            item.setSelected(false);
+                        }
+                    }
+                    frame.repaint();
+                }
+            }
+        }
+    }
+
+    private class Dragger implements MouseListener, MouseMotionListener {
+
+        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+                                    // used to manage the final result of
+                                    // the mouse motions.
+        boolean dragging;           // Set to true when a drag is in progress.
+        Furniture target = null;    // Set the instance of the current dragging item (in furnitureArrayList)
+
+        int topLeftX = 0;           // the top-left x-coords of the target furniture
+        int topLeftY = 0;           // the top-left y-coords of the target furniture
+        int bottomRightX;           // the buttom-right x-coords of the target furniture
+        int bottomRightY;           // the buttom-right y-coods of the target furniture
+
+        int itemWidth;
+        int itemLength;
 
         @Override
         public void mousePressed(MouseEvent evt) {
 
-            System.out.println("clicked: " + evt.getX() + ", " + evt.getY());
+            System.out.println("\n------- mousePressed()  (" + evt.getX() + ", " + evt.getY() + ")" +
+                    "----------------------------");
 
             // Exit if a drag is in progress.
-            if( dragging )
+            if (dragging)
                 return;
+            if( target != null )
+                target = null;
             int locX = evt.getX();
             int locY = evt.getY();
 
-            ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
             ArrayList<Furniture> targetList = new ArrayList<>();
-
-            Furniture target = null;
+                                    // save the temporary item(s) that could
+                                    // be targeted during dragging.
 
             for (Furniture item : itemList) {
-                int topLeftX = item.getCurX();
-                int topLeftY = item.getCurY();
-                int buttomRightX = topLeftX + (int)(item.getWidth() * adjustRatioWidth);
-                int buttomRightY = topLeftY + (int)(item.getLength() * adjustRatioLength);
+
+                itemWidth = (int) (item.getWidth() * adjustRatioWidth);
+                itemLength = (int) (item.getLength() * adjustRatioLength);
+
+                // topLeft coords before dragging
+                topLeftX = item.getCurX();
+                topLeftY = item.getCurY();
+                System.out.println("topLeft: " + topLeftX + ", " + topLeftY);
+
+                // buttomRight coords before dragging
+                bottomRightX = topLeftX + itemWidth;
+                bottomRightY = topLeftY + itemLength;
+                System.out.println("bottomRight: " + bottomRightX + ", " + bottomRightY);
+
+                // the length of the gap between the mouse-clicked position and the
+                // top-left corner of the item at the very starting point.
+                item.setOffsetX( locX - topLeftX );
+                item.setOffsetY( locY - topLeftY );
+//                System.out.println("offset (" + item.getOffsetX() + ", " + item.getOffsetY() + ")");
 
                 // Check whether the area of this item contains the clicked position.
                 // And add the item to targetList as a potential item to detect the clicked item.
-                if (topLeftX <= locX && locX <= buttomRightX
-                        && topLeftY <= locY && locY <= buttomRightY) {
+                if (topLeftX <= locX && locX <= bottomRightX
+                        && topLeftY <= locY && locY <= bottomRightY) {
                     targetList.add(item);
                 }
             } // end for-loop
 
-            //TODO the following process can be improved with Stream! try later.
+            // assingn the item with the one containing the latest id. (= shown on the top
+            // layer)
             int latestItemId = 0;
-            for(Furniture item: targetList){
-                if( item.getId() >= latestItemId ) {
+            //TODO the following process can be improved with Stream! try later.
+            for (Furniture item : targetList) {
+                if (item.getId() >= latestItemId) {
                     latestItemId = item.getId();
                     target = item;
                 }
             }
 
-            //For Debugging
-            //TODO: delete the following block later
-            if( target != null ) {
-                System.out.println("your target is " + target.getName());
-            } else {
-                System.out.println("nothing is clicked.");
+            // Select the item on the list if the target is selected
+            String targetName = target.getName();
+
+            for( int i = 0; i< listModel.getSize(); i++) {
+                // extract only the item name
+                String listStr = listModel.getElementAt(i);
+                int listStrIndex = listStr.indexOf(":");
+                String subListStr = listStr.substring(0, listStrIndex);
+                if( targetName.equals(subListStr)){
+                    // set selected the item in the list
+                    furnitureList.setSelectedIndex(i);
+                    // assign true for the status of isSelected of the item;
+                    // otherwise assign false.
+                    for (Furniture fItem: itemList){
+                        if(fItem.getName().equals(targetName) ){
+                            fItem.setSelected(true);
+                        } else {
+                            fItem.setSelected(false);
+                        }
+                    }
+                }
             }
 
+            dragging = true;
+
+            target.setSelected(true);
+            frame.repaint();// to reflect isSeleceted status
+
+            //For debugging
+            System.out.println("\n------- mousePressed() ---------------------");
         }
 
-//        public int detectLatestItem(ArrayList<Furniture> list){
-//            // Detect the latest item in the furnitureArrayList
-//            int latestItemId = 0; // id represents the latest created item
-//            for( Furniture item: list ){
-//                if(latestItemId < item.getId() )
-//                    latestItemId = item.getId();
-//            }
-//            return latestItemId;
-//        }
-
+        /**
+         * Respond when the user drags the mouse.
+         * If a square, representing each furniture, is not being dragged, then exit.
+         * Otherwise, change the position of the mouse.
+         * NOTE: the corner of the square is placed in the same relative position with
+         * respect to the mouse that I had when the user started dragging it.
+         */
         @Override
-        public void mouseDragged(MouseEvent e) {
+        public void mouseDragged(MouseEvent evt) {
+//            System.out.println("\n====== mouseDragged() ===========================");
+            if (!dragging)
+                return;
+            int x = evt.getX();
+            int y = evt.getY();
+
+            // set the temporary location in the target object
+            target.setCurX( x );
+            target.setCurY( y );
+
+            System.out.println("MouseDragged(): " +
+                    "cur(" + x + "," + y + ") " +
+                    "top (" + topLeftX + "," + topLeftY+ ") " +
+                    "bottom (" + bottomRightX + "," + bottomRightY +")");
+
+            frame.repaint();
+
+//            System.out.println("====== mouseDragged() ===========================");
 
         }
 
+        /**
+         * Dragging stops when user releases the mouse button.
+         */
         @Override
-        public void mouseReleased(MouseEvent e) {
+        public void mouseReleased(MouseEvent evt) {
+            System.out.println("\n***** mouseReleased! ****************************");
+            int afterReleaseX = evt.getX();
+            int afterReleaseY = evt.getY();
+
+            // If the bottom-right corner of the item will out of the floor,
+            // repaint the image in one of the edge of the floor.
+            boolean showNotification = false;
+            if ( (afterReleaseX - target.getOffsetX() + itemWidth) > 440) {
+                int bottomXReset = 450 - itemWidth;
+                target.setCurX(bottomXReset);
+                System.out.println("bottom X reset.");
+                showNotification = true;
+            }
+            if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 300) {
+                int bottomYReset = 310 - itemLength;
+                target.setCurY(bottomYReset);
+                System.out.println("bottom Y reset.");
+                showNotification = true;
+            }
+//            if( ( target.getOffsetX() - afterReleaseX ) < 10 ){
+            if( ( afterReleaseX - target.getOffsetX() ) < 10 ){
+                target.setCurX(10);
+                System.out.println("top x reset.");
+                showNotification = true;
+            }
+//            if ( ( target.getOffsetY() - afterReleaseY ) < 10){
+            if ( ( afterReleaseY - target.getOffsetY() ) < 10){
+                target.setCurY(10);
+                System.out.println("top y reset.");
+                showNotification = true;
+            }
+
+            if( showNotification ){
+                JOptionPane.showMessageDialog(null,
+                        "You cannot move the item out side your room. " +
+                                "Please put it in the room, please!");
+            }
+
+            System.out.println("Current cords: " + target.getCurX() + ", " + target.getCurY());
+
+            // set the location information in furnitureArrayList, and
+            // the location information of starting point is stored as previous coords in the furnitureArraylist.
+            int index = itemList.indexOf( target );
+            int prevX = itemList.get( index ).getCurX();
+            int prevY = itemList.get( index ).getCurY();
+            target.setPreX( prevX );
+            target.setPreY( prevY );
+            itemList.set( index, target );
+
+            // reset isSelected status of the unselected items
+            for( Furniture item: itemList ){
+                if( !item.equals(target))
+                    item.setSelected(false);
+            }
+
+            dragging = false;
+
+            frame.repaint();
+
+            System.out.println("***** mouseReleased! ****************************");
 
         }
 
-        @Override
-        public void mouseMoved(MouseEvent e) {
-
-        }
-
+        public void mouseMoved(MouseEvent e) { }
         public void mouseClicked(MouseEvent evt) {}
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
 
-
-
-
     }   // end: nested-class Dragger
-
 
 }

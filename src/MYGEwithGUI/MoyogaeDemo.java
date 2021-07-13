@@ -339,6 +339,7 @@ public class MoyogaeDemo extends JPanel {
         }
     }
 
+    //TODO add checking the position: notice if user put the item out of the area
     private class rotateItemListener implements ActionListener{
 
         @Override
@@ -447,13 +448,11 @@ public class MoyogaeDemo extends JPanel {
                 // buttomRight coords before dragging
                 bottomRightX = topLeftX + itemWidth;
                 bottomRightY = topLeftY + itemLength;
-                System.out.println("bottomRight: " + bottomRightX + ", " + bottomRightY);
 
                 // the length of the gap between the mouse-clicked position and the
                 // top-left corner of the item at the very starting point.
                 item.setOffsetX( locX - topLeftX );
                 item.setOffsetY( locY - topLeftY );
-//                System.out.println("offset (" + item.getOffsetX() + ", " + item.getOffsetY() + ")");
 
                 // Check whether the area of this item contains the clicked position.
                 // And add the item to targetList as a potential item to detect the clicked item.
@@ -470,7 +469,27 @@ public class MoyogaeDemo extends JPanel {
             for (Furniture item : targetList) {
                 if (item.getId() >= latestItemId) {
                     latestItemId = item.getId();
+                    item.setSelected(true);
                     target = item;
+                }
+            }
+
+            //
+            if( target == null ){
+
+                // get the information that is currently selected.
+                String str = furnitureList.getSelectedValue();
+
+                // rotate the furniture
+                int strIndex = str.indexOf(":");
+                String subtractText = str.substring(0, strIndex);
+                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+
+                for(Furniture item: list ) {
+                    if (item.getName().equals(subtractText)) {
+                        item.setSelected(true);
+                        target = item;
+                    }
                 }
             }
 
@@ -525,11 +544,6 @@ public class MoyogaeDemo extends JPanel {
             target.setCurX( x );
             target.setCurY( y );
 
-            System.out.println("MouseDragged(): " +
-                    "cur(" + x + "," + y + ") " +
-                    "top (" + topLeftX + "," + topLeftY+ ") " +
-                    "bottom (" + bottomRightX + "," + bottomRightY +")");
-
             frame.repaint();
 
 //            System.out.println("====== mouseDragged() ===========================");
@@ -542,32 +556,99 @@ public class MoyogaeDemo extends JPanel {
         @Override
         public void mouseReleased(MouseEvent evt) {
             System.out.println("\n***** mouseReleased! ****************************");
-            int afterReleaseX = evt.getX();
-            int afterReleaseY = evt.getY();
 
+            // Reset the locations of topLeftX and Y.
+            topLeftX = evt.getX();
+            topLeftY = evt.getY();
+
+            // Reset the size of item
+            itemWidth = (int) (target.getWidth() * adjustRatioWidth);
+            itemLength = (int) (target.getLength() * adjustRatioLength);
+
+            System.out.println("info of " + target.getName());
+            System.out.println("top: " + topLeftX + ", " + topLeftY);
+            System.out.println("size: " + itemWidth + " x " + itemLength);
+
+            resetPosition();
+//            // If the bottom-right corner of the item will out of the floor,
+//            // repaint the image in one of the edge of the floor.
+//            boolean showNotification = false;
+//            if ( (topLeftX + itemWidth) > 450) {
+//                int bottomXReset = 450 - itemWidth;
+//                target.setCurX(bottomXReset);
+//                System.out.println("bottom X reset.");
+//                showNotification = true;
+//            }
+//            if ( ( topLeftY + itemLength) > 310) {
+//                int bottomYReset = 310 - itemLength;
+//                target.setCurY(bottomYReset);
+//                System.out.println("bottom Y reset.");
+//                showNotification = true;
+//            }
+//            if( topLeftX < 10 ){
+//                target.setCurX(10);
+//                System.out.println("top x reset.");
+//                showNotification = true;
+//            }
+//            if ( topLeftY < 10){
+//                target.setCurY(10);
+//                System.out.println("top y reset.");
+//                showNotification = true;
+//            }
+//
+//            if( showNotification ){
+//                JOptionPane.showMessageDialog(null,
+//                        "You cannot move the item out side your room. " +
+//                                "Please put it in the room, please!");
+//            }
+//
+//            // set the location information in furnitureArrayList, and
+//            // the location information of starting point is stored as previous coords in the furnitureArraylist.
+//            int index = itemList.indexOf( target );
+//            int prevX = itemList.get( index ).getCurX();
+//            int prevY = itemList.get( index ).getCurY();
+//            target.setPreX( prevX );
+//            target.setPreY( prevY );
+//            itemList.set( index, target );
+
+            // reset isSelected status of the unselected items
+            for( Furniture item: itemList ){
+                if( !item.equals(target))
+                    item.setSelected(false);
+            }
+
+            System.out.println("target: " + target.getName() + " (" + target.getOffsetX() + ", " + target.getOffsetY() + ")");
+
+            dragging = false;
+
+            frame.repaint();
+
+            System.out.println("***** mouseReleased! ****************************");
+
+        }
+
+        void resetPosition(){
             // If the bottom-right corner of the item will out of the floor,
             // repaint the image in one of the edge of the floor.
             boolean showNotification = false;
-            if ( (afterReleaseX - target.getOffsetX() + itemWidth) > 440) {
+            if ( (topLeftX + itemWidth) > 450) {
                 int bottomXReset = 450 - itemWidth;
                 target.setCurX(bottomXReset);
                 System.out.println("bottom X reset.");
                 showNotification = true;
             }
-            if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 300) {
+            if ( ( topLeftY + itemLength) > 310) {
                 int bottomYReset = 310 - itemLength;
                 target.setCurY(bottomYReset);
                 System.out.println("bottom Y reset.");
                 showNotification = true;
             }
-//            if( ( target.getOffsetX() - afterReleaseX ) < 10 ){
-            if( ( afterReleaseX - target.getOffsetX() ) < 10 ){
+            if( topLeftX < 10 ){
                 target.setCurX(10);
                 System.out.println("top x reset.");
                 showNotification = true;
             }
-//            if ( ( target.getOffsetY() - afterReleaseY ) < 10){
-            if ( ( afterReleaseY - target.getOffsetY() ) < 10){
+            if ( topLeftY < 10){
                 target.setCurY(10);
                 System.out.println("top y reset.");
                 showNotification = true;
@@ -579,8 +660,6 @@ public class MoyogaeDemo extends JPanel {
                                 "Please put it in the room, please!");
             }
 
-            System.out.println("Current cords: " + target.getCurX() + ", " + target.getCurY());
-
             // set the location information in furnitureArrayList, and
             // the location information of starting point is stored as previous coords in the furnitureArraylist.
             int index = itemList.indexOf( target );
@@ -589,19 +668,6 @@ public class MoyogaeDemo extends JPanel {
             target.setPreX( prevX );
             target.setPreY( prevY );
             itemList.set( index, target );
-
-            // reset isSelected status of the unselected items
-            for( Furniture item: itemList ){
-                if( !item.equals(target))
-                    item.setSelected(false);
-            }
-
-            dragging = false;
-
-            frame.repaint();
-
-            System.out.println("***** mouseReleased! ****************************");
-
         }
 
         public void mouseMoved(MouseEvent e) { }

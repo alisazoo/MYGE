@@ -1,6 +1,8 @@
 package MYGEwithGUI;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -79,6 +81,7 @@ public class MoyogaeDemo extends JPanel {
             listModel.addElement(s);
         }
         furnitureList = new JList<>(listModel);
+        furnitureList.addListSelectionListener( new ListListener() );
         JScrollPane scrollPane = new JScrollPane(furnitureList);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 60;
@@ -114,8 +117,6 @@ public class MoyogaeDemo extends JPanel {
         c.gridx = 2;
         c.gridy = 1;
         furniturePanel.add( remItem, c );
-
-
 
         mainPanel.add( floorPanel );
         mainPanel.add( furniturePanel );
@@ -338,6 +339,7 @@ public class MoyogaeDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             if(!listModel.isEmpty()) {
 
                 String str = furnitureList.getSelectedValue();
@@ -367,6 +369,27 @@ public class MoyogaeDemo extends JPanel {
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before trying to rotate nothing!");
             }
+        }
+    }
+
+    private class ListListener implements ListSelectionListener{
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+
+            String str = furnitureList.getSelectedValue();
+
+            int strIndex = str.indexOf(":");
+            String subtractText = str.substring(0, strIndex);
+            ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
+            for(Furniture item: list ){
+                if ( item.getName().equals(subtractText) ){
+                    item.setSelected( true );
+                } else {
+                    item.setSelected(false);
+                }
+            }
+            frame.repaint();
         }
     }
 
@@ -441,9 +464,14 @@ public class MoyogaeDemo extends JPanel {
                 if (item.getId() >= latestItemId) {
                     latestItemId = item.getId();
                     target = item;
+
                 }
             }
+
             dragging = true;
+
+            target.setSelected(true);
+            frame.repaint();// to reflect isSeleceted status
 
             //For debugging
             System.out.println("\n------- mousePressed() ---------------------");
@@ -531,8 +559,13 @@ public class MoyogaeDemo extends JPanel {
             int prevY = itemList.get( index ).getCurY();
             target.setPreX( prevX );
             target.setPreY( prevY );
-            target.setSelected( true );
             itemList.set( index, target );
+
+            // reset isSelected status of the unselected items
+            for( Furniture item: itemList ){
+                if( !item.equals(target))
+                    item.setSelected(false);
+            }
 
             dragging = false;
 
@@ -548,6 +581,5 @@ public class MoyogaeDemo extends JPanel {
         public void mouseExited(MouseEvent e) { }
 
     }   // end: nested-class Dragger
-
 
 }

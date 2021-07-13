@@ -525,11 +525,6 @@ public class MoyogaeDemo extends JPanel {
             target.setCurX( x );
             target.setCurY( y );
 
-            System.out.println("MouseDragged(): " +
-                    "cur(" + x + "," + y + ") " +
-                    "top (" + topLeftX + "," + topLeftY+ ") " +
-                    "bottom (" + bottomRightX + "," + bottomRightY +")");
-
             frame.repaint();
 
 //            System.out.println("====== mouseDragged() ===========================");
@@ -542,32 +537,42 @@ public class MoyogaeDemo extends JPanel {
         @Override
         public void mouseReleased(MouseEvent evt) {
             System.out.println("\n***** mouseReleased! ****************************");
-            int afterReleaseX = evt.getX();
-            int afterReleaseY = evt.getY();
+
+            // Reset the locations of topLeftX and Y.
+            topLeftX = evt.getX();
+            topLeftY = evt.getY();
+            System.out.println("info of " + target.getName());
+            System.out.println("top: " + topLeftX + ", " + topLeftY);
+
+//            // buttomRight coords after dragging
+//            bottomRightX = topLeftX + itemWidth;
+//            bottomRightY = topLeftY + itemLength;
+//            System.out.println("condition btm x-axis: " + (topLeftX + itemWidth));
+//            System.out.println("condition btm Y-axis: " + (topLeftY + itemLength));
+//            System.out.println("condition top x-axis: " + topLeftX );
+//            System.out.println("condition top y-axis: " + topLeftY );
 
             // If the bottom-right corner of the item will out of the floor,
             // repaint the image in one of the edge of the floor.
             boolean showNotification = false;
-            if ( (afterReleaseX - target.getOffsetX() + itemWidth) > 440) {
+            if ( (topLeftX+ itemWidth) > 450) {
                 int bottomXReset = 450 - itemWidth;
                 target.setCurX(bottomXReset);
                 System.out.println("bottom X reset.");
                 showNotification = true;
             }
-            if ( ( afterReleaseY - target.getOffsetY() + itemLength) > 300) {
+            if ( ( topLeftY + itemLength) > 310) {
                 int bottomYReset = 310 - itemLength;
                 target.setCurY(bottomYReset);
                 System.out.println("bottom Y reset.");
                 showNotification = true;
             }
-//            if( ( target.getOffsetX() - afterReleaseX ) < 10 ){
-            if( ( afterReleaseX - target.getOffsetX() ) < 10 ){
+            if( topLeftX < 10 ){
                 target.setCurX(10);
                 System.out.println("top x reset.");
                 showNotification = true;
             }
-//            if ( ( target.getOffsetY() - afterReleaseY ) < 10){
-            if ( ( afterReleaseY - target.getOffsetY() ) < 10){
+            if ( topLeftY < 10){
                 target.setCurY(10);
                 System.out.println("top y reset.");
                 showNotification = true;
@@ -578,8 +583,6 @@ public class MoyogaeDemo extends JPanel {
                         "You cannot move the item out side your room. " +
                                 "Please put it in the room, please!");
             }
-
-            System.out.println("Current cords: " + target.getCurX() + ", " + target.getCurY());
 
             // set the location information in furnitureArrayList, and
             // the location information of starting point is stored as previous coords in the furnitureArraylist.

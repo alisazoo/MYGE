@@ -28,6 +28,7 @@ public class Furniture {
     //For GUI
     private int offsetX;
     private int offsetY;
+    private boolean isSelected = false;
 
     private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
@@ -189,5 +190,13 @@ public class Furniture {
 
     public void setOffsetY(int offsetY) {
         this.offsetY = offsetY;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

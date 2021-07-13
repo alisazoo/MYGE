@@ -3,7 +3,6 @@ package MYGEwithGUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MoyogaeDemo extends JPanel {
@@ -507,6 +506,7 @@ public class MoyogaeDemo extends JPanel {
             int prevY = itemList.get( index ).getCurY();
             target.setPreX( prevX );
             target.setPreY( prevY );
+            target.setSelected( true );
             itemList.set( index, target );
 
             dragging = false;
@@ -521,8 +521,6 @@ public class MoyogaeDemo extends JPanel {
         public void mouseClicked(MouseEvent evt) {}
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
-
-
 
     }   // end: nested-class Dragger
 

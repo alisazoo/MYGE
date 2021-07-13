@@ -8,11 +8,6 @@ public class FloorPanel extends JPanel {
 
     double adjustRatioWidth, adjustRatioLength;
 
-//    public FloorPanel(double adjustRatioWidth, double adjustRatioLength){
-//        super();
-//
-//    }
-
     public void setFloorRatio(double adjustRatioWidth, double adjustRatioLength){
         this.adjustRatioWidth = adjustRatioWidth;
         this.adjustRatioLength = adjustRatioLength;
@@ -59,6 +54,12 @@ public class FloorPanel extends JPanel {
 
             g.setColor(randomColor);
             g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
+            if( item.isSelected() ){//TODO: this does not work so fix it!
+                g.setColor(Color.MAGENTA);
+            } else {
+                g.setColor(Color.WHITE);
+            }
+            g.drawRect(x,y,itemW, itemH);
             g.setColor(Color.BLACK);
             g.drawString(itemName + ": (" + x + ", " + y + ")", x,y); // after the 2nd: curX, curY
 

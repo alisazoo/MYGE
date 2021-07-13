@@ -472,13 +472,24 @@ public class MoyogaeDemo extends JPanel {
 
             // Select the item on the list if the target is selected
             String targetName = target.getName();
+
             for( int i = 0; i< listModel.getSize(); i++) {
                 // extract only the item name
                 String listStr = listModel.getElementAt(i);
                 int listStrIndex = listStr.indexOf(":");
                 String subListStr = listStr.substring(0, listStrIndex);
                 if( targetName.equals(subListStr)){
+                    // set selected the item in the list
                     furnitureList.setSelectedIndex(i);
+                    // assign true for the status of isSelected of the item;
+                    // otherwise assign false.
+                    for (Furniture fItem: itemList){
+                        if(fItem.getName().equals(targetName) ){
+                            fItem.setSelected(true);
+                        } else {
+                            fItem.setSelected(false);
+                        }
+                    }
                 }
             }
 

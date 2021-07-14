@@ -556,14 +556,11 @@ public class MoyogaeDemo extends JPanel {
                     }
                 }
             }
+            target.setSelected(true);
 
             dragging = true;
-
-            target.setSelected(true);
             frame.repaint();// to reflect isSeleceted status
 
-            //For debugging
-            System.out.println("\n------- mousePressed() ---------------------");
         }
 
         /**
@@ -586,8 +583,6 @@ public class MoyogaeDemo extends JPanel {
             target.setCurY( y );
 
             frame.repaint();
-
-//            System.out.println("====== mouseDragged() ===========================");
 
         }
 
@@ -619,14 +614,8 @@ public class MoyogaeDemo extends JPanel {
                     item.setSelected(false);
             }
 
-            System.out.println("target: " + target.getName() + " (" + target.getOffsetX() + ", " + target.getOffsetY() + ")");
-
             dragging = false;
-
             frame.repaint();
-
-            System.out.println("***** mouseReleased! ****************************");
-
         }
 
         /**

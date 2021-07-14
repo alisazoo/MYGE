@@ -391,8 +391,10 @@ public class MoyogaeDemo extends JPanel {
                         break;
                     }
                 }
+
                 // set the location information in furnitureArrayList, and
-                // the location information of starting point is stored as previous coords in the furnitureArraylist.
+                // the location information of starting point is stored as
+                // previous coords in the furnitureArraylist.
                 int index = itemList.indexOf( target );
                 int prevX = itemList.get( index ).getCurX();
                 int prevY = itemList.get( index ).getCurY();
@@ -400,9 +402,9 @@ public class MoyogaeDemo extends JPanel {
                 target.setPreY( prevY );
                 itemList.set( index, target );
 
-                // TODO fix the flow! (Not checking the needs of the following process before doing)
                 // Change the location information if user can put the item out of the floor
-                // after rotating. If so, the item automatically put the nearest edge of the floor.
+                // after rotating.
+                // If so, the item is automatically put on the nearest edge/corner.
                 int topLeftX = target.getCurX();
                 int topLeftY = target.getCurY();
                 int[] sizeList = new Dragger().calcItemSize(target);
@@ -631,8 +633,10 @@ public class MoyogaeDemo extends JPanel {
         }
 
         /**
-         * If user try to put the item outside of the floor,
-         * repaint the image at the nearest edge/corner of the floor.
+         * Check whether this program need to repaint the image
+         * at the nearest edge/corner of the floor, instead of user-set position,
+         * when user try to put the item outside of the floor
+         * If need repaint, this program set the new location information to the Furniture object.
          * @param topLeftX the x-coords of the user-set placement
          * @param topLeftY the y-coords of the user-set placement
          * @param itemWidth the width of the item on the floorPanel

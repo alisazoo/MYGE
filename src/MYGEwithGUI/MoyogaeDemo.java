@@ -306,9 +306,20 @@ public class MoyogaeDemo extends JPanel {
 
     private class remItemListener implements ActionListener{
 
+        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
         public void actionPerformed(ActionEvent evt){
 
-            if(!listModel.isEmpty()) {
+            // process to handle when no item is selected
+            boolean isSelectedNow = false;
+            for(Furniture item: itemList) {
+                if (item.isSelected()) {
+                    isSelectedNow = true;
+                    break;
+                }
+            }
+
+            if(!listModel.isEmpty() && isSelectedNow ) { // OR itemList.isEmpty()
 
                 int index = furnitureList.getSelectedIndex();
                 String str = furnitureList.getSelectedValue();
@@ -332,9 +343,11 @@ public class MoyogaeDemo extends JPanel {
 
                 frame.repaint();
 
-            } else {
+            } else if ( listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before deleting!");
+            } else if ( !isSelectedNow ){
+                JOptionPane.showMessageDialog(null, "Please select an item to delete.");
             }
         }
     }
@@ -342,10 +355,20 @@ public class MoyogaeDemo extends JPanel {
     //TODO add checking the position: notice if user put the item out of the area
     private class rotateItemListener implements ActionListener{
 
-        @Override
+        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
         public void actionPerformed(ActionEvent e) {
 
-            if(!listModel.isEmpty()) {
+            // process to handle when no item is selected
+            boolean isSelectedNow = false;
+            for(Furniture item: itemList) {
+                if (item.isSelected()) {
+                    isSelectedNow = true;
+                    break;
+                }
+            }
+
+            if(!listModel.isEmpty() && isSelectedNow ) {
 
                 String str = furnitureList.getSelectedValue();
 
@@ -368,9 +391,11 @@ public class MoyogaeDemo extends JPanel {
                 }
                 frame.repaint();
 
-            } else {
+            } else if (listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before trying to rotate nothing!");
+            } else if ( !isSelectedNow ){
+                JOptionPane.showMessageDialog(null, "Please select an item to rotate.");
             }
         }
     }
@@ -389,10 +414,9 @@ public class MoyogaeDemo extends JPanel {
                     String subtractText = str.substring(0, strIndex);
                     ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
                     for (Furniture item : list) {
+                        item.setSelected(false);
                         if (item.getName().equals(subtractText)) {
                             item.setSelected(true);
-                        } else {
-                            item.setSelected(false);
                         }
                     }
                     frame.repaint();
@@ -507,10 +531,9 @@ public class MoyogaeDemo extends JPanel {
                     // assign true for the status of isSelected of the item;
                     // otherwise assign false.
                     for (Furniture fItem: itemList){
+                        fItem.setSelected(false);
                         if(fItem.getName().equals(targetName) ){
                             fItem.setSelected(true);
-                        } else {
-                            fItem.setSelected(false);
                         }
                     }
                 }

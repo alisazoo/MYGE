@@ -61,19 +61,20 @@ public class MoyogaeDemo extends JPanel {
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
         //------floorPanel-------------------------------------------
-        JLabel floorWidth = new JLabel( Floor.getWidth() + " cm (width)" + " x " +
-                Floor.getLength() + " cm (length)", JLabel.CENTER);
-
-// Comment out during checking out sizeAdjustment brunch
         Dragger dragListener = new Dragger();
         floorPanel.addMouseListener( dragListener );
         floorPanel.addMouseMotionListener( dragListener );
-        floorPanel.add( BorderLayout.SOUTH, floorWidth );
-        // TODO: fix the layout issue with BorderLayout manager?
-        // floorPanel.add(BorderLayout.SOUTH, floorWidth);
-        //  this above line also work but the location is the SAME as NORTH ver.
+        floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
 
         //------furniturePanel----------------------------------------
+        JLabel floorSizeInfo = new JLabel( "Floor Size: " + Floor.getWidth() + " cm (width)" + " x " +
+                Floor.getLength() + " cm (length)", JLabel.CENTER);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 0;
+        furniturePanel.add( floorSizeInfo, c );
 
         listModel = new DefaultListModel<>();
         for (Furniture item: Furniture.getFurnitureArrayList() ){
@@ -85,10 +86,9 @@ public class MoyogaeDemo extends JPanel {
         JScrollPane scrollPane = new JScrollPane(furnitureList);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 60;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.gridx = 0;
         c.gridwidth = 3;
-        c.gridy = 0;
+        c.gridy = 1;
         furniturePanel.add( scrollPane, c );
 
         JButton addItem = new JButton("Add Furniture");
@@ -97,7 +97,7 @@ public class MoyogaeDemo extends JPanel {
         c.ipady = 0;
         c.gridwidth = 1;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         furniturePanel.add( addItem, c );
 
         JButton rotateItem = new JButton("Rotate Furniture");
@@ -106,7 +106,7 @@ public class MoyogaeDemo extends JPanel {
         c.ipady = 0;
         c.gridwidth = 1;
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         furniturePanel.add( rotateItem, c );
 
         JButton remItem = new JButton("Remove Furniture");
@@ -115,7 +115,7 @@ public class MoyogaeDemo extends JPanel {
         c.ipady = 0;
         c.gridwidth = 1;
         c.gridx = 2;
-        c.gridy = 1;
+        c.gridy = 2;
         furniturePanel.add( remItem, c );
 
         mainPanel.add( floorPanel );

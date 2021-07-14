@@ -46,15 +46,13 @@ public class FloorPanel extends JPanel {
                 item.setCurX(x);
                 item.setCurY(y);
             }
-//todo
-//            System.out.println("<paintComponent()>\ncurrent X & Y: " + item.getCurX() + ", " + item.getCurY());
 
             x = item.getCurX();
             y = item.getCurY();
 
             g.setColor(randomColor);
             g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
-            if( item.isSelected() ){//TODO: this does not work so fix it!
+            if( item.isSelected() ){
                 g.setColor(Color.RED);
             } else {
                 g.setColor(Color.WHITE);

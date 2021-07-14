@@ -68,7 +68,7 @@ public class MoyogaeDemo extends JPanel {
         Dragger dragListener = new Dragger();
         floorPanel.addMouseListener( dragListener );
         floorPanel.addMouseMotionListener( dragListener );
-        floorPanel.add( BorderLayout.NORTH, floorWidth );
+        floorPanel.add( BorderLayout.SOUTH, floorWidth );
         // TODO: fix the layout issue with BorderLayout manager?
         // floorPanel.add(BorderLayout.SOUTH, floorWidth);
         //  this above line also work but the location is the SAME as NORTH ver.
@@ -352,7 +352,6 @@ public class MoyogaeDemo extends JPanel {
         }
     }
 
-    //TODO add checking the position: notice if user put the item out of the area
     private class rotateItemListener implements ActionListener{
 
         ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();

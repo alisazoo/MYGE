@@ -11,9 +11,6 @@ import java.util.ArrayList;
  */
 public class Furniture {
 
-    //TODO debugging
-//        System.out.println("id: " + item.getId() );
-
     private int id;
     private String name;
     private int length;
@@ -60,7 +57,6 @@ public class Furniture {
     public static void addFurniturePreviousLocation(String name, int x, int y){
         for( Furniture item: furnitureArrayList ){
             if( item.getName().equals(name) ){
-                //TODO: encupsulation
                 item.setPreX(x);
                 item.setPreY(y);
                 break;

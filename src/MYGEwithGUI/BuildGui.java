@@ -145,7 +145,7 @@ public class BuildGui extends MoyogaeDemo {
     private class addItemListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evt) {
-            InputDialog.inputFurnitureData(listModel);
+            FurnitureDialog.inputFurnitureData(listModel);
             floorPanel.repaint();
         }
     }

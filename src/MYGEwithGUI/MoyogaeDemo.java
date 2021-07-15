@@ -9,7 +9,7 @@ public class MoyogaeDemo extends JPanel {
      */
     public static void main(String[] args) {
         BuildGui gui = new BuildGui();
-        InputDialog.inputFloorData();
+        FloorDialog.inputFloorDialog();
         gui.buildGUI();
     }
 

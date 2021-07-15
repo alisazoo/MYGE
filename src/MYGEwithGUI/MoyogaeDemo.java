@@ -408,10 +408,7 @@ public class MoyogaeDemo extends JPanel {
                 // If so, the item is automatically put on the nearest edge/corner.
                 int topLeftX = target.getCurX();
                 int topLeftY = target.getCurY();
-                int[] sizeList = new Dragger().calcItemSize(target);
-                int itemWidth = sizeList[0];
-                int itemLength = sizeList[1];
-                new Dragger().resetPosition(topLeftX, topLeftY, itemWidth, itemLength, target);
+                new Dragger().resetPosition(topLeftX, topLeftY, target);
 
                 frame.repaint();
 
@@ -467,20 +464,16 @@ public class MoyogaeDemo extends JPanel {
         @Override
         public void mousePressed(MouseEvent evt) {
 
-            System.out.println("\n------- mousePressed()  (" + evt.getX() + ", " + evt.getY() + ")" +
-                    "----------------------------");
-
-            // Exit if a drag is in progress.
             if (dragging)
                 return;
+
             if( target != null )
                 target = null;
+
             int locX = evt.getX();
             int locY = evt.getY();
 
-            ArrayList<Furniture> targetList = new ArrayList<>();
-                                    // save the temporary item(s) that could
-                                    // be targeted during dragging.
+            ArrayList<Furniture> tempTargetList = new ArrayList<>();
 
             for (Furniture item : itemList) {
 
@@ -488,12 +481,9 @@ public class MoyogaeDemo extends JPanel {
                 itemWidth = sizeArray[0];
                 itemLength = sizeArray[1];
 
-                // topLeft coords before dragging
                 topLeftX = item.getCurX();
                 topLeftY = item.getCurY();
-                System.out.println("topLeft: " + topLeftX + ", " + topLeftY);
 
-                // buttomRight coords before dragging
                 bottomRightX = topLeftX + itemWidth;
                 bottomRightY = topLeftY + itemLength;
 
@@ -506,7 +496,7 @@ public class MoyogaeDemo extends JPanel {
                 // And add the item to targetList as a potential item to detect the clicked item.
                 if (topLeftX <= locX && locX <= bottomRightX
                         && topLeftY <= locY && locY <= bottomRightY) {
-                    targetList.add(item);
+                    tempTargetList.add(item);
                 }
             } // end for-loop
 
@@ -514,7 +504,7 @@ public class MoyogaeDemo extends JPanel {
             // layer)
             int latestItemId = 0;
             //TODO the following process can be improved with Stream! try later.
-            for (Furniture item : targetList) {
+            for (Furniture item : tempTargetList) {
                 if (item.getId() >= latestItemId) {
                     latestItemId = item.getId();
                     item.setSelected(true);
@@ -588,18 +578,10 @@ public class MoyogaeDemo extends JPanel {
          */
         @Override
         public void mouseReleased(MouseEvent evt) {
-            System.out.println("\n***** mouseReleased! ****************************");
 
-            // Reset the locations of topLeftX and Y.
             topLeftX = evt.getX() - target.getOffsetX();
             topLeftY = evt.getY() - target.getOffsetY();
-
-            // Reset the size of item
-            int[] sizeList = calcItemSize(target);
-            itemWidth = sizeList[0];
-            itemLength = sizeList[1];
-
-            resetPosition(topLeftX, topLeftY, itemWidth, itemLength, target);
+            resetPosition(topLeftX, topLeftY, target);
 
             // reset isSelected status of the unselected items
             for( Furniture item: itemList ){
@@ -630,11 +612,13 @@ public class MoyogaeDemo extends JPanel {
          * If need repaint, this program set the new location information to the Furniture object.
          * @param topLeftX the x-coords of the user-set placement
          * @param topLeftY the y-coords of the user-set placement
-         * @param itemWidth the width of the item on the floorPanel
-         * @param itemLength the length of the item on the floorPanel
          * @param target Furniture object that is clicked by user
          */
-        void resetPosition(int topLeftX, int topLeftY, int itemWidth, int itemLength, Furniture target){
+        void resetPosition(int topLeftX, int topLeftY, Furniture target){
+
+            int[] sizeList = new Dragger().calcItemSize(target);
+            int itemWidth = sizeList[0];
+            int itemLength = sizeList[1];
 
             boolean showNotification = false;
             if ( (topLeftX + itemWidth) > 450) {

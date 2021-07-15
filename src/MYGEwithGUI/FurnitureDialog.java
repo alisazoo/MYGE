@@ -101,5 +101,4 @@ public class FurnitureDialog {
         return resultArray;
     }
 
-
 }

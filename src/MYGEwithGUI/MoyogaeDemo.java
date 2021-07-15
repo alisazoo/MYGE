@@ -483,6 +483,10 @@ public class MoyogaeDemo extends JPanel {
 
             for (Furniture item : itemList) {
 
+                int[] sizeArray = calcItemSize(item);
+                itemWidth = sizeArray[0];
+                itemLength = sizeArray[1];
+
                 // topLeft coords before dragging
                 topLeftX = item.getCurX();
                 topLeftY = item.getCurY();

@@ -16,11 +16,12 @@ public class BuildGui extends MoyogaeDemo {
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
 
-    double floorAreaWidth = 440.0;
-    double floorAreaLength = 300.0;
+    final double floorAreaWidth = 440.0;
+    final double floorAreaLength = 300.0;
     double adjustRatioWidth, adjustRatioLength;
 
     ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+    Furniture target;
 
     /**
      * This method build components and display them as the initial GUI.
@@ -40,7 +41,6 @@ public class BuildGui extends MoyogaeDemo {
      * @return mainPanel
      */
     private JPanel buildMainPanel(){
-
         mainPanel = new JPanel();
         mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
@@ -50,7 +50,6 @@ public class BuildGui extends MoyogaeDemo {
         mainPanel.add( buildFurniturePanel() );
 
         return mainPanel;
-
     }
 
     /**
@@ -59,7 +58,6 @@ public class BuildGui extends MoyogaeDemo {
      * @return furniturePanel
      */
     private JPanel buildFurniturePanel(){
-
         furniturePanel = new JPanel();
         furniturePanel.setLayout( new GridBagLayout() );
         GridBagConstraints c = new GridBagConstraints();
@@ -142,19 +140,17 @@ public class BuildGui extends MoyogaeDemo {
 
 
 
+    //-------- Nested classes to handle events ---------------------------------------
 
     private class addItemListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evt) {
-            inputFurnitureData(Furniture.getFurnitureArrayList(), listModel);
+            InputDialog.inputFurnitureData(listModel);
             floorPanel.repaint();
         }
     }
 
-
     private class remItemListener implements ActionListener{
-
-        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
 
         @Override
         public void actionPerformed(ActionEvent evt){
@@ -163,7 +159,8 @@ public class BuildGui extends MoyogaeDemo {
 
             if(!listModel.isEmpty() && isSelectedItemNow ) {
                 int itemIndexToDelete = furnitureList.getSelectedIndex();
-                String itemNameToDelete = extractSubstring( furnitureList.getSelectedValue(), ':');
+                String itemNameToDelete =
+                        extractSubstring( furnitureList.getSelectedValue());
 
                 for( Furniture item: itemList ){
                     if( item.getName().equals(itemNameToDelete) ){
@@ -188,9 +185,6 @@ public class BuildGui extends MoyogaeDemo {
 
     private class rotateItemListener implements ActionListener{
 
-        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
-        Furniture target;
-
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -198,7 +192,8 @@ public class BuildGui extends MoyogaeDemo {
 
             if(!listModel.isEmpty() && isSelectedItemNow ) {
 
-                String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':' );
+                String targetItemName =
+                        extractSubstring( furnitureList.getSelectedValue());
 
                 for(Furniture item: itemList ){
                     if( item.getName().equals(targetItemName) ){
@@ -214,19 +209,13 @@ public class BuildGui extends MoyogaeDemo {
                     }
                 }
 
-                // set the location information in furnitureArrayList, and
-                // the location information of starting point is stored as
-                // previous coords in the furnitureArraylist.
-                int index = itemList.indexOf( target );
-                int prevX = itemList.get( index ).getCurX();
-                int prevY = itemList.get( index ).getCurY();
-                target.setPreX( prevX );
-                target.setPreY( prevY );
-                itemList.set( index, target );
+                int targetIndex = itemList.indexOf( target );
+                int targetPrevX = itemList.get( targetIndex ).getCurX();
+                int targetPrevY = itemList.get( targetIndex ).getCurY();
+                target.setPreX( targetPrevX );
+                target.setPreY( targetPrevY );
+                itemList.set( targetIndex, target );
 
-                // Change the location information if user can put the item out of the floor
-                // after rotating.
-                // If so, the item is automatically put on the nearest edge/corner.
                 int topLeftX = target.getCurX();
                 int topLeftY = target.getCurY();
                 new Dragger().resetPosition(topLeftX, topLeftY, target);//TODO
@@ -244,15 +233,13 @@ public class BuildGui extends MoyogaeDemo {
 
     private class ListListener implements ListSelectionListener{
 
-        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
-
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if(!e.getValueIsAdjusting()) {
 
                 String str = furnitureList.getSelectedValue();
                 if( str!=null ) {
-                    String targetItemName = extractSubstring( str, ':');
+                    String targetItemName = extractSubstring( str);
                     for (Furniture item : itemList) {
                         item.setSelected(false);
                         if (item.getName().equals(targetItemName)) {
@@ -267,19 +254,10 @@ public class BuildGui extends MoyogaeDemo {
 
     private class Dragger implements MouseListener, MouseMotionListener {
 
-        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
-                                    // used to manage the final result of
-                                    // the mouse motions.
-        boolean dragging;           // Set to true when a drag is in progress.
-        Furniture target = null;    // Set the instance of the current dragging item (in furnitureArrayList)
+        private boolean dragging;
 
-        int topLeftX = 0;           // the top-left x-coords of the target furniture
-        int topLeftY = 0;           // the top-left y-coords of the target furniture
-        int bottomRightX;           // the buttom-right x-coords of the target furniture
-        int bottomRightY;           // the buttom-right y-coods of the target furniture
-
-        int itemWidth;
-        int itemLength;
+        private int topLeftX = 0;
+        private int topLeftY = 0;
 
         @Override
         public void mousePressed(MouseEvent evt) {
@@ -287,13 +265,11 @@ public class BuildGui extends MoyogaeDemo {
             if (dragging)
                 return;
 
-//            if( target != null )
-//                target = null;
-
             target = findTarget( evt.getX(), evt.getY() );
 
             if( target == null ){
-                String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':');
+                String targetItemName =
+                        extractSubstring( furnitureList.getSelectedValue());
                 for(Furniture item: itemList ) {
                     if (item.getName().equals(targetItemName)) {
                         item.setSelected(true);
@@ -302,17 +278,12 @@ public class BuildGui extends MoyogaeDemo {
                 }
             }
 
-            // Select the item on the list if the target is selected
             String targetName = target.getName();
-
             for( int i = 0; i< listModel.getSize(); i++) {
-
-                String targetItemNameInList = extractSubstring( listModel.getElementAt(i), ':');
+                String targetItemNameInList =
+                        extractSubstring( listModel.getElementAt(i));
                 if( targetName.equals(targetItemNameInList)){
-                    // set selected the item in the list
                     furnitureList.setSelectedIndex(i);
-                    // assign true for the status of isSelected of the item;
-                    // otherwise assign false.
                     for (Furniture fItem: itemList){
                         fItem.setSelected(false);
                         if(fItem.getName().equals(targetName) ){
@@ -321,7 +292,7 @@ public class BuildGui extends MoyogaeDemo {
                     }
                 }
             }
-            target.setSelected(true);
+            target.setSelected(true); //todo ?????
 
             dragging = true;
             frame.repaint();
@@ -347,7 +318,6 @@ public class BuildGui extends MoyogaeDemo {
             target.setCurY( y - target.getOffsetY() );
 
             frame.repaint();
-
         }
 
         /**
@@ -370,46 +340,45 @@ public class BuildGui extends MoyogaeDemo {
 
         /**
          * Find the clicked item by user according to the current clicked position.
+         * The gap between the mouse-clicked position and the top-left corner is stored
+         * as setOffsetX and setOffsetY.
+         * Item(s) stored in tempTargetList (= a potential item to detect the clicked item)
+         * is determined by the check whether the area of this item contains the clicked position.
+         * The clicked item is the element with higher id (=top-layered) in tempTargetList.
          * @param locX x-coord of current clicked position
          * @param locY y-coord of current clicked position
          * @return the instance represents the current clicked furniture item
          */
-        public Furniture findTarget( int locX, int locY ){
+        private Furniture findTarget( int locX, int locY ){
             ArrayList<Furniture> tempTargetList = new ArrayList<>();
+
             for (Furniture item : itemList) {
 
                 int[] sizeArray = calcItemSize(item);
-                itemWidth = sizeArray[0];
-                itemLength = sizeArray[1];
+                int itemWidth = sizeArray[0];
+                int itemLength = sizeArray[1];
 
                 topLeftX = item.getCurX();
                 topLeftY = item.getCurY();
 
-                bottomRightX = topLeftX + itemWidth;
-                bottomRightY = topLeftY + itemLength;
+                int bottomRightX = topLeftX + itemWidth;
+                int bottomRightY = topLeftY + itemLength;
 
-                // the length of the gap between the mouse-clicked position and the
-                // top-left corner of the item at the very starting point.
                 item.setOffsetX( locX - topLeftX );
                 item.setOffsetY( locY - topLeftY );
 
-                // Check whether the area of this item contains the clicked position.
-                // And add the item to targetList as a potential item to detect the clicked item.
                 if (topLeftX <= locX && locX <= bottomRightX
                         && topLeftY <= locY && locY <= bottomRightY) {
                     tempTargetList.add(item);
                 }
-            } // end for-loop
-
-            // assingn the item with the one containing the latest id. (= shown on the top
-            // layer)
-            int latestItemId = 0;
+            }
 
             //TODO the following process can be improved with Stream! try later.
             Furniture target = null;
+            int topLayeredItemId = 0;
             for (Furniture item : tempTargetList) {
-                if (item.getId() >= latestItemId) {
-                    latestItemId = item.getId();
+                if (item.getId() >= topLayeredItemId) {
+                    topLayeredItemId = item.getId();
                     item.setSelected(true);
                     target = item;
                 }
@@ -423,7 +392,7 @@ public class BuildGui extends MoyogaeDemo {
          * @param item Furniture object that is clicked by user
          * @return int[0] = the width of item, int[1] = the length of the item
          */
-        int[] calcItemSize(Furniture item){
+        private int[] calcItemSize(Furniture item){
             int itemWidth = (int) (item.getWidth() * adjustRatioWidth);
             int itemLength = (int) (item.getLength() * adjustRatioLength);
 
@@ -440,7 +409,7 @@ public class BuildGui extends MoyogaeDemo {
          * @param topLeftY the y-coords of the user-set placement
          * @param target Furniture object that is clicked by user
          */
-        void resetPosition(int topLeftX, int topLeftY, Furniture target){
+        private void resetPosition(int topLeftX, int topLeftY, Furniture target){
 
             int[] sizeList = new Dragger().calcItemSize(target);
             int itemWidth = sizeList[0];
@@ -492,30 +461,26 @@ public class BuildGui extends MoyogaeDemo {
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
 
-    }   // end: nested-class Dragger
-
+    }
 
 
 
     /**
-     * Extract substring start from the beginning and end before something
-     * at the indexOf in the String, str.
+     * Extract substring start from the beginning and end before ":"
+     * in the String str.
      * @param fullString a string to extract a substring from.
-     * @param mark substring ends at right before of this char
-     * @return substring start from the begening and end before mark
+     * @return substring start from the beginning and end before ":"
      */
-    public String extractSubstring( String fullString, char mark ){
-
-        int strIndex = fullString.indexOf(mark);
+    private String extractSubstring(String fullString){
+        int strIndex = fullString.indexOf(':');
         return fullString.substring(0, strIndex);
-
     }
 
     /**
      * Check whether there is a selected furniture item now.
      * @return true if a furniture item is selected.
      */
-    public boolean checkIsSelectedNow(){
+    private boolean checkIsSelectedNow(){
         boolean isSelectedNow = false;
         for(Furniture item: itemList) {
             if (item.isSelected()) {

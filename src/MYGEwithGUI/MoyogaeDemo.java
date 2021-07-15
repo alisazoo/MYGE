@@ -34,13 +34,11 @@ public class MoyogaeDemo extends JPanel {
         main.buildGUI();
     }
 
-    //-------------- GUI ---------------------------------------------
 
     /**
      * This method build components and display them as the initial GUI.
      */
     public void buildGUI(){
-
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -48,7 +46,6 @@ public class MoyogaeDemo extends JPanel {
         frame.setBounds(10,10,500,650);
         frame.pack();
         frame.setVisible(true);
-
     }
 
     /**
@@ -176,7 +173,7 @@ public class MoyogaeDemo extends JPanel {
         panel.add( label, BorderLayout.WEST );
 
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        control.add( new JLabel(""));   // to fill the empty space for layout
+        control.add( new JLabel(""));//todo change layout manager and remove this unnecessary JLabel
         JTextField floorWidthField = new JTextField();
         control.add(floorWidthField);
         JTextField floorLengthField = new JTextField();
@@ -188,7 +185,6 @@ public class MoyogaeDemo extends JPanel {
         boolean isSetFloorData = false;
         while(!isSetFloorData ){
             try {
-                // Set the input data into the floor object
                 Floor.setWidth(Integer.parseInt(floorWidthField.getText()));
                 Floor.setLength(Integer.parseInt(floorLengthField.getText()));
                 isSetFloorData = true;
@@ -206,8 +202,6 @@ public class MoyogaeDemo extends JPanel {
 
     }   // end inputFloorSize() method
 
-
-    //--------- input Dialog: furniture -------------------------------------
     /**
      * This static inputFurnitureData method aims to set the new item in the ArrayList<Furniture>.
      * The data of the new item is sent from input dialog.
@@ -223,7 +217,6 @@ public class MoyogaeDemo extends JPanel {
         int inputWidth, inputLength;
 
         try {
-
             inputName = result[0];
             inputWidth = Integer.parseInt(result[1]);
             inputLength = Integer.parseInt(result[2]);
@@ -233,17 +226,15 @@ public class MoyogaeDemo extends JPanel {
 
             String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
             listModel.addElement(newItemTxt);
-
         }
         catch (NumberFormatException numEx){
-
             numEx.printStackTrace();
             JOptionPane.showMessageDialog(null,
                     "Please enter the valid data. Width and length of the furniture should be number.");
 
         }
 
-    }   // end: inputFurnitureData() method
+    }
 
     /**
      * This static method inputFurnitureDialog create the input dialog
@@ -291,10 +282,10 @@ public class MoyogaeDemo extends JPanel {
                 "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
         String inputFurnitureName = furnitureNameField.getText();
-        String[] infoArray = new String[3];
-        infoArray[0] = inputFurnitureName;
-        infoArray[1] = furnitureWidthField.getText();
-        infoArray[2] = furnitureLengthField.getText();
+        String[] resultArray = new String[3];
+        resultArray[0] = inputFurnitureName;
+        resultArray[1] = furnitureWidthField.getText();
+        resultArray[2] = furnitureLengthField.getText();
 
         for (Furniture newItem: itemList){
             if(newItem.getName().equals(inputFurnitureName)){
@@ -305,14 +296,11 @@ public class MoyogaeDemo extends JPanel {
             }
         }
 
-        return infoArray;
+        return resultArray;
     } // end: inputFurnitureDialog() method
 
 
-    //-----Action Listener--------------------------------------------
-
     private class addItemListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent evt) {
             inputFurnitureData(Furniture.getFurnitureArrayList(), listModel);
@@ -320,41 +308,37 @@ public class MoyogaeDemo extends JPanel {
         }
     }
 
+
     private class remItemListener implements ActionListener{
 
         ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
 
+        @Override
         public void actionPerformed(ActionEvent evt){
 
-            // process to handle when no item is selected
-            boolean isSelectedNow = false;
-            for(Furniture item: itemList) {
-                if (item.isSelected()) {
-                    isSelectedNow = true;
-                    break;
-                }
-            }
+            boolean isSelectedItemNow = checkIsSelectedNow();
 
-            if(!listModel.isEmpty() && isSelectedNow ) {
+            if(!listModel.isEmpty() && isSelectedItemNow ) {
+                int itemIndexToDelete = furnitureList.getSelectedIndex();
+                String itemNameToDelete = extractSubstring( furnitureList.getSelectedValue(), ':');
 
-                int indexToDelete = furnitureList.getSelectedIndex();
-                String itemToDelete = extractSubstring( furnitureList.getSelectedValue(), ':');
-
-                for(Furniture item: itemList ){
-                    if( item.getName().equals(itemToDelete) ){
+                for( Furniture item: itemList ){
+                    if( item.getName().equals(itemNameToDelete) ){
                         itemList.remove(item);
                         break;
                     }
                 }
-                listModel.removeElementAt(indexToDelete);
+                listModel.removeElementAt(itemIndexToDelete);
 
                 frame.repaint();
 
             } else if ( listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before deleting!");
-            } else if ( !isSelectedNow ){
+
+            } else if ( !isSelectedItemNow ){
                 JOptionPane.showMessageDialog(null, "Please select an item to delete.");
+
             }
         }
     }
@@ -364,18 +348,12 @@ public class MoyogaeDemo extends JPanel {
         ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
         Furniture target;
 
+        @Override
         public void actionPerformed(ActionEvent e) {
 
-            // process to handle when no item is selected
-            boolean isSelectedNow = false;
-            for(Furniture item: itemList) {
-                if (item.isSelected()) {
-                    isSelectedNow = true;
-                    break;
-                }
-            }
+            boolean isSelectedItemNow = checkIsSelectedNow();
 
-            if(!listModel.isEmpty() && isSelectedNow ) {
+            if(!listModel.isEmpty() && isSelectedItemNow ) {
 
                 String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':' );
 
@@ -408,14 +386,14 @@ public class MoyogaeDemo extends JPanel {
                 // If so, the item is automatically put on the nearest edge/corner.
                 int topLeftX = target.getCurX();
                 int topLeftY = target.getCurY();
-                new Dragger().resetPosition(topLeftX, topLeftY, target);
+                new Dragger().resetPosition(topLeftX, topLeftY, target);//TODO
 
                 frame.repaint();
 
             } else if (listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
                         "No more item here. Please add the new one before trying to rotate nothing!");
-            } else if ( !isSelectedNow ){
+            } else if ( !isSelectedItemNow ){
                 JOptionPane.showMessageDialog(null, "Please select an item to rotate.");
             }
         }
@@ -430,7 +408,6 @@ public class MoyogaeDemo extends JPanel {
             if(!e.getValueIsAdjusting()) {
 
                 String str = furnitureList.getSelectedValue();
-
                 if( str!=null ) {
                     String targetItemName = extractSubstring( str, ':');
                     for (Furniture item : itemList) {
@@ -467,54 +444,12 @@ public class MoyogaeDemo extends JPanel {
             if (dragging)
                 return;
 
-            if( target != null )
-                target = null;
+//            if( target != null )
+//                target = null;
 
-            int locX = evt.getX();
-            int locY = evt.getY();
+            target = findTarget( evt.getX(), evt.getY() );
 
-            ArrayList<Furniture> tempTargetList = new ArrayList<>();
-
-            for (Furniture item : itemList) {
-
-                int[] sizeArray = calcItemSize(item);
-                itemWidth = sizeArray[0];
-                itemLength = sizeArray[1];
-
-                topLeftX = item.getCurX();
-                topLeftY = item.getCurY();
-
-                bottomRightX = topLeftX + itemWidth;
-                bottomRightY = topLeftY + itemLength;
-
-                // the length of the gap between the mouse-clicked position and the
-                // top-left corner of the item at the very starting point.
-                item.setOffsetX( locX - topLeftX );
-                item.setOffsetY( locY - topLeftY );
-
-                // Check whether the area of this item contains the clicked position.
-                // And add the item to targetList as a potential item to detect the clicked item.
-                if (topLeftX <= locX && locX <= bottomRightX
-                        && topLeftY <= locY && locY <= bottomRightY) {
-                    tempTargetList.add(item);
-                }
-            } // end for-loop
-
-            // assingn the item with the one containing the latest id. (= shown on the top
-            // layer)
-            int latestItemId = 0;
-            //TODO the following process can be improved with Stream! try later.
-            for (Furniture item : tempTargetList) {
-                if (item.getId() >= latestItemId) {
-                    latestItemId = item.getId();
-                    item.setSelected(true);
-                    target = item;
-                }
-            }
-
-            //
             if( target == null ){
-
                 String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':');
                 for(Furniture item: itemList ) {
                     if (item.getName().equals(targetItemName)) {
@@ -546,9 +481,9 @@ public class MoyogaeDemo extends JPanel {
             target.setSelected(true);
 
             dragging = true;
-            frame.repaint();// to reflect isSeleceted status
-
+            frame.repaint();
         }
+
 
         /**
          * Respond when the user drags the mouse.
@@ -559,13 +494,12 @@ public class MoyogaeDemo extends JPanel {
          */
         @Override
         public void mouseDragged(MouseEvent evt) {
-//            System.out.println("\n====== mouseDragged() ===========================");
             if (!dragging)
                 return;
+
             int x = evt.getX();
             int y = evt.getY();
 
-            // set the temporary location in the target object
             target.setCurX( x - target.getOffsetX() );
             target.setCurY( y - target.getOffsetY() );
 
@@ -583,15 +517,63 @@ public class MoyogaeDemo extends JPanel {
             topLeftY = evt.getY() - target.getOffsetY();
             resetPosition(topLeftX, topLeftY, target);
 
-            // reset isSelected status of the unselected items
             for( Furniture item: itemList ){
                 if( !item.equals(target))
                     item.setSelected(false);
             }
-
             dragging = false;
             frame.repaint();
         }
+
+        /**
+         * Find the clicked item by user according to the current clicked position.
+         * @param locX x-coord of current clicked position
+         * @param locY y-coord of current clicked position
+         * @return the instance represents the current clicked furniture item
+         */
+        public Furniture findTarget( int locX, int locY ){
+            ArrayList<Furniture> tempTargetList = new ArrayList<>();
+            for (Furniture item : itemList) {
+
+                int[] sizeArray = calcItemSize(item);
+                itemWidth = sizeArray[0];
+                itemLength = sizeArray[1];
+
+                topLeftX = item.getCurX();
+                topLeftY = item.getCurY();
+
+                bottomRightX = topLeftX + itemWidth;
+                bottomRightY = topLeftY + itemLength;
+
+                // the length of the gap between the mouse-clicked position and the
+                // top-left corner of the item at the very starting point.
+                item.setOffsetX( locX - topLeftX );
+                item.setOffsetY( locY - topLeftY );
+
+                // Check whether the area of this item contains the clicked position.
+                // And add the item to targetList as a potential item to detect the clicked item.
+                if (topLeftX <= locX && locX <= bottomRightX
+                        && topLeftY <= locY && locY <= bottomRightY) {
+                    tempTargetList.add(item);
+                }
+            } // end for-loop
+
+            // assingn the item with the one containing the latest id. (= shown on the top
+            // layer)
+            int latestItemId = 0;
+
+            //TODO the following process can be improved with Stream! try later.
+            Furniture target = null;
+            for (Furniture item : tempTargetList) {
+                if (item.getId() >= latestItemId) {
+                    latestItemId = item.getId();
+                    item.setSelected(true);
+                    target = item;
+                }
+            }
+            return target;
+        }
+
 
         /**
          * Calculate the size of the item on the floorPanel.
@@ -607,9 +589,10 @@ public class MoyogaeDemo extends JPanel {
 
         /**
          * Check whether this program need to repaint the image
-         * at the nearest edge/corner of the floor, instead of user-set position,
-         * when user try to put the item outside of the floor
-         * If need repaint, this program set the new location information to the Furniture object.
+         * at the nearest edge/corner of the floor, instead of user-set position
+         * when user try to put the item outside of the floor.
+         * If need repaint, this program set the new location information
+         * to the Furniture object.
          * @param topLeftX the x-coords of the user-set placement
          * @param topLeftY the y-coords of the user-set placement
          * @param target Furniture object that is clicked by user
@@ -668,6 +651,9 @@ public class MoyogaeDemo extends JPanel {
 
     }   // end: nested-class Dragger
 
+
+
+
     /**
      * Extract substring start from the beginning and end before something
      * at the indexOf in the String, str.
@@ -680,6 +666,21 @@ public class MoyogaeDemo extends JPanel {
         int strIndex = fullString.indexOf(mark);
         return fullString.substring(0, strIndex);
 
+    }
+
+    /**
+     * Check whether there is a selected furniture item now.
+     * @return true if a furniture item is selected.
+     */
+    public boolean checkIsSelectedNow(){
+        boolean isSelectedNow = false;
+        for(Furniture item: itemList) {
+            if (item.isSelected()) {
+                isSelectedNow = true;
+                break;
+            }
+        }
+        return isSelectedNow;
     }
 
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class FloorPanel extends JPanel {
+public class FloorDrawing extends JPanel {
 
     double adjustRatioWidth, adjustRatioLength;
 

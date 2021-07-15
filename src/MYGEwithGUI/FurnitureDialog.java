@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 public class FurnitureDialog {
 
+    static ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
     static boolean isDuplicateFurniture = false;
     static String[] result = new String[3];
-    static ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
 
     /**
      * This static inputFurnitureData method aims to set the new item in the ArrayList<Furniture>.
@@ -52,10 +53,8 @@ public class FurnitureDialog {
      */
     public static String[] inputFurnitureDialog(){
 
-        if( isDuplicateFurniture ){
-            //TODO: find more sophisticated way!.
-            result = new String[3];
-        }
+        if( isDuplicateFurniture )
+            result = new String[result.length];
 
         JPanel panel = new JPanel(new BorderLayout(5,5));
 

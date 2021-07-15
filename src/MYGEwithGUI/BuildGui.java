@@ -11,7 +11,7 @@ public class BuildGui extends MoyogaeDemo {
 
     JFrame frame;
     JPanel mainPanel, furniturePanel;
-    FloorPanel floorPanel;
+    FloorDrawing floorPanel;
 
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
@@ -121,9 +121,9 @@ public class BuildGui extends MoyogaeDemo {
      * Build floor panel includes the space to display furniture images
      * @return floorPanel
      */
-    private FloorPanel buildFloorPanel(){
+    private FloorDrawing buildFloorPanel(){
 
-        floorPanel = new FloorPanel();
+        floorPanel = new FloorDrawing();
         adjustRatioWidth = floorAreaWidth / Floor.getWidth();
         adjustRatioLength = floorAreaLength / Floor.getLength();
         floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);

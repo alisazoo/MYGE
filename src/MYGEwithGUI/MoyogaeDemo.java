@@ -24,51 +24,63 @@ public class MoyogaeDemo extends JPanel {
     double adjustRatioWidth, adjustRatioLength;
 
     ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
     /**
      * This main routine allow to use this program as an application.
      */
     public static void main(String[] args) {
-
         MoyogaeDemo main = new MoyogaeDemo();
         inputFloorData();
         main.buildGUI();
-
     }
 
+    //-------------- GUI ---------------------------------------------
+
     /**
-     * This method creates a frame and makes it visible.
+     * This method build components and display them as the initial GUI.
      */
     public void buildGUI(){
 
         frame = new JFrame("Moyogae Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setContentPane( buildMainPanel() );
+        frame.setBounds(10,10,500,650);
+        frame.pack();
+        frame.setVisible(true);
 
-        BorderLayout layout = new BorderLayout();
+    }
+
+    /**
+     * Build main panel of this app.
+     * @return mainPanel
+     */
+    private JPanel buildMainPanel(){
 
         mainPanel = new JPanel();
         mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        floorPanel = new FloorPanel();
-        adjustRatioWidth = floorAreaWidth / Floor.getWidth();
-        adjustRatioLength = floorAreaLength / Floor.getLength();
-        floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
+        mainPanel.add( buildFloorPanel() );
+        mainPanel.add( buildFurniturePanel() );
 
-        floorPanel.setPreferredSize(new Dimension(440,350));
+        return mainPanel;
+
+    }
+
+    /**
+     * Build furniture Panel, including list of the furniture items,
+     * and 3 buttons to manipulate items displayed in the list and floorPanel.
+     * @return furniturePanel
+     */
+    private JPanel buildFurniturePanel(){
 
         furniturePanel = new JPanel();
         furniturePanel.setLayout( new GridBagLayout() );
         GridBagConstraints c = new GridBagConstraints();
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
-        //------floorPanel-------------------------------------------
-        Dragger dragListener = new Dragger();
-        floorPanel.addMouseListener( dragListener );
-        floorPanel.addMouseMotionListener( dragListener );
-        floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
-
-        //------furniturePanel----------------------------------------
         JLabel floorSizeInfo = new JLabel( "Floor Size: " + Floor.getWidth() + " cm (width)" + " x " +
                 Floor.getLength() + " cm (length)", JLabel.CENTER);
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -120,18 +132,29 @@ public class MoyogaeDemo extends JPanel {
         c.gridy = 2;
         furniturePanel.add( remItem, c );
 
-        mainPanel.add( floorPanel );
-        mainPanel.add( furniturePanel );
+        return furniturePanel;
+    }
 
-        frame.setLocationRelativeTo(null);
-        frame.setContentPane(mainPanel);
-        frame.setBounds(10,10,500,650);
-        frame.pack();
-        frame.setVisible(true);
+    /**
+     * Build floor panel includes the space to display furniture images
+     * @return floorPanel
+     */
+    private FloorPanel buildFloorPanel(){
 
-    } // end: buildGUI()
+        floorPanel = new FloorPanel();
+        adjustRatioWidth = floorAreaWidth / Floor.getWidth();
+        adjustRatioLength = floorAreaLength / Floor.getLength();
+        floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
 
+        floorPanel.setPreferredSize(new Dimension(440,350));
 
+        Dragger dragListener = new Dragger();
+        floorPanel.addMouseListener( dragListener );
+        floorPanel.addMouseMotionListener( dragListener );
+        floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
+
+        return floorPanel;
+    }
 
     //--------- input Dialog: floor ---------------------------------------
 
@@ -143,43 +166,43 @@ public class MoyogaeDemo extends JPanel {
 
 // TODO: uncomment out the following code to use dialog input
 
-//        //Input Dialog
-//        JPanel panel = new JPanel(new BorderLayout(5,5));
-//
-//        JPanel label = new JPanel(new GridLayout(0,1,2,2));
-//        label.add( new JLabel("Enter the size:") );
-//        label.add( new JLabel("Floor Width (cm)", SwingConstants.RIGHT) );
-//        label.add( new JLabel("Floor Length (cm)", SwingConstants.RIGHT) );
-//        panel.add( label, BorderLayout.WEST );
-//
-//        JPanel control = new JPanel(new GridLayout(0,1,2,2));
-//        control.add( new JLabel(""));   // to fill the empty space for layout
-//        JTextField floorWidthInput = new JTextField();
-//        control.add(floorWidthInput);
-//        JTextField floorLengthInput = new JTextField();
-//        control.add(floorLengthInput);
-//        panel.add(control, BorderLayout.CENTER);
-//
-//        JOptionPane.showMessageDialog(null, panel,
-//                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-//        boolean isSetFloorData = false;
-//        while(!isSetFloorData ){
-//            try {
-//                // Set the input data into the floor object
-//                Floor.setWidth(Integer.parseInt(floorWidthInput.getText()));
-//                Floor.setLength(Integer.parseInt(floorLengthInput.getText()));
-//                isSetFloorData = true;
-//            } catch (NumberFormatException exception) {
-//                JOptionPane.showMessageDialog(null,
-//                        "Please enter number for both width and length.");
-//                JOptionPane.showMessageDialog(null, panel,
-//                        "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-//            }
-//        }
+        //Input Dialog
+        JPanel panel = new JPanel(new BorderLayout(5,5));
 
-        // TODO: delete the following test data
-        Floor.setWidth(350);
-        Floor.setLength(210);
+        JPanel label = new JPanel(new GridLayout(0,1,2,2));
+        label.add( new JLabel("Enter the size:") );
+        label.add( new JLabel("Floor Width (cm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("Floor Length (cm)", SwingConstants.RIGHT) );
+        panel.add( label, BorderLayout.WEST );
+
+        JPanel control = new JPanel(new GridLayout(0,1,2,2));
+        control.add( new JLabel(""));   // to fill the empty space for layout
+        JTextField floorWidthField = new JTextField();
+        control.add(floorWidthField);
+        JTextField floorLengthField = new JTextField();
+        control.add(floorLengthField);
+        panel.add(control, BorderLayout.CENTER);
+
+        JOptionPane.showMessageDialog(null, panel,
+                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+        boolean isSetFloorData = false;
+        while(!isSetFloorData ){
+            try {
+                // Set the input data into the floor object
+                Floor.setWidth(Integer.parseInt(floorWidthField.getText()));
+                Floor.setLength(Integer.parseInt(floorLengthField.getText()));
+                isSetFloorData = true;
+            } catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(null,
+                        "Please enter number for both width and length.");
+                JOptionPane.showMessageDialog(null, panel,
+                        "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+            }
+        }
+
+//        // TODO: delete the following test data
+//        Floor.setWidth(350);
+//        Floor.setLength(210);
 
     }   // end inputFloorSize() method
 
@@ -190,73 +213,72 @@ public class MoyogaeDemo extends JPanel {
      * The data of the new item is sent from input dialog.
      */
     public static void inputFurnitureData(
-            ArrayList<Furniture> arrayList, DefaultListModel<String> listModel){
+            ArrayList<Furniture> itemList, DefaultListModel<String> listModel){
 
         do{
             result = inputFurnitureDialog();
         } while (isDuplicateFurniture);
 
-        // Set the input data into the local variables
-        String name;
-        int width, length;
+        String inputName;
+        int inputWidth, inputLength;
 
         try {
-            name = result[0];
-            width = Integer.parseInt(result[1]);
-            length = Integer.parseInt(result[2]);
 
-            // new data is assigned to the ArrayList
-            Furniture item = new Furniture(name, width, length);
-            arrayList.add(item);
+            inputName = result[0];
+            inputWidth = Integer.parseInt(result[1]);
+            inputLength = Integer.parseInt(result[2]);
 
-            // Set the input data into the DefaultListModel
-            String newItemTxt = name + ": " + width + " cm x " + length + " cm";
+            Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
+            itemList.add(inputItem);
+
+            String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
             listModel.addElement(newItemTxt);
+
         }
         catch (NumberFormatException numEx){
+
             numEx.printStackTrace();
             JOptionPane.showMessageDialog(null,
                     "Please enter the valid data. Width and length of the furniture should be number.");
+
         }
 
     }   // end: inputFurnitureData() method
 
     /**
      * This static method inputFurnitureDialog create the input dialog
-     * for user to input the data of new furniture item. If the input name of the new item
-     * is same as the existing one, this program requires to input again.
+     * for user to input the data of new furniture item.
+     * If the input name of the new item is same as the existing one,
+     * this program requires to input again.
+     * If the input item is valid, this set the isDuplicatedFurniture of the item true and
+     * return the result as a String array.
      * @return array with String value of name, width, and length of the new item.
      */
     public static String[] inputFurnitureDialog(){
 
         ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
 
-        // Delete an invalid element if the array contains.
         if( isDuplicateFurniture ){
             //TODO: find more sophisticated way!.
             result = new String[3];
         }
 
-        // set up the main panel for Input Dialog
         JPanel panel = new JPanel(new BorderLayout(5,5));
 
-        // set up labelPanel
         JPanel label = new JPanel(new GridLayout(0,1,2,2));
         label.add( new JLabel("Name", SwingConstants.RIGHT) );
         label.add( new JLabel("Width (cm)", SwingConstants.RIGHT) );
         label.add( new JLabel("Length (cm)", SwingConstants.RIGHT) );
         panel.add( label, BorderLayout.WEST );
 
-        // set up controlPanel
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        JTextField furnitureName = new JTextField();
-        control.add( furnitureName );
-        JTextField furnitureWidthInput = new JTextField();
-        control.add(furnitureWidthInput);
-        JTextField furnitureLengthInput = new JTextField();
-        control.add(furnitureLengthInput);
+        JTextField furnitureNameField = new JTextField();
+        control.add( furnitureNameField );
+        JTextField furnitureWidthField = new JTextField();
+        control.add(furnitureWidthField);
+        JTextField furnitureLengthField = new JTextField();
+        control.add(furnitureLengthField);
 
-        // add components onto the main panel
         if(isDuplicateFurniture) {
             panel.add( new JLabel("You cannot add duplicated item. " +
                     "Please make the new one with different name."), BorderLayout.NORTH );
@@ -265,27 +287,17 @@ public class MoyogaeDemo extends JPanel {
         }
         panel.add(control, BorderLayout.CENTER);
 
-        String name;
-        String width;
-        String length;
-
         JOptionPane.showMessageDialog(null, panel,
                 "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
-        // keep the input data into the String array, infoArray.
-        name = furnitureName.getText();
-        width = furnitureWidthInput.getText();
-        length = furnitureLengthInput.getText();
-
+        String inputFurnitureName = furnitureNameField.getText();
         String[] infoArray = new String[3];
-        infoArray[0] = name;
-        infoArray[1] = width;
-        infoArray[2] = length;
+        infoArray[0] = inputFurnitureName;
+        infoArray[1] = furnitureWidthField.getText();
+        infoArray[2] = furnitureLengthField.getText();
 
-        // If the name of the new input item is the same as one of the existing item,
-        // isDuplicateFurniture set as true.
         for (Furniture newItem: itemList){
-            if(newItem.getName().equals(name)){
+            if(newItem.getName().equals(inputFurnitureName)){
                 isDuplicateFurniture = true;
                 break;
             } else {
@@ -323,26 +335,18 @@ public class MoyogaeDemo extends JPanel {
                 }
             }
 
-            if(!listModel.isEmpty() && isSelectedNow ) { // OR itemList.isEmpty()
+            if(!listModel.isEmpty() && isSelectedNow ) {
 
-                int index = furnitureList.getSelectedIndex();
-                String str = furnitureList.getSelectedValue();
-
-                // Delete the existing item from furnitureArrayList
-                int strIndex = str.indexOf(":");
-                String subtractText = str.substring(0, strIndex);
+                int indexToDelete = furnitureList.getSelectedIndex();
+                String itemToDelete = extractSubstring( furnitureList.getSelectedValue(), ':');
 
                 for(Furniture item: itemList ){
-                    if( item.getName().equals(subtractText) ){
-
+                    if( item.getName().equals(itemToDelete) ){
                         itemList.remove(item);
                         break;
-
                     }
                 }
-
-                // Delete the existing item from JList
-                listModel.removeElementAt(index);
+                listModel.removeElementAt(indexToDelete);
 
                 frame.repaint();
 
@@ -373,15 +377,10 @@ public class MoyogaeDemo extends JPanel {
 
             if(!listModel.isEmpty() && isSelectedNow ) {
 
-                String str = furnitureList.getSelectedValue();
-
-                // rotate the furniture
-                int strIndex = str.indexOf(":");
-                String subtractText = str.substring(0, strIndex);
-
+                String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':' );
 
                 for(Furniture item: itemList ){
-                    if( item.getName().equals(subtractText) ){
+                    if( item.getName().equals(targetItemName) ){
 
                         int i = itemList.indexOf(item);
                         int preW = itemList.get(i).getWidth();
@@ -436,12 +435,10 @@ public class MoyogaeDemo extends JPanel {
                 String str = furnitureList.getSelectedValue();
 
                 if( str!=null ) {
-                    // Reset the isSelected status: set true only if it is currently selected.
-                    int strIndex = str.indexOf(":");
-                    String subtractText = str.substring(0, strIndex);
+                    String targetItemName = extractSubstring( str, ':');
                     for (Furniture item : itemList) {
                         item.setSelected(false);
-                        if (item.getName().equals(subtractText)) {
+                        if (item.getName().equals(targetItemName)) {
                             item.setSelected(true);
                         }
                     }
@@ -528,15 +525,9 @@ public class MoyogaeDemo extends JPanel {
             //
             if( target == null ){
 
-                // get the information that is currently selected.
-                String str = furnitureList.getSelectedValue();
-
-                // rotate the furniture
-                int strIndex = str.indexOf(":");
-                String subtractText = str.substring(0, strIndex);
-
+                String targetItemName = extractSubstring( furnitureList.getSelectedValue(), ':');
                 for(Furniture item: itemList ) {
-                    if (item.getName().equals(subtractText)) {
+                    if (item.getName().equals(targetItemName)) {
                         item.setSelected(true);
                         target = item;
                     }
@@ -547,11 +538,9 @@ public class MoyogaeDemo extends JPanel {
             String targetName = target.getName();
 
             for( int i = 0; i< listModel.getSize(); i++) {
-                // extract only the item name
-                String listStr = listModel.getElementAt(i);
-                int listStrIndex = listStr.indexOf(":");
-                String subListStr = listStr.substring(0, listStrIndex);
-                if( targetName.equals(subListStr)){
+
+                String targetItemNameInList = extractSubstring( listModel.getElementAt(i), ':');
+                if( targetName.equals(targetItemNameInList)){
                     // set selected the item in the list
                     furnitureList.setSelectedIndex(i);
                     // assign true for the status of isSelected of the item;
@@ -698,5 +687,19 @@ public class MoyogaeDemo extends JPanel {
         public void mouseExited(MouseEvent e) { }
 
     }   // end: nested-class Dragger
+
+    /**
+     * Extract substring start from the beginning and end before something
+     * at the indexOf in the String, str.
+     * @param fullString a string to extract a substring from.
+     * @param mark substring ends at right before of this char
+     * @return substring start from the begening and end before mark
+     */
+    public String extractSubstring( String fullString, char mark ){
+
+        int strIndex = fullString.indexOf(mark);
+        return fullString.substring(0, strIndex);
+
+    }
 
 }

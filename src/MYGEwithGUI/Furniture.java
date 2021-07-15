@@ -76,22 +76,6 @@ public class Furniture {
     }
 
 
-//    // For debugging: make sure items are set in the ArrayList
-//    /**
-//     * Return the string
-//     * @return String of item
-//     */
-//    public String getFurniturelistText(){
-//        String itemTxt = "";
-//        for(MYGEwithGUI.Furniture item: furnitureArrayList){
-//            String itemN = item.getName();
-//            int w = item.getLength();
-//            int l = item.getWidth();
-//            itemTxt = itemTxt.concat( itemN +" (" + w + "mm x  " + l + "mm)\n" );
-//        }
-//        return itemTxt;
-//    }
-
     public static ArrayList<Furniture> getFurnitureArrayList(){
         return furnitureArrayList;
     }

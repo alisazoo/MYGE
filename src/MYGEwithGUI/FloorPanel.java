@@ -42,7 +42,7 @@ public class FloorPanel extends JPanel {
             if( item.getCurX() == -1 && item.getCurY() == -1 ) {
                 x = 20;
                 y = 20;
-                // Set the current x & y coods into furnitureArrayList
+
                 item.setCurX(x);
                 item.setCurY(y);
             }
@@ -51,15 +51,15 @@ public class FloorPanel extends JPanel {
             y = item.getCurY();
 
             g.setColor(randomColor);
-            g.fillRect(x,y,itemW, itemH); // after the 2nd: curX, curY
-            if( item.isSelected() ){
+            g.fillRect(x,y,itemW, itemH);
+
+            g.setColor(Color.WHITE);
+            if( item.isSelected() )
                 g.setColor(Color.RED);
-            } else {
-                g.setColor(Color.WHITE);
-            }
+
             g.drawRect(x,y,itemW, itemH);
             g.setColor(Color.BLACK);
-            g.drawString(itemName + ": (" + x + ", " + y + ")", x,y); // after the 2nd: curX, curY
+            g.drawString(itemName + ": (" + x + ", " + y + ")", x,y);
 
         }
     }

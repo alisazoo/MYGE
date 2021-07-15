@@ -8,15 +8,15 @@ public class Floor {
     private static int length;
     private static int width;
 
-    public Floor(int length, int width){
-        Floor.width = width;
-        Floor.length = length;
-    }
-
-    public Floor(){
-        Floor.length = 800;
-        Floor.width = 600;
-    }
+//    public Floor(int length, int width){
+//        Floor.width = width;
+//        Floor.length = length;
+//    }
+//
+//    public Floor(){
+//        Floor.length = 800;
+//        Floor.width = 600;
+//    }
 
     public static int getLength() {
         return length;

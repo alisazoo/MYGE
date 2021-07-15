@@ -22,6 +22,8 @@ public class MoyogaeDemo extends JPanel {
     double floorAreaWidth = 440.0;
     double floorAreaLength = 300.0;
     double adjustRatioWidth, adjustRatioLength;
+
+    ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
     /**
      * This main routine allow to use this program as an application.
      */
@@ -77,7 +79,7 @@ public class MoyogaeDemo extends JPanel {
         furniturePanel.add( floorSizeInfo, c );
 
         listModel = new DefaultListModel<>();
-        for (Furniture item: Furniture.getFurnitureArrayList() ){
+        for (Furniture item: itemList ){
             String s = item.getName() + ": " + item.getWidth() + " cm x " + item.getLength() + " cm";
             listModel.addElement(s);
         }
@@ -227,6 +229,8 @@ public class MoyogaeDemo extends JPanel {
      */
     public static String[] inputFurnitureDialog(){
 
+        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
         // Delete an invalid element if the array contains.
         if( isDuplicateFurniture ){
             //TODO: find more sophisticated way!.
@@ -280,7 +284,7 @@ public class MoyogaeDemo extends JPanel {
 
         // If the name of the new input item is the same as one of the existing item,
         // isDuplicateFurniture set as true.
-        for (Furniture newItem: Furniture.getFurnitureArrayList()){
+        for (Furniture newItem: itemList){
             if(newItem.getName().equals(name)){
                 isDuplicateFurniture = true;
                 break;
@@ -327,12 +331,11 @@ public class MoyogaeDemo extends JPanel {
                 // Delete the existing item from furnitureArrayList
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
-                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
 
-                for(Furniture item: list ){
+                for(Furniture item: itemList ){
                     if( item.getName().equals(subtractText) ){
 
-                        list.remove(item);
+                        itemList.remove(item);
                         break;
 
                     }
@@ -424,6 +427,8 @@ public class MoyogaeDemo extends JPanel {
 
     private class ListListener implements ListSelectionListener{
 
+        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if(!e.getValueIsAdjusting()) {
@@ -434,8 +439,7 @@ public class MoyogaeDemo extends JPanel {
                     // Reset the isSelected status: set true only if it is currently selected.
                     int strIndex = str.indexOf(":");
                     String subtractText = str.substring(0, strIndex);
-                    ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
-                    for (Furniture item : list) {
+                    for (Furniture item : itemList) {
                         item.setSelected(false);
                         if (item.getName().equals(subtractText)) {
                             item.setSelected(true);
@@ -530,9 +534,8 @@ public class MoyogaeDemo extends JPanel {
                 // rotate the furniture
                 int strIndex = str.indexOf(":");
                 String subtractText = str.substring(0, strIndex);
-                ArrayList<Furniture> list = Furniture.getFurnitureArrayList();
 
-                for(Furniture item: list ) {
+                for(Furniture item: itemList ) {
                     if (item.getName().equals(subtractText)) {
                         item.setSelected(true);
                         target = item;

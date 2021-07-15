@@ -576,8 +576,8 @@ public class MoyogaeDemo extends JPanel {
             int y = evt.getY();
 
             // set the temporary location in the target object
-            target.setCurX( x );
-            target.setCurY( y );
+            target.setCurX( x - target.getOffsetX() );
+            target.setCurY( y - target.getOffsetY() );
 
             frame.repaint();
 
@@ -591,17 +591,13 @@ public class MoyogaeDemo extends JPanel {
             System.out.println("\n***** mouseReleased! ****************************");
 
             // Reset the locations of topLeftX and Y.
-            topLeftX = evt.getX();
-            topLeftY = evt.getY();
+            topLeftX = evt.getX() - target.getOffsetX();
+            topLeftY = evt.getY() - target.getOffsetY();
 
             // Reset the size of item
             int[] sizeList = calcItemSize(target);
             itemWidth = sizeList[0];
             itemLength = sizeList[1];
-
-            System.out.println("info of " + target.getName());
-            System.out.println("top: " + topLeftX + ", " + topLeftY);
-            System.out.println("size: " + itemWidth + " x " + itemLength);
 
             resetPosition(topLeftX, topLeftY, itemWidth, itemLength, target);
 

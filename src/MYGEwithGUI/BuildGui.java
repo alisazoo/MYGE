@@ -7,175 +7,141 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class MoyogaeDemo extends JPanel {
+public class BuildGui extends MoyogaeDemo {
 
     JFrame frame;
+    JPanel mainPanel, furniturePanel;
     FloorPanel floorPanel;
 
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
 
-    static boolean isDuplicateFurniture = false;
-    static String[] result = new String[3];
-
+    double floorAreaWidth = 440.0;
+    double floorAreaLength = 300.0;
     double adjustRatioWidth, adjustRatioLength;
 
     ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
 
     /**
-     * This main routine allow to use this program as an application.
+     * This method build components and display them as the initial GUI.
      */
-    public static void main(String[] args) {
-        BuildGui gui = new BuildGui();
-        inputFloorData();
-        gui.buildGUI();
+    public void buildGUI(){
+        frame = new JFrame("Moyogae Demo");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setContentPane( buildMainPanel() );
+        frame.setBounds(10,10,500,650);
+        frame.pack();
+        frame.setVisible(true);
     }
 
-    //--------- input Dialog: floor ---------------------------------------
-
     /**
-     * This inputFloorData method create the input dialog window, then
-     * assign each values to the Floor class.
+     * Build main panel of this app.
+     * @return mainPanel
      */
-    public static void inputFloorData(){
+    private JPanel buildMainPanel(){
 
-// TODO: uncomment out the following code to use dialog input
+        mainPanel = new JPanel();
+        mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
 
-        //Input Dialog
-        JPanel panel = new JPanel(new BorderLayout(5,5));
+        mainPanel.add( buildFloorPanel() );
+        mainPanel.add( buildFurniturePanel() );
 
-        JPanel label = new JPanel(new GridLayout(0,1,2,2));
-        label.add( new JLabel("Enter the size:") );
-        label.add( new JLabel("Floor Width (cm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Floor Length (cm)", SwingConstants.RIGHT) );
-        panel.add( label, BorderLayout.WEST );
-
-        JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        control.add( new JLabel(""));//todo change layout manager and remove this unnecessary JLabel
-        JTextField floorWidthField = new JTextField();
-        control.add(floorWidthField);
-        JTextField floorLengthField = new JTextField();
-        control.add(floorLengthField);
-        panel.add(control, BorderLayout.CENTER);
-
-        JOptionPane.showMessageDialog(null, panel,
-                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-        boolean isSetFloorData = false;
-        while(!isSetFloorData ){
-            try {
-                Floor.setWidth(Integer.parseInt(floorWidthField.getText()));
-                Floor.setLength(Integer.parseInt(floorLengthField.getText()));
-                isSetFloorData = true;
-            } catch (NumberFormatException exception) {
-                JOptionPane.showMessageDialog(null,
-                        "Please enter number for both width and length.");
-                JOptionPane.showMessageDialog(null, panel,
-                        "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
-            }
-        }
-
-//        // TODO: delete the following test data
-//        Floor.setWidth(350);
-//        Floor.setLength(210);
-
-    }   // end inputFloorSize() method
-
-    /**
-     * This static inputFurnitureData method aims to set the new item in the ArrayList<Furniture>.
-     * The data of the new item is sent from input dialog.
-     */
-    public static void inputFurnitureData(
-            ArrayList<Furniture> itemList, DefaultListModel<String> listModel){
-
-        do{
-            result = inputFurnitureDialog();
-        } while (isDuplicateFurniture);
-
-        String inputName;
-        int inputWidth, inputLength;
-
-        try {
-            inputName = result[0];
-            inputWidth = Integer.parseInt(result[1]);
-            inputLength = Integer.parseInt(result[2]);
-
-            Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
-            itemList.add(inputItem);
-
-            String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
-            listModel.addElement(newItemTxt);
-        }
-        catch (NumberFormatException numEx){
-            numEx.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                    "Please enter the valid data. Width and length of the furniture should be number.");
-
-        }
+        return mainPanel;
 
     }
 
     /**
-     * This static method inputFurnitureDialog create the input dialog
-     * for user to input the data of new furniture item.
-     * If the input name of the new item is same as the existing one,
-     * this program requires to input again.
-     * If the input item is valid, this set the isDuplicatedFurniture of the item true and
-     * return the result as a String array.
-     * @return array with String value of name, width, and length of the new item.
+     * Build furniture Panel, including list of the furniture items,
+     * and 3 buttons to manipulate items displayed in the list and floorPanel.
+     * @return furniturePanel
      */
-    public static String[] inputFurnitureDialog(){
+    private JPanel buildFurniturePanel(){
 
-        ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
+        furniturePanel = new JPanel();
+        furniturePanel.setLayout( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
+        furniturePanel.setPreferredSize( new Dimension(400, 150));
 
-        if( isDuplicateFurniture ){
-            //TODO: find more sophisticated way!.
-            result = new String[3];
+        JLabel floorSizeInfo = new JLabel( "Floor Size: " + Floor.getWidth() + " cm (width)" + " x " +
+                Floor.getLength() + " cm (length)", JLabel.CENTER);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 0;
+        furniturePanel.add( floorSizeInfo, c );
+
+        listModel = new DefaultListModel<>();
+        for (Furniture item: itemList ){
+            String s = item.getName() + ": " + item.getWidth() + " cm x " + item.getLength() + " cm";
+            listModel.addElement(s);
         }
+        furnitureList = new JList<>(listModel);
+        furnitureList.addListSelectionListener( new ListListener() );
+        JScrollPane scrollPane = new JScrollPane(furnitureList);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 60;
+        c.gridx = 0;
+        c.gridwidth = 3;
+        c.gridy = 1;
+        furniturePanel.add( scrollPane, c );
 
-        JPanel panel = new JPanel(new BorderLayout(5,5));
+        JButton addItem = new JButton("Add Furniture");
+        addItem.addActionListener(new addItemListener() );
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 2;
+        furniturePanel.add( addItem, c );
 
-        JPanel label = new JPanel(new GridLayout(0,1,2,2));
-        label.add( new JLabel("Name", SwingConstants.RIGHT) );
-        label.add( new JLabel("Width (cm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Length (cm)", SwingConstants.RIGHT) );
-        panel.add( label, BorderLayout.WEST );
+        JButton rotateItem = new JButton("Rotate Furniture");
+        rotateItem.addActionListener(new rotateItemListener() );
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 1;
+        c.gridy = 2;
+        furniturePanel.add( rotateItem, c );
 
-        JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        JTextField furnitureNameField = new JTextField();
-        control.add( furnitureNameField );
-        JTextField furnitureWidthField = new JTextField();
-        control.add(furnitureWidthField);
-        JTextField furnitureLengthField = new JTextField();
-        control.add(furnitureLengthField);
+        JButton remItem = new JButton("Remove Furniture");
+        remItem.addActionListener(new remItemListener() );
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipady = 0;
+        c.gridwidth = 1;
+        c.gridx = 2;
+        c.gridy = 2;
+        furniturePanel.add( remItem, c );
 
-        if(isDuplicateFurniture) {
-            panel.add( new JLabel("You cannot add duplicated item. " +
-                    "Please make the new one with different name."), BorderLayout.NORTH );
-        } else {
-            panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
-        }
-        panel.add(control, BorderLayout.CENTER);
+        return furniturePanel;
+    }
 
-        JOptionPane.showMessageDialog(null, panel,
-                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+    /**
+     * Build floor panel includes the space to display furniture images
+     * @return floorPanel
+     */
+    private FloorPanel buildFloorPanel(){
 
-        String inputFurnitureName = furnitureNameField.getText();
-        String[] resultArray = new String[3];
-        resultArray[0] = inputFurnitureName;
-        resultArray[1] = furnitureWidthField.getText();
-        resultArray[2] = furnitureLengthField.getText();
+        floorPanel = new FloorPanel();
+        adjustRatioWidth = floorAreaWidth / Floor.getWidth();
+        adjustRatioLength = floorAreaLength / Floor.getLength();
+        floorPanel.setFloorRatio(adjustRatioWidth, adjustRatioLength);
 
-        for (Furniture newItem: itemList){
-            if(newItem.getName().equals(inputFurnitureName)){
-                isDuplicateFurniture = true;
-                break;
-            } else {
-                isDuplicateFurniture = false;
-            }
-        }
+        floorPanel.setPreferredSize(new Dimension(440,350));
 
-        return resultArray;
-    } // end: inputFurnitureDialog() method
+        Dragger dragListener = new Dragger();
+        floorPanel.addMouseListener( dragListener );
+        floorPanel.addMouseMotionListener( dragListener );
+        floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
+
+        return floorPanel;
+    }
+
+
+
 
     private class addItemListener implements ActionListener {
         @Override
@@ -184,6 +150,7 @@ public class MoyogaeDemo extends JPanel {
             floorPanel.repaint();
         }
     }
+
 
     private class remItemListener implements ActionListener{
 

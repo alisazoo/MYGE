@@ -262,14 +262,13 @@ public class BuildGui extends MoyogaeDemo {
 
             String targetName = target.getName();
             for( int i = 0; i< listModel.getSize(); i++) {
-                String targetItemNameInList =
+                String targetNameInList =
                         extractSubstring( listModel.getElementAt(i));
-                if( targetName.equals(targetItemNameInList)){
+                if( targetName.equals(targetNameInList)){
                     furnitureList.setSelectedIndex(i);
-                    setIsSelected(targetItemNameInList);
+                    setIsSelected(targetNameInList);
                 }
             }
-
             dragging = true;
             frame.repaint();
         }

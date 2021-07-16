@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class BuildGui extends MoyogaeDemo {
 
-    JFrame frame;
+    static JFrame frame;
     FloorDrawing floorPanel;
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
@@ -128,9 +128,9 @@ public class BuildGui extends MoyogaeDemo {
 
         floorPanel.setPreferredSize(new Dimension(440,350));
 
-        Dragger dragListener = new Dragger();
-        floorPanel.addMouseListener( dragListener );
-        floorPanel.addMouseMotionListener( dragListener );
+        Dragger draggingListener = new Dragger();
+        floorPanel.addMouseListener( draggingListener );
+        floorPanel.addMouseMotionListener( draggingListener );
         floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
 
         return floorPanel;
@@ -229,6 +229,7 @@ public class BuildGui extends MoyogaeDemo {
                 if( str!=null ) {
                     String targetItemName = extractSubstring( str);
                     setIsSelected(targetItemName);
+
                     frame.repaint();
                 }
             }
@@ -308,7 +309,9 @@ public class BuildGui extends MoyogaeDemo {
                 if( !item.equals(target))
                     item.setSelected(false);
             }
+
             dragging = false;
+
             frame.repaint();
         }
 

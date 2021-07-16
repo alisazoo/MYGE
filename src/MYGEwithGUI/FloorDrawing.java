@@ -21,7 +21,9 @@ public class FloorDrawing extends JPanel {
         Color randomColor;
 
         super.paintComponent(g);
-        g.setColor(Color.GRAY);
+        g.setColor(Color.WHITE);
+        g.fillRect(10,10,440,300);
+        g.setColor(Color.BLACK);
         g.drawRect(10,10,440,300);
 
         for(Furniture item: itemArrayList ){
@@ -53,13 +55,14 @@ public class FloorDrawing extends JPanel {
             g.setColor(randomColor);
             g.fillRect(x,y,itemW, itemH);
 
-            g.setColor(Color.WHITE);
+            g.setColor(Color.LIGHT_GRAY);
             if( item.isSelected() )
                 g.setColor(Color.RED);
 
             g.drawRect(x,y,itemW, itemH);
-            g.setColor(Color.BLACK);
-            g.drawString(itemName + ": (" + x + ", " + y + ")", x,y);
+            g.setColor(Color.DARK_GRAY);
+
+            g.drawString(itemName + ": (" + item.getWidth() + " x " + item.getLength() + ")", x,y);
 
         }
     }

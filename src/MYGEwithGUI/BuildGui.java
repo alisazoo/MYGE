@@ -10,9 +10,7 @@ import java.util.ArrayList;
 public class BuildGui extends MoyogaeDemo {
 
     JFrame frame;
-    JPanel mainPanel, furniturePanel;
     FloorDrawing floorPanel;
-
     DefaultListModel<String> listModel;
     JList<String> furnitureList;
 
@@ -41,7 +39,7 @@ public class BuildGui extends MoyogaeDemo {
      * @return mainPanel
      */
     private JPanel buildMainPanel(){
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout( new BoxLayout(mainPanel, BoxLayout.Y_AXIS) );
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         mainPanel.setPreferredSize( new Dimension( 480, 500 ) );
@@ -58,7 +56,7 @@ public class BuildGui extends MoyogaeDemo {
      * @return furniturePanel
      */
     private JPanel buildFurniturePanel(){
-        furniturePanel = new JPanel();
+        JPanel furniturePanel = new JPanel();
         furniturePanel.setLayout( new GridBagLayout() );
         GridBagConstraints c = new GridBagConstraints();
         furniturePanel.setPreferredSize( new Dimension(400, 150));
@@ -194,32 +192,21 @@ public class BuildGui extends MoyogaeDemo {
 
                 String targetItemName =
                         extractSubstring( furnitureList.getSelectedValue());
-
                 for(Furniture item: itemList ){
                     if( item.getName().equals(targetItemName) ){
 
-                        int i = itemList.indexOf(item);
-                        int preW = itemList.get(i).getWidth();
-                        int preL = itemList.get(i).getLength();
-                        itemList.get(i).setWidth(preL);
-                        itemList.get(i).setLength(preW);
+                        int indexOfTarget = itemList.indexOf(item);
+                        int itemWidthBeforeRotating = itemList.get(indexOfTarget).getWidth();
+                        int itemLengthBeforeRotating = itemList.get(indexOfTarget).getLength();
+                        itemList.get(indexOfTarget).setWidth(itemLengthBeforeRotating);
+                        itemList.get(indexOfTarget).setLength(itemWidthBeforeRotating);
                         target = item;
 
                         break;
                     }
                 }
-
-                int targetIndex = itemList.indexOf( target );
-                int targetPrevX = itemList.get( targetIndex ).getCurX();
-                int targetPrevY = itemList.get( targetIndex ).getCurY();
-                target.setPreX( targetPrevX );
-                target.setPreY( targetPrevY );
-                itemList.set( targetIndex, target );
-
-                int topLeftX = target.getCurX();
-                int topLeftY = target.getCurY();
-                new Dragger().resetPosition(topLeftX, topLeftY, target);//TODO
-
+                setTargetInfo(target);
+                resetPosition(target.getCurX(), target.getCurY(), target);
                 frame.repaint();
 
             } else if (listModel.isEmpty() ){
@@ -235,17 +222,13 @@ public class BuildGui extends MoyogaeDemo {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
+
             if(!e.getValueIsAdjusting()) {
 
                 String str = furnitureList.getSelectedValue();
                 if( str!=null ) {
                     String targetItemName = extractSubstring( str);
-                    for (Furniture item : itemList) {
-                        item.setSelected(false);
-                        if (item.getName().equals(targetItemName)) {
-                            item.setSelected(true);
-                        }
-                    }
+                    setIsSelected(targetItemName);
                     frame.repaint();
                 }
             }
@@ -255,9 +238,8 @@ public class BuildGui extends MoyogaeDemo {
     private class Dragger implements MouseListener, MouseMotionListener {
 
         private boolean dragging;
-
-        private int topLeftX = 0;
-        private int topLeftY = 0;
+        private int topLeftX;
+        private int topLeftY;
 
         @Override
         public void mousePressed(MouseEvent evt) {
@@ -284,20 +266,13 @@ public class BuildGui extends MoyogaeDemo {
                         extractSubstring( listModel.getElementAt(i));
                 if( targetName.equals(targetItemNameInList)){
                     furnitureList.setSelectedIndex(i);
-                    for (Furniture fItem: itemList){
-                        fItem.setSelected(false);
-                        if(fItem.getName().equals(targetName) ){
-                            fItem.setSelected(true);
-                        }
-                    }
+                    setIsSelected(targetItemNameInList);
                 }
             }
-            target.setSelected(true); //todo ?????
 
             dragging = true;
             frame.repaint();
         }
-
 
         /**
          * Respond when the user drags the mouse.
@@ -373,7 +348,7 @@ public class BuildGui extends MoyogaeDemo {
                 }
             }
 
-            //TODO the following process can be improved with Stream! try later.
+            //TODO the following process can be improved with Stream? try later.
             Furniture target = null;
             int topLayeredItemId = 0;
             for (Furniture item : tempTargetList) {
@@ -386,84 +361,12 @@ public class BuildGui extends MoyogaeDemo {
             return target;
         }
 
-
-        /**
-         * Calculate the size of the item on the floorPanel.
-         * @param item Furniture object that is clicked by user
-         * @return int[0] = the width of item, int[1] = the length of the item
-         */
-        private int[] calcItemSize(Furniture item){
-            int itemWidth = (int) (item.getWidth() * adjustRatioWidth);
-            int itemLength = (int) (item.getLength() * adjustRatioLength);
-
-            return new int[]{itemWidth, itemLength};
-        }
-
-        /**
-         * Check whether this program need to repaint the image
-         * at the nearest edge/corner of the floor, instead of user-set position
-         * when user try to put the item outside of the floor.
-         * If need repaint, this program set the new location information
-         * to the Furniture object.
-         * @param topLeftX the x-coords of the user-set placement
-         * @param topLeftY the y-coords of the user-set placement
-         * @param target Furniture object that is clicked by user
-         */
-        private void resetPosition(int topLeftX, int topLeftY, Furniture target){
-
-            int[] sizeList = new Dragger().calcItemSize(target);
-            int itemWidth = sizeList[0];
-            int itemLength = sizeList[1];
-
-            boolean showNotification = false;
-            if ( (topLeftX + itemWidth) > 450) {
-                int bottomXReset = 450 - itemWidth;
-                target.setCurX(bottomXReset);
-                System.out.println("bottom X reset.");
-                showNotification = true;
-            }
-            if ( ( topLeftY + itemLength) > 310) {
-                int bottomYReset = 310 - itemLength;
-                target.setCurY(bottomYReset);
-                System.out.println("bottom Y reset.");
-                showNotification = true;
-            }
-            if( topLeftX < 10 ){
-                target.setCurX(10);
-                System.out.println("top x reset.");
-                showNotification = true;
-            }
-            if ( topLeftY < 10){
-                target.setCurY(10);
-                System.out.println("top y reset.");
-                showNotification = true;
-            }
-
-            if( showNotification ){
-                JOptionPane.showMessageDialog(null,
-                        "You cannot move the item out side your room. " +
-                                "Please put it in the room, please!");
-            }
-
-            // set the location information in furnitureArrayList, and
-            // the location information of starting point is stored
-            // as previous coords in the furnitureArraylist.
-            int index = itemList.indexOf( target );
-            int prevX = itemList.get( index ).getCurX();
-            int prevY = itemList.get( index ).getCurY();
-            target.setPreX( prevX );
-            target.setPreY( prevY );
-            itemList.set( index, target );
-        }
-
         public void mouseMoved(MouseEvent e) { }
         public void mouseClicked(MouseEvent evt) {}
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
 
     }
-
-
 
     /**
      * Extract substring start from the beginning and end before ":"
@@ -490,5 +393,93 @@ public class BuildGui extends MoyogaeDemo {
         }
         return isSelectedNow;
     }
+
+    /**
+     * Calculate the size of the item on the floorPanel.
+     * @param item Furniture object that is clicked by user
+     * @return int[0] = the width of item, int[1] = the length of the item
+     */
+    private int[] calcItemSize(Furniture item){
+        int itemWidth = (int) (item.getWidth() * adjustRatioWidth);
+        int itemLength = (int) (item.getLength() * adjustRatioLength);
+
+        return new int[]{itemWidth, itemLength};
+    }
+
+    /**
+     * Check whether this program need to repaint the image
+     * at the nearest edge/corner of the floor, instead of user-set position
+     * when user try to put the item outside of the floor.
+     * If need repaint, this program set the new location information
+     * to the Furniture object.
+     * @param topLeftX the x-coords of the user-set placement
+     * @param topLeftY the y-coords of the user-set placement
+     * @param target Furniture object that is clicked by user
+     */
+    private void resetPosition(int topLeftX, int topLeftY, Furniture target){
+
+        int[] sizeList = calcItemSize(target);
+        int itemWidth = sizeList[0];
+        int itemLength = sizeList[1];
+
+        boolean showNotification = false;
+        //TODO consider organise the following if statements in a better way.
+        if ( (topLeftX + itemWidth) > 450) {
+            int bottomXReset = 450 - itemWidth;
+            target.setCurX(bottomXReset);
+            showNotification = true;
+        }
+        if ( ( topLeftY + itemLength) > 310) {
+            int bottomYReset = 310 - itemLength;
+            target.setCurY(bottomYReset);
+            showNotification = true;
+        }
+        if( topLeftX < 10 ){
+            target.setCurX(10);
+            showNotification = true;
+        }
+        if ( topLeftY < 10){
+            target.setCurY(10);
+            showNotification = true;
+        }
+
+        if( showNotification ){
+            JOptionPane.showMessageDialog(null,
+                    "You cannot move the item out side your room. " +
+                            "Please put it in the room, please!");
+        }
+        setTargetInfo(target);
+    }
+
+    /**
+     * set the location information in furnitureArrayList, and
+     * the location information of starting point is stored
+     * as previous coords in the furnitureArraylist.
+     * @param target clicked furniture object
+     */
+    private void setTargetInfo(Furniture target){
+        int targetIndex = itemList.indexOf( target );
+        int targetPrevX = itemList.get( targetIndex ).getCurX();
+        int targetPrevY = itemList.get( targetIndex ).getCurY();
+        target.setPreX( targetPrevX );
+        target.setPreY( targetPrevY );
+        itemList.set( targetIndex, target );
+    }
+
+    /**
+     * Set true if an item in itemList is selected;
+     * otherwise set false.
+     * @param targetName the name of the clicked item
+     */
+    private void setIsSelected(String targetName){
+        for (Furniture item: itemList){
+            item.setSelected(false);
+            if(item.getName().equals(targetName) ){
+                item.setSelected(true);
+            }
+        }
+    }
+
+
 
 }

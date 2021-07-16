@@ -6,12 +6,13 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BuildGui extends MoyogaeDemo {
 
     static JFrame frame;
     FloorDrawing floorPanel;
-    DefaultListModel<String> listModel;
+    DefaultListModel<String> listModel = new DefaultListModel<>();
     JList<String> furnitureList;
 
     final double floorAreaWidth = 440.0;
@@ -70,7 +71,6 @@ public class BuildGui extends MoyogaeDemo {
         c.gridy = 0;
         furniturePanel.add( floorSizeInfo, c );
 
-        listModel = new DefaultListModel<>();
         for (Furniture item: itemList ){
             String s = item.getName() + ": " + item.getWidth() + " cm x " + item.getLength() + " cm";
             listModel.addElement(s);
@@ -120,6 +120,14 @@ public class BuildGui extends MoyogaeDemo {
      * @return floorPanel
      */
     private FloorDrawing buildFloorPanel(){
+
+
+
+//        if(MoyogaeDemo.isDefaultData()){
+//            setDefaultFurnitureData(listModel);
+//        }
+
+
 
         floorPanel = new FloorDrawing();
         adjustRatioWidth = floorAreaWidth / Floor.getWidth();
@@ -480,6 +488,34 @@ public class BuildGui extends MoyogaeDemo {
                 item.setSelected(true);
             }
         }
+    }
+
+
+
+
+
+
+    public void setDefaultFurnitureData(DefaultListModel<String> listModel){
+
+        Furniture ex1 = new Furniture("desk", 120, 60);
+        Furniture ex2 = new Furniture("bed", 210, 100);
+        Furniture ex3 = new Furniture("shelf", 40,30);
+        Furniture ex4 = new Furniture("book shelf", 100, 30);
+        ArrayList<Furniture> itemList = new ArrayList<>();
+        itemList.add(ex1);
+        itemList.add(ex2);
+        itemList.add(ex3);
+        itemList.add(ex4);
+
+        for(Furniture item: itemList){
+            String[] tempArray = new String[3];
+            tempArray[0] = item.getName();
+            tempArray[1] = String.valueOf(item.getWidth());
+            tempArray[2] = String.valueOf(item.getLength());
+            System.out.println(Arrays.toString(tempArray));
+            FurnitureDialog.setFurnitureInput(tempArray, itemList, listModel);
+        }
+
     }
 
 

@@ -22,10 +22,20 @@ public class FloorDialog extends BuildGui {
 
         JPanel control = new JPanel(new GridLayout(0, 1, 2, 2));
         control.add(new JLabel(""));//todo change layout manager and remove this unnecessary JLabel
-        JTextField floorWidthField = new JTextField();
+
+        // FloorDialog
+        JTextField floorWidthField;
+        JTextField floorLengthField;
+        if(MoyogaeDemo.isDefaultData()) {
+            floorWidthField = new JTextField("350");
+            floorLengthField = new JTextField("200");
+        } else {
+            floorWidthField = new JTextField();
+            floorLengthField = new JTextField();
+        }
         control.add(floorWidthField);
-        JTextField floorLengthField = new JTextField();
         control.add(floorLengthField);
+
         panel.add(control, BorderLayout.CENTER);
 
         showInputFloorDialog(panel);
@@ -42,7 +52,7 @@ public class FloorDialog extends BuildGui {
             } catch (NumberFormatException exception) {
 
                 int result = JOptionPane.showConfirmDialog(
-                        null, "Please enter number for both width and length.",
+                        BuildGui.frame, "Please enter number for both width and length.",
                         "Continue?", JOptionPane.OK_CANCEL_OPTION);
 
                 if ( result == JOptionPane.OK_OPTION ){
@@ -59,7 +69,7 @@ public class FloorDialog extends BuildGui {
     }
 
     private static void showInputFloorDialog(JPanel panel){
-        JOptionPane.showMessageDialog(null, panel,
+        JOptionPane.showMessageDialog(BuildGui.frame, panel,
                 "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
     }
 

@@ -69,13 +69,34 @@ public class FurnitureDialog {
             panel.add( new JLabel("You cannot add duplicated item. " +
                     "Please make the new one with different name."), BorderLayout.NORTH );
         } else {
+
             panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
+            panel.add(control, BorderLayout.CENTER);
+
+            JOptionPane.showMessageDialog( BuildGui.frame, panel,
+                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+
+
+
         }
-        panel.add(control, BorderLayout.CENTER);
 
-        JOptionPane.showMessageDialog( BuildGui.frame, panel,
-                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+//        panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
+//        panel.add(control, BorderLayout.CENTER);
+//
+//        JOptionPane.showMessageDialog( BuildGui.frame, panel,
+//                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+//
+//        String inputFurnitureName = furnitureNameField.getText();
+//        for (Furniture newItem: itemList){
+//            if(newItem.getName().equals(inputFurnitureName)){
+//                isDuplicateFurniture = true;
+//                break;
+//            } else {
+//                isDuplicateFurniture = false;
+//            }
+//        }
 
+        // need try-catch when nothing is input
         String inputFurnitureName = furnitureNameField.getText();
         for (Furniture newItem: itemList){
             if(newItem.getName().equals(inputFurnitureName)){
@@ -86,6 +107,7 @@ public class FurnitureDialog {
             }
         }
 
+        // need: check validity of input data esp width and length
         String[] resultArray = new String[3];
         resultArray[0] = inputFurnitureName;
         resultArray[1] = furnitureWidthField.getText();

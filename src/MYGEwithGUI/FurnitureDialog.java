@@ -7,22 +7,52 @@ import java.util.ArrayList;
 public class FurnitureDialog {
 
     static ArrayList<Furniture> itemList = Furniture.getFurnitureArrayList();
-
+    static FurnitureTempData inputData;
     static boolean isDuplicateFurniture = false;
-    static String[] result = new String[3];
+    static boolean isInputValid = true;
 
     /**
-     * This static inputFurnitureData method aims to set the new item in the ArrayList<Furniture>.
-     * The data of the new item is sent from input dialog.
+     * This inputFurnitureData method aims to control the flow around input furniture dialog.
+     * This calls showInputFurnitureDialog method to get the result array, then
+     * check whether the data is duplicate or not.
+     * If the data is not duplicate, send the result array to setFurnitureInputData method
+     * to set the input data to DefaultListModel and ArrayList of furniture.
      */
-    public static void inputFurnitureData(DefaultListModel<String> listModel){
+    public static void inputFurniture(DefaultListModel<String> listModel, FurnitureTempData tempResult){
 
         do{
-            result = showInputFurnitureDialog();
+            inputData = showInputFurnitureDialog(tempResult);
+            checkIsDuplicate(inputData, itemList);
+
         } while (isDuplicateFurniture);
 
-        setFurnitureInput(result, itemList, listModel);
+        setFurnitureInputData( inputData, itemList, listModel );
 
+        if(!isInputValid){
+            // show dialog again
+        }
+
+    }
+
+    /**
+     * Check whether input data is duplicated comparing to the existing data.
+     * If the name is duplicated, the input data is invalid in this case
+     * because the name should be identical in this program.
+     * @param tempResult temporary object containing the result of furniture item input
+     * @param itemList ArrayList contains the data of Furniture items.
+     */
+    private static void checkIsDuplicate(
+            FurnitureTempData tempResult, ArrayList<Furniture> itemList){
+
+        String inputFurnitureName = tempResult.getFurnitureName();
+        for (Furniture newItem: itemList){
+            if(newItem.getName().equals(inputFurnitureName)){
+                isDuplicateFurniture = true;
+                break;
+            } else {
+                isDuplicateFurniture = false;
+            }
+        }
     }
 
     /**
@@ -34,10 +64,7 @@ public class FurnitureDialog {
      * return the result as a String array.
      * @return array with String value of name, width, and length of the new item.
      */
-    public static String[] showInputFurnitureDialog(){
-
-        if( isDuplicateFurniture )
-            result = new String[result.length];
+    public static FurnitureTempData showInputFurnitureDialog( FurnitureTempData tempResult ){
 
         JPanel panel = new JPanel(new BorderLayout(5,5));
 
@@ -66,79 +93,51 @@ public class FurnitureDialog {
         control.add( furnitureLengthField );
 
         if(isDuplicateFurniture) {
-            panel.add( new JLabel("You cannot add duplicated item. " +
-                    "Please make the new one with different name."), BorderLayout.NORTH );
+            String message = "You cannot add duplicated item. " +
+                    "Please make the new one with different name.";
+            JOptionPane.showMessageDialog( BuildGui.frame, message );
+
         } else {
-
             panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
-            panel.add(control, BorderLayout.CENTER);
-
-            JOptionPane.showMessageDialog( BuildGui.frame, panel,
-                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-
-
-
         }
+        panel.add(control, BorderLayout.CENTER);
+        JOptionPane.showMessageDialog( BuildGui.frame, panel,
+                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
-//        panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
-//        panel.add(control, BorderLayout.CENTER);
-//
-//        JOptionPane.showMessageDialog( BuildGui.frame, panel,
-//                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-//
-//        String inputFurnitureName = furnitureNameField.getText();
-//        for (Furniture newItem: itemList){
-//            if(newItem.getName().equals(inputFurnitureName)){
-//                isDuplicateFurniture = true;
-//                break;
-//            } else {
-//                isDuplicateFurniture = false;
-//            }
-//        }
-
-        // need try-catch when nothing is input
-        String inputFurnitureName = furnitureNameField.getText();
-        for (Furniture newItem: itemList){
-            if(newItem.getName().equals(inputFurnitureName)){
-                isDuplicateFurniture = true;
-                break;
-            } else {
-                isDuplicateFurniture = false;
-            }
-        }
-
-        // need: check validity of input data esp width and length
-        String[] resultArray = new String[3];
-        resultArray[0] = inputFurnitureName;
-        resultArray[1] = furnitureWidthField.getText();
-        resultArray[2] = furnitureLengthField.getText();
-
-        return resultArray;
-    }
-
-    public static void setFurnitureInput(String[] result,
-                                         ArrayList<Furniture> itemList, DefaultListModel<String> listModel){
+        //TODO: Add function to exit from the dialog
 
         try {
-            String inputName = result[0];
-            int inputWidth = Integer.parseInt(result[1]);
-            int inputLength = Integer.parseInt(result[2]);
+            String inputName = furnitureNameField.getText();
+            int inputWidth = Integer.parseInt( furnitureWidthField.getText() );
+            int inputLength = Integer.parseInt( furnitureLengthField.getText() );
+            tempResult.setFurnitureName( inputName );
+            tempResult.setFurnitureWidth( inputWidth );
+            tempResult.setFurnitureLength( inputLength );
 
-
-            Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
-            itemList.add(inputItem);
-
-            String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
-            listModel.addElement(newItemTxt);
-
+        } catch (NumberFormatException ex){
+            isInputValid = false;
+            System.out.println("please input anything");
+            ex.printStackTrace();
         }
-        catch (NumberFormatException numEx){
-            JOptionPane.showMessageDialog( BuildGui.frame,
-                    "Please enter the valid data. Width and length of the furniture should be number.");
-            numEx.printStackTrace();
-        }
+
+        return tempResult;
+    }
+
+    public static void setFurnitureInputData( FurnitureTempData inputData,
+                                             ArrayList<Furniture> itemList, DefaultListModel<String> listModel){
+
+        String inputName = inputData.getFurnitureName();
+        int inputWidth = inputData.getFurnitureWidth();
+        int inputLength = inputData.getFurnitureLength();
+
+        Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
+        itemList.add(inputItem);
+
+        String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
+        listModel.addElement(newItemTxt);
 
     }
+
 
 
 

@@ -151,7 +151,8 @@ public class BuildGui extends MoyogaeDemo {
     private class addItemListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evt) {
-            FurnitureDialog.inputFurnitureData(listModel);
+            FurnitureTempData tempData = new FurnitureTempData();
+            FurnitureDialog.inputFurniture(listModel, tempData);
             floorPanel.repaint();
         }
     }
@@ -490,11 +491,6 @@ public class BuildGui extends MoyogaeDemo {
         }
     }
 
-
-
-
-
-
     public void setDefaultFurnitureData(DefaultListModel<String> listModel){
 
         Furniture ex1 = new Furniture("desk", 120, 60);
@@ -507,14 +503,14 @@ public class BuildGui extends MoyogaeDemo {
         itemList.add(ex3);
         itemList.add(ex4);
 
-        for(Furniture item: itemList){
-            String[] tempArray = new String[3];
-            tempArray[0] = item.getName();
-            tempArray[1] = String.valueOf(item.getWidth());
-            tempArray[2] = String.valueOf(item.getLength());
-            System.out.println(Arrays.toString(tempArray));
-            FurnitureDialog.setFurnitureInput(tempArray, itemList, listModel);
-        }
+//        for(Furniture item: itemList){
+//            String[] tempArray = new String[3];
+//            tempArray[0] = item.getName();
+//            tempArray[1] = String.valueOf(item.getWidth());
+//            tempArray[2] = String.valueOf(item.getLength());
+//            System.out.println(Arrays.toString(tempArray));
+//            FurnitureDialog.setFurnitureInputData(tempArray, itemList, listModel);
+//        }
 
     }
 

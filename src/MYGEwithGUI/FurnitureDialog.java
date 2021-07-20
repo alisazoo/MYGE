@@ -92,17 +92,25 @@ public class FurnitureDialog {
         control.add( furnitureWidthField );
         control.add( furnitureLengthField );
 
+        panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
+        panel.add(control, BorderLayout.CENTER);
+//        inputFrame.add(panel);
+//        JOptionPane.showMessageDialog( BuildGui.frame, inputFrame, "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+
+
         if(isDuplicateFurniture) {
             String message = "You cannot add duplicated item. " +
-                    "Please make the new one with different name.";
-            JOptionPane.showMessageDialog( BuildGui.frame, message );
+                    "Please make the new one with different name. Do you want to continue?";
+//            JOptionPane.showMessageDialog( BuildGui.frame, message );
+            panel.add(new JLabel(message), BorderLayout.NORTH);
+//            int isContinue = JOptionPane.showConfirmDialog(BuildGui.frame, message, "Continue?", JOptionPane.YES_NO_OPTION);
+//            if( isContinue == JOptionPane.NO_OPTION ){
+//            }
 
         } else {
             panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
         }
-        panel.add(control, BorderLayout.CENTER);
-        JOptionPane.showMessageDialog( BuildGui.frame, panel,
-                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+        JOptionPane.showMessageDialog( BuildGui.frame, panel, "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
         //TODO: Add function to exit from the dialog
 

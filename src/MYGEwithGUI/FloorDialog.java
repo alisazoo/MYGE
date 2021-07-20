@@ -58,7 +58,7 @@ public class FloorDialog extends BuildGui {
                 if ( result == JOptionPane.OK_OPTION ){
                     showInputFloorDialog(panel);
                 } else if ( result == JOptionPane.CANCEL_OPTION ){
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.dispose();
                 } else {
                     exception.printStackTrace();
                 }

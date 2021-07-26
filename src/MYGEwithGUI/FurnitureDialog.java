@@ -36,7 +36,7 @@ public class FurnitureDialog {
             listModel.addElement(newItemTxt);
         }
         catch (NumberFormatException numEx){
-            numEx.printStackTrace();
+//            numEx.printStackTrace();
             JOptionPane.showMessageDialog(null,
                     "Please enter the valid data. Width and length of the furniture should be number.");
         }

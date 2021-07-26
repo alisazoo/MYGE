@@ -18,11 +18,28 @@ public class FurnitureDialog {
     public static void inputFurnitureData(DefaultListModel<String> listModel){
 
         do{
-            result = showInputFurnitureDialog();
+            result = inputFurnitureDialog();
         } while (isDuplicateFurniture);
 
-        setFurnitureInput(result, itemList, listModel);
+        String inputName;
+        int inputWidth, inputLength;
 
+        try {
+            inputName = result[0];
+            inputWidth = Integer.parseInt(result[1]);
+            inputLength = Integer.parseInt(result[2]);
+
+            Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
+            itemList.add(inputItem);
+
+            String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
+            listModel.addElement(newItemTxt);
+        }
+        catch (NumberFormatException numEx){
+//            numEx.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Please enter the valid data. Width and length of the furniture should be number.");
+        }
     }
 
     /**
@@ -34,7 +51,7 @@ public class FurnitureDialog {
      * return the result as a String array.
      * @return array with String value of name, width, and length of the new item.
      */
-    public static String[] showInputFurnitureDialog(){
+    public static String[] inputFurnitureDialog(){
 
         if( isDuplicateFurniture )
             result = new String[result.length];
@@ -48,56 +65,30 @@ public class FurnitureDialog {
         panel.add( label, BorderLayout.WEST );
 
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
-        JTextField furnitureNameField;
-        JTextField furnitureWidthField;
-        JTextField furnitureLengthField;
-        if(MoyogaeDemo.isDefaultData()) {
-            furnitureNameField = new JTextField("Desk");
-            furnitureWidthField = new JTextField("120");
-            furnitureLengthField = new JTextField("45");
-        } else {
-            furnitureNameField = new JTextField();
-            furnitureWidthField = new JTextField();
-            furnitureLengthField = new JTextField();
-
-        }
+        JTextField furnitureNameField = new JTextField();
         control.add( furnitureNameField );
-        control.add( furnitureWidthField );
-        control.add( furnitureLengthField );
+        JTextField furnitureWidthField = new JTextField();
+        control.add(furnitureWidthField);
+        JTextField furnitureLengthField = new JTextField();
+        control.add(furnitureLengthField);
 
         if(isDuplicateFurniture) {
             panel.add( new JLabel("You cannot add duplicated item. " +
                     "Please make the new one with different name."), BorderLayout.NORTH );
         } else {
-
             panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
-            panel.add(control, BorderLayout.CENTER);
-
-            JOptionPane.showMessageDialog( BuildGui.frame, panel,
-                    "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-
-
-
         }
+        panel.add(control, BorderLayout.CENTER);
 
-//        panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
-//        panel.add(control, BorderLayout.CENTER);
-//
-//        JOptionPane.showMessageDialog( BuildGui.frame, panel,
-//                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
-//
-//        String inputFurnitureName = furnitureNameField.getText();
-//        for (Furniture newItem: itemList){
-//            if(newItem.getName().equals(inputFurnitureName)){
-//                isDuplicateFurniture = true;
-//                break;
-//            } else {
-//                isDuplicateFurniture = false;
-//            }
-//        }
+        JOptionPane.showMessageDialog(null, panel,
+                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
 
-        // need try-catch when nothing is input
         String inputFurnitureName = furnitureNameField.getText();
+        String[] resultArray = new String[3];
+        resultArray[0] = inputFurnitureName;
+        resultArray[1] = furnitureWidthField.getText();
+        resultArray[2] = furnitureLengthField.getText();
+
         for (Furniture newItem: itemList){
             if(newItem.getName().equals(inputFurnitureName)){
                 isDuplicateFurniture = true;
@@ -106,40 +97,9 @@ public class FurnitureDialog {
                 isDuplicateFurniture = false;
             }
         }
-
-        // need: check validity of input data esp width and length
-        String[] resultArray = new String[3];
-        resultArray[0] = inputFurnitureName;
-        resultArray[1] = furnitureWidthField.getText();
-        resultArray[2] = furnitureLengthField.getText();
-
         return resultArray;
     }
 
-    public static void setFurnitureInput(String[] result,
-                                         ArrayList<Furniture> itemList, DefaultListModel<String> listModel){
-
-        try {
-            String inputName = result[0];
-            int inputWidth = Integer.parseInt(result[1]);
-            int inputLength = Integer.parseInt(result[2]);
-
-
-            Furniture inputItem = new Furniture(inputName, inputWidth, inputLength);
-            itemList.add(inputItem);
-
-            String newItemTxt = inputName + ": " + inputWidth + " cm x " + inputLength + " cm";
-            listModel.addElement(newItemTxt);
-
-        }
-        catch (NumberFormatException numEx){
-            JOptionPane.showMessageDialog( BuildGui.frame,
-                    "Please enter the valid data. Width and length of the furniture should be number.");
-            numEx.printStackTrace();
-        }
-
+    public static void setFurnitureInput(String[] tempArray, ArrayList<Furniture> itemList, DefaultListModel<String> listModel) {
     }
-
-
-
 }

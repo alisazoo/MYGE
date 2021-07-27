@@ -26,7 +26,7 @@ public class BuildGui extends MoyogaeDemo {
      * This method build components and display them as the initial GUI.
      */
     public void buildGUI(){
-        frame = new JFrame("Moyogae Demo");
+        frame = new JFrame("MYGE / もようがえ");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setContentPane( buildMainPanel() );
@@ -62,8 +62,8 @@ public class BuildGui extends MoyogaeDemo {
         GridBagConstraints c = new GridBagConstraints();
         furniturePanel.setPreferredSize( new Dimension(400, 150));
 
-        JLabel floorSizeInfo = new JLabel( "Floor Size: " + Floor.getWidth() + " cm (width)" + " x " +
-                Floor.getLength() + " cm (length)", JLabel.CENTER);
+        JLabel floorSizeInfo = new JLabel( "部屋のサイズ: " + Floor.getWidth() + " cm (幅)" + " x " +
+                Floor.getLength() + " cm (奥行き)", JLabel.CENTER);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.gridwidth = 3;
@@ -85,7 +85,7 @@ public class BuildGui extends MoyogaeDemo {
         c.gridy = 1;
         furniturePanel.add( scrollPane, c );
 
-        JButton addItem = new JButton("Add Furniture");
+        JButton addItem = new JButton("家具を追加");
         addItem.addActionListener(new addItemListener() );
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 0;
@@ -94,7 +94,7 @@ public class BuildGui extends MoyogaeDemo {
         c.gridy = 2;
         furniturePanel.add( addItem, c );
 
-        JButton rotateItem = new JButton("Rotate Furniture");
+        JButton rotateItem = new JButton("家具を回転");
         rotateItem.addActionListener(new rotateItemListener() );
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 0;
@@ -103,7 +103,7 @@ public class BuildGui extends MoyogaeDemo {
         c.gridy = 2;
         furniturePanel.add( rotateItem, c );
 
-        JButton remItem = new JButton("Remove Furniture");
+        JButton remItem = new JButton("家具を削除");
         remItem.addActionListener(new remItemListener() );
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 0;
@@ -121,14 +121,6 @@ public class BuildGui extends MoyogaeDemo {
      */
     private FloorDrawing buildFloorPanel(){
 
-
-
-//        if(MoyogaeDemo.isDefaultData()){
-//            setDefaultFurnitureData(listModel);
-//        }
-
-
-
         floorPanel = new FloorDrawing();
         adjustRatioWidth = floorAreaWidth / Floor.getWidth();
         adjustRatioLength = floorAreaLength / Floor.getLength();
@@ -139,7 +131,7 @@ public class BuildGui extends MoyogaeDemo {
         Dragger draggingListener = new Dragger();
         floorPanel.addMouseListener( draggingListener );
         floorPanel.addMouseMotionListener( draggingListener );
-        floorPanel.add( BorderLayout.NORTH, new JLabel("Here is your floor..."));
+        floorPanel.add( BorderLayout.NORTH, new JLabel("お部屋"));
 
         return floorPanel;
     }
@@ -180,10 +172,10 @@ public class BuildGui extends MoyogaeDemo {
 
             } else if ( listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
-                        "No more item here. Please add the new one before deleting!");
+                        "家具が登録されていません。家具を追加してください！");
 
             } else if ( !isSelectedItemNow ){
-                JOptionPane.showMessageDialog(null, "Please select an item to delete.");
+                JOptionPane.showMessageDialog(null, "削除する家具を選んでください。");
 
             }
         }
@@ -219,9 +211,9 @@ public class BuildGui extends MoyogaeDemo {
 
             } else if (listModel.isEmpty() ){
                 JOptionPane.showMessageDialog(null,
-                        "No more item here. Please add the new one before trying to rotate nothing!");
+                        "家具がありません。まずは家具を登録してください。");
             } else if ( !isSelectedItemNow ){
-                JOptionPane.showMessageDialog(null, "Please select an item to rotate.");
+                JOptionPane.showMessageDialog(null, "回転したい家具を選んでください。");
             }
         }
     }
@@ -455,8 +447,8 @@ public class BuildGui extends MoyogaeDemo {
 
         if( showNotification ){
             JOptionPane.showMessageDialog(null,
-                    "You cannot move the item out side your room. " +
-                            "Please put it in the room, please!");
+                    "家具は部屋の外にはみ出るようには置けません。" +
+                            "部屋の中におさまるように置いてください！");
         }
         setTargetInfo(target);
     }

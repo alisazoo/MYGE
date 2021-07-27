@@ -36,9 +36,8 @@ public class FurnitureDialog {
             listModel.addElement(newItemTxt);
         }
         catch (NumberFormatException numEx){
-//            numEx.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                    "Please enter the valid data. Width and length of the furniture should be number.");
+                    "家具の幅と奥行は、半角数字で入力してください。");
         }
     }
 
@@ -59,9 +58,9 @@ public class FurnitureDialog {
         JPanel panel = new JPanel(new BorderLayout(5,5));
 
         JPanel label = new JPanel(new GridLayout(0,1,2,2));
-        label.add( new JLabel("Name", SwingConstants.RIGHT) );
-        label.add( new JLabel("Width (cm)", SwingConstants.RIGHT) );
-        label.add( new JLabel("Length (cm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("家具の名前", SwingConstants.RIGHT) );
+        label.add( new JLabel("幅 (cm)", SwingConstants.RIGHT) );
+        label.add( new JLabel("奥行 (cm)", SwingConstants.RIGHT) );
         panel.add( label, BorderLayout.WEST );
 
         JPanel control = new JPanel(new GridLayout(0,1,2,2));
@@ -73,15 +72,15 @@ public class FurnitureDialog {
         control.add(furnitureLengthField);
 
         if(isDuplicateFurniture) {
-            panel.add( new JLabel("You cannot add duplicated item. " +
-                    "Please make the new one with different name."), BorderLayout.NORTH );
+            panel.add( new JLabel("同じ名前の家具は登録できません。 " +
+                    "違う名前で登録してください。"), BorderLayout.NORTH );
         } else {
-            panel.add( new JLabel("Enter the data of the new item."), BorderLayout.NORTH);
+            panel.add( new JLabel("新しい家具の情報を入力してください。"), BorderLayout.NORTH);
         }
         panel.add(control, BorderLayout.CENTER);
 
         JOptionPane.showMessageDialog(null, panel,
-                "Add new furniture", JOptionPane.QUESTION_MESSAGE);
+                "家具を追加", JOptionPane.QUESTION_MESSAGE);
 
         String inputFurnitureName = furnitureNameField.getText();
         String[] resultArray = new String[3];

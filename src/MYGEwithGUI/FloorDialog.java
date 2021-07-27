@@ -15,9 +15,9 @@ public class FloorDialog extends BuildGui {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
 
         JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
-        label.add(new JLabel("Enter the size:"));
-        label.add(new JLabel("Floor Width (cm)", SwingConstants.RIGHT));
-        label.add(new JLabel("Floor Length (cm)", SwingConstants.RIGHT));
+        label.add(new JLabel("部屋のサイズを登録"));
+        label.add(new JLabel("幅 (cm)", SwingConstants.RIGHT));
+        label.add(new JLabel("奥行 (cm)", SwingConstants.RIGHT));
         panel.add(label, BorderLayout.WEST);
 
         JPanel control = new JPanel(new GridLayout(0, 1, 2, 2));
@@ -52,8 +52,8 @@ public class FloorDialog extends BuildGui {
             } catch (NumberFormatException exception) {
 
                 int result = JOptionPane.showConfirmDialog(
-                        BuildGui.frame, "Please enter number for both width and length.",
-                        "Continue?", JOptionPane.OK_CANCEL_OPTION);
+                        BuildGui.frame, "幅と奥行は、半角数字で入力してください",
+                        "続けますか?", JOptionPane.OK_CANCEL_OPTION);
 
                 if ( result == JOptionPane.OK_OPTION ){
                     showInputFloorDialog(panel);
@@ -70,7 +70,7 @@ public class FloorDialog extends BuildGui {
 
     private static void showInputFloorDialog(JPanel panel){
         JOptionPane.showMessageDialog(BuildGui.frame, panel,
-                "Set Floor Size", JOptionPane.QUESTION_MESSAGE);
+                "部屋のサイズを入力", JOptionPane.QUESTION_MESSAGE);
     }
 
 }

@@ -121,14 +121,6 @@ public class BuildGui extends MoyogaeDemo {
      */
     private FloorDrawing buildFloorPanel(){
 
-
-
-//        if(MoyogaeDemo.isDefaultData()){
-//            setDefaultFurnitureData(listModel);
-//        }
-
-
-
         floorPanel = new FloorDrawing();
         adjustRatioWidth = floorAreaWidth / Floor.getWidth();
         adjustRatioLength = floorAreaLength / Floor.getLength();
@@ -358,7 +350,6 @@ public class BuildGui extends MoyogaeDemo {
                 }
             }
 
-            //TODO the following process can be improved with Stream? try later.
             Furniture target = null;
             int topLayeredItemId = 0;
             for (Furniture item : tempTargetList) {
@@ -433,7 +424,7 @@ public class BuildGui extends MoyogaeDemo {
         int itemLength = sizeList[1];
 
         boolean showNotification = false;
-        //TODO consider organise the following if statements in a better way.
+
         if ( (topLeftX + itemWidth) > 450) {
             int bottomXReset = 450 - itemWidth;
             target.setCurX(bottomXReset);
@@ -489,35 +480,5 @@ public class BuildGui extends MoyogaeDemo {
             }
         }
     }
-
-
-
-
-
-
-    public void setDefaultFurnitureData(DefaultListModel<String> listModel){
-
-        Furniture ex1 = new Furniture("desk", 120, 60);
-        Furniture ex2 = new Furniture("bed", 210, 100);
-        Furniture ex3 = new Furniture("shelf", 40,30);
-        Furniture ex4 = new Furniture("book shelf", 100, 30);
-        ArrayList<Furniture> itemList = new ArrayList<>();
-        itemList.add(ex1);
-        itemList.add(ex2);
-        itemList.add(ex3);
-        itemList.add(ex4);
-
-        for(Furniture item: itemList){
-            String[] tempArray = new String[3];
-            tempArray[0] = item.getName();
-            tempArray[1] = String.valueOf(item.getWidth());
-            tempArray[2] = String.valueOf(item.getLength());
-            System.out.println(Arrays.toString(tempArray));
-            FurnitureDialog.setFurnitureInput(tempArray, itemList, listModel);
-        }
-
-    }
-
-
 
 }

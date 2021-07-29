@@ -21,9 +21,8 @@ public class FloorDialog extends BuildGui {
         panel.add(label, BorderLayout.WEST);
 
         JPanel control = new JPanel(new GridLayout(0, 1, 2, 2));
-        control.add(new JLabel(""));//todo change layout manager and remove this unnecessary JLabel
+        control.add(new JLabel(""));
 
-        // FloorDialog
         JTextField floorWidthField;
         JTextField floorLengthField;
         if(MoyogaeDemo.isDefaultData()) {

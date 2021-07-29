@@ -27,7 +27,7 @@ public class Furniture {
     private int offsetY;
     private boolean isSelected = false;
 
-    private static ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
+    private static final ArrayList<Furniture> furnitureArrayList = new ArrayList<>();
 
     // Constructor
     public Furniture(){
@@ -42,46 +42,8 @@ public class Furniture {
         this.curY = -1;
     }
 
-    // Set the coordinates of current location of the item
-    public static void addFurnitureCurrentLocation(String name, int x, int y){
-        for( Furniture item: furnitureArrayList ){
-            if( item.getName().equals(name) ){
-                item.setCurX(x);
-                item.setCurY(y);
-                break;
-            }
-        }
-    }
-
-    // Set the previous of current location of the item
-    public static void addFurniturePreviousLocation(String name, int x, int y){
-        for( Furniture item: furnitureArrayList ){
-            if( item.getName().equals(name) ){
-                item.setPreX(x);
-                item.setPreY(y);
-                break;
-            }
-        }
-    }
-
-    // private JList<MYGEwithGUI.Furniture> createFurnitureList(){
-    protected static String[] createFurnitureList(){
-        String[] itemList = new String[furnitureArrayList.size()];
-        for(int i = 0; i < furnitureArrayList.size(); i++){
-            itemList[i] = furnitureArrayList.get(i).getName() + " (" +
-                    furnitureArrayList.get(i).getWidth() + " mm x " +
-                    furnitureArrayList.get(i).getWidth() + " mm)";
-        }
-        return itemList;
-    }
-
-
     public static ArrayList<Furniture> getFurnitureArrayList(){
         return furnitureArrayList;
-    }
-
-    public static void setFurnitureArrayList(ArrayList<Furniture> furnitureArrayList) {
-        Furniture.furnitureArrayList = furnitureArrayList;
     }
 
     public int getId() {

@@ -12,7 +12,7 @@ Launched on 25th July 2021.
 - Move the items on the screen (and think about your "Moyo-gae" plan visually).
   - You can rotate furniture items
   - This program automatically replaces your item if you tried to put it outside the floor area.
-### What's happening next is:
+### What's coming next is:
 - Registration: You can register the sizes of floor and furniture items.
 - Natural View: The images on the screen represent the sizes of the floor and furniture items are reflected their actual size.
 - Measure Distance: You can automatically understand the distance between each of the items and the edge of the floor.
